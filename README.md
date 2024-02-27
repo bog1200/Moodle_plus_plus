@@ -2,7 +2,7 @@
 
 TEAM NAME: undefined
 (Academic -something-)
-TEAM:
+- TEAM:
 - Stan-Soponaru Ioan-Alexandru
 - Stefanescu Bogdan-Laurentiu
 - Cristea George-Razvan
