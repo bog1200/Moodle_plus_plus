@@ -1,0 +1,26 @@
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 200vh; /* Adjust as needed */
+}
+
+.inline_right{
+    display: inline-block;
+    float: right;
+}
+
+.icon-small {
+    font-size: 0.8rem; /* Adjust as needed */
+}
+
+.btn-small {
+    padding: 0.25rem 0.5rem; /* Adjust as needed */
+    height: 20px !important;
+}
+
+.bordered {
+    border: 2px solid #000; /* Adjust as needed */
+}
+
