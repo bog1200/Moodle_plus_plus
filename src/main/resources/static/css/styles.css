@@ -3,7 +3,7 @@ html {
 }
 
 body {
-    min-height: 200vh; /* Adjust as needed */
+    min-height: 100vh; /* Adjust as needed */
 }
 
 .inline_right{
@@ -24,3 +24,29 @@ body {
     border: 2px solid #000; /* Adjust as needed */
 }
 
+.padding_margin{
+    margin: 5px;
+    padding: 5px;
+}
+
+.activity_border{
+    border-left: cadetblue 2px solid;
+    margin: 5px;
+    padding: 5px;
+}
+
+.img-circle {
+    border-radius: 50%; /* This makes the image circular */
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    object-fit: cover; /* This makes sure the image covers the whole area */
+}
+
+.courses_bg{
+    background-color: violet;
+    text-align: center;
+}
+
+.bi-mortarboard {
+    font-size: 2rem;
+}
