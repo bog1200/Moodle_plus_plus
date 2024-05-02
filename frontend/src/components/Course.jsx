@@ -3,9 +3,16 @@
 
 // Course.jsx
 import React from 'react';
+import './Course.css';
 
-function Course() {
-    // Your component logic here
+
+function Course({ name, professor }) {
+    return (
+        <div className="course_div align-items-center mb-3 rounded-3 bg-primary bg-opacity-10">
+            <h2>{name}</h2>
+            <p>{professor}</p>
+        </div>
+    );
 }
 
 export default Course;
