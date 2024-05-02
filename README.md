@@ -1,6 +1,8 @@
 # WAD Project
 
 TEAM NAME: Moodle++
+
+TRELLO: https://trello.com/b/Ee1kPTiI/moodle
 - TEAM:
   - Stan-Soponaru Ioan-Alexandru
   - Stefanescu Bogdan-Laurentiu
