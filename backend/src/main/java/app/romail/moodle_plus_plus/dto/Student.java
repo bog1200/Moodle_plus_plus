@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 @Setter
@@ -20,11 +21,15 @@ public class Student extends Person {
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	private StudentGroup group;
 	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<Subject> subjects;
+	private List<Subject> subjects = new ArrayList<>();
 
+	public Student(String firstName, String lastName, String email, String phone, String address, String gender, Date dob, String studentId, Date enrollmentDate) {
+		super(firstName, lastName, email, phone, address, gender, dob);
+		this.studentId = studentId;
+		this.enrollmentDate = enrollmentDate;
+	}
 
+	public Student() {
 
-
-
-
+	}
 }

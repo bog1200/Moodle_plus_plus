@@ -4,10 +4,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
+
 @Entity
+@lombok.Getter
+@lombok.Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class AssignmentSubmission {
 	@Id
 	@GeneratedValue

@@ -22,4 +22,17 @@ public abstract class Person {
 	private String gender;
 	private Date dob;
 
+	public Person(String firstName, String lastName, String email, String phone, String address, String gender, Date dob) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phone = phone;
+		this.address = address;
+		this.gender = gender;
+		this.dob = dob;
+	}
+
+	public Person() {
+
+	}
 }

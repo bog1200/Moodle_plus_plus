@@ -1,11 +1,16 @@
 package app.romail.moodle_plus_plus.dto;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
-
+@lombok.Getter
+@lombok.Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CourseEnrollment {
 	@Id
 	@GeneratedValue
@@ -15,9 +20,9 @@ public class CourseEnrollment {
 	@OneToOne
 	private Student student;
 	@OneToMany
-	private Set<CourseAttendance> courseAttendances;
+	private List<CourseAttendance> courseAttendances;
 
-//	private Set<Grade> grades;
+//	private List<Grade> grades;
 
 
 

@@ -1,13 +1,18 @@
 package app.romail.moodle_plus_plus.dto;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @lombok.Getter
 @lombok.Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Assignment {
 	@Id
 	@GeneratedValue
@@ -16,7 +21,7 @@ public class Assignment {
 	private String name;
 	private String description;
 	@OneToMany
-	private Set<File> files;
+	private List<File> files = new ArrayList<>();
 	@ManyToOne
 	private Subject subject;
 	private Date startDate;

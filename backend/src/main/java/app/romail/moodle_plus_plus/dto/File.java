@@ -1,8 +1,14 @@
 package app.romail.moodle_plus_plus.dto;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
+@lombok.Getter
+@lombok.Setter
+@AllArgsConstructor
+@NoArgsConstructor
 
 public class File {
 	@Id
