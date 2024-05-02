@@ -1,0 +1,11 @@
+aside {
+
+    margin: 1rem;
+}
+
+.img-circle {
+    border-radius: 50%; /* This makes the image circular */
+    width: 50px; /* Adjust as needed */
+    height: 50px; /* Adjust as needed */
+    object-fit: cover; /* This makes sure the image covers the whole area */
+}

@@ -1,41 +1,48 @@
 import Products from "./components/Products";
 import { useState, useEffect } from "react";
+import Card from "./components/Card.jsx";
+import Aside from "./components/Aside.jsx";
+import MainPage from './components/MainPage';
+import PageTitleUp from "./components/PageTitleUp.jsx";
+import * as React from "react";
+import * as ReactDOM from "react-dom/client";
+import {createBrowserRouter, RouterProvider,} from "react-router-dom";
+
+
 
 export default function App() {
 
-  const [products, addProduct] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    fetchProductHandler();
-  }, []);
+    const [products, addProduct] = useState([]);
 
-
-
-  async function fetchProductHandler() {
-    setIsLoading(true);
-    const response = await fetch('http://localhost:8080/api/v1/products/')
-    const data = await response.json();
-    const cleanedProducts = data.map((productData) => {
-      return {
-        id: productData.id,
-        price: productData.price,
-        category: productData.type,
-      };
-    });
-    addProduct(cleanedProducts);
-    setIsLoading(false);
-  }
-
-
-
-
-  return (
-    <>
-      <Products items={products} />
-      {isLoading && <p>Loading...</p>}
-    </>
-  );
-
-
+    return (
+        <div className="container-fluid">
+            <div className="row">
+                <div className="col-1">
+                    <Aside/>
+                </div>
+                <div className="col-11">
+                    <PageTitleUp/>
+                    <MainPage/>
+                </div>
+            </div>
+        </div>
+    );
 }
 
+
+
+
+
+
+
+
+// const [isLoading, setIsLoading] = useState(false);
+// useEffect(() => {
+//   fetchProductHandler();
+// }, []);
+
+// async function fetchProductHandler() {
+//   setIsLoading(true);
+//
+//   setIsLoading(false);
+// }
