@@ -9,8 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 @lombok.Getter
 @lombok.Setter
-public class StudentDTO {
-    private Long id;
+public class StudentDTO extends PersonDTO {
     private String studentId;
     private Date enrollmentDate;
 }

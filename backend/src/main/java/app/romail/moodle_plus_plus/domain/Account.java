@@ -20,7 +20,6 @@ public class Account implements UserDetails{
 	@GeneratedValue
 	private Long id;
 	@OneToOne
-	@JsonSerialize
 	private Person person;
 	private String username;
 	private String password;

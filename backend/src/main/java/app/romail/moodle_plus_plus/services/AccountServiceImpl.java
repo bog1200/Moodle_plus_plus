@@ -32,7 +32,8 @@ public class AccountServiceImpl implements AccountService{
 	private AccountDTO convertToDTO(Account account) {
 		AccountDTO accountDTO = new AccountDTO();
 		BeanUtils.copyProperties(account, accountDTO, "person");
-		//accountDTO.setPerson_id(account.getPerson().getId());
+		accountDTO.setPerson_id(account.getPerson().getId());
+		accountDTO.setRoles(account.getRoles().stream().map(Role::toString).collect(Collectors.toList()));
 		return accountDTO;
 	}
 
