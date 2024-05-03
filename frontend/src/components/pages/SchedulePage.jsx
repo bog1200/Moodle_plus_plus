@@ -1,44 +1,41 @@
-import React from 'react';
-import searchIcon from "bootstrap-icons/icons/search.svg";
-import uploadIcon from "bootstrap-icons/icons/upload.svg";
+import React, { useState, useEffect } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import './SchedulePage.css';
 
 function SchedulePage() {
+    const [dueDates, setDueDates] = useState([
+        { date: new Date(2024, 4, 15), homework: 'Math: Chapter 5' },
+        { date: new Date(2024, 4, 20), homework: 'English: Essay' },
+        // Add more due dates as needed
+    ]);
+
+    useEffect(() => {
+        // Fetch the due dates from the server and update the state
+        // setDueDates(fetchedDueDates);
+    }, []);
 
     return (
         <div className="row">
-            <div className="col-8">
+            <div className="col-12">
                 <h2>Schedule</h2>
-                <div className="d-flex align-items-center mb-3">
-                    <select className="form-select me-2">
-                        <option selected>Choose...</option>
-                        <option value="1">All</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
-                    </select>
-                    <input type="search" className="form-control me-2" placeholder="Search..."/>
-                    <img src={searchIcon} alt="Search" width="30" height="30"/>
-                </div>
-                <div className="d-flex align-items-center mb-3">
-                    <img className="ms-2" src={uploadIcon} alt="Upload" width="30" height="30"/>
-                    <div className="ps-4">
-                        <h3>Title</h3>
-                        <p>Paragraph</p>
-                    </div>
-                </div>
-            </div>
-            <div className="col-4">
-                <div className="mb-4">
-                    <h2>Announcements</h2>
-                    <img src="announcement.jpg" alt="Announcement" width="100%" height="auto"/>
-                    <h4>Small Heading</h4>
-                    <p>Name - Date and Time</p>
-                </div>
-                <div>
-                    <h2>Activity</h2>
-                    <img src="activity.jpg" alt="Activity" width="100%" height="auto"/>
-                    <h4>Small Heading</h4>
-                    <p>Name - Date and Time</p>
-                </div>
+                <Calendar
+                    tileContent={({ date, view }) => {
+                        if (view === 'month') {
+                            const dueDate = dueDates.find(dueDate =>
+                                dueDate.date.getDate() === date.getDate() &&
+                                dueDate.date.getMonth() === date.getMonth() &&
+                                dueDate.date.getFullYear() === date.getFullYear()
+                            );
+                            return (
+                                <div>
+                                    <p>Day {date.getDate()}</p>
+                                    {dueDate && <p style={{ color: 'red' }}>{dueDate.homework}</p>}
+                                </div>
+                            );
+                        }
+                    }}
+                />
             </div>
         </div>
     );

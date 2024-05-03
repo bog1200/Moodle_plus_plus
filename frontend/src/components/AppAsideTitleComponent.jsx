@@ -15,10 +15,10 @@ export function AppAsideTitleComponent() {
     return(
     <div className="container-fluid">
         <div className="row">
-            <div className="col-1">
+            <div className="col-xs-4 col-lg-1">
                 <Aside/>
             </div>
-            <div className="col-11">
+            <div className="col-xs-8 col-lg-11">
                 <PageTitleUp/>
                 <Outlet/>
             </div>

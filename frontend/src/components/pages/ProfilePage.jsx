@@ -4,41 +4,35 @@ import uploadIcon from "bootstrap-icons/icons/upload.svg";
 
 function ProfilePage() {
 
+
+
     return (
         <div className="row">
             <div className="col-8">
-                <h2>Profile</h2>
-                <div className="d-flex align-items-center mb-3">
-                    <select className="form-select me-2">
-                        <option selected>Choose...</option>
-                        <option value="1">All</option>
-                        <option value="2">Option 2</option>
-                        <option value="3">Option 3</option>
-                    </select>
-                    <input type="search" className="form-control me-2" placeholder="Search..."/>
-                    <img src={searchIcon} alt="Search" width="30" height="30"/>
+                <h2>Profile</h2><br/>
+                <div className="card bg-light mb-3">
+                    <div className="card-body">
+                        <h3 className="card-title">Heading 1</h3>
+                        <p className="card-text">Paragraph 1</p>
+                        <p className="card-text">Paragraph 2</p>
+                    </div>
                 </div>
-                <div className="d-flex align-items-center mb-3">
-                    <img className="ms-2" src={uploadIcon} alt="Upload" width="30" height="30"/>
-                    <div className="ps-4">
-                        <h3>Title</h3>
-                        <p>Paragraph</p>
+                <div className="card bg-light mb-3">
+                    <div className="card-body">
+                        <h3 className="card-title">Heading 2</h3>
+                        <p className="card-text">Paragraph 1</p>
+                        <p className="card-text">Paragraph 2</p>
+                    </div>
+                </div>
+                <div className="card bg-light mb-3">
+                    <div className="card-body">
+                        <h3 className="card-title">Heading 3</h3>
+                        <p className="card-text">Paragraph 1</p>
+                        <p className="card-text">Paragraph 2</p>
                     </div>
                 </div>
             </div>
             <div className="col-4">
-                <div className="mb-4">
-                    <h2>Announcements</h2>
-                    <img src="announcement.jpg" alt="Announcement" width="100%" height="auto"/>
-                    <h4>Small Heading</h4>
-                    <p>Name - Date and Time</p>
-                </div>
-                <div>
-                    <h2>Activity</h2>
-                    <img src="activity.jpg" alt="Activity" width="100%" height="auto"/>
-                    <h4>Small Heading</h4>
-                    <p>Name - Date and Time</p>
-                </div>
             </div>
         </div>
     );

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useMediaQuery } from 'react-responsive';
 import searchIcon from "bootstrap-icons/icons/search.svg";
 import uploadIcon from "bootstrap-icons/icons/upload.svg";
 import DueSubmissionAlert from "../DueSubmissionAlert.jsx";
@@ -14,10 +15,16 @@ function MainPage() {
     let subjects = ["Subject 1", "Subject 2", "Subject 3"];
     let texts = ["Text 1", "Text 2", "Text 3"];
 
+    const isDesktopOrLaptop = useMediaQuery({
+        query: '(min-device-width: 1224px)'
+    });
+    const isTabletOrMobile = useMediaQuery({
+        query: '(max-device-width: 1224px)'
+    });
 
     return (
         <div className="row">
-            <div className="col-8">
+            <div className={isDesktopOrLaptop ? "desktop-class" : "mobile-class"}>
                 <h2>Timeline</h2>
 
                 <DueSubmissionAlert subject={subjects[0]} text={texts[0]} />
@@ -27,20 +34,7 @@ function MainPage() {
                 <RecentCourses courses={courses} />
 
             </div>
-            <div className="col-4">
-                <div className="mb-4">
-                <h2>Announcements</h2>
-                    <img src="announcement.jpg" alt="Announcement" width="100%" height="auto"/>
-                    <h4>Small Heading</h4>
-                    <p>Name - Date and Time</p>
-                </div>
-                <div>
-                    <h2>Activity</h2>
-                    <img src="activity.jpg" alt="Activity" width="100%" height="auto"/>
-                    <h4>Small Heading</h4>
-                    <p>Name - Date and Time</p>
-                </div>
-            </div>
+
         </div>
     );
 }
