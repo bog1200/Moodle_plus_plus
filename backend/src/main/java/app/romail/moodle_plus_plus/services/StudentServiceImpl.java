@@ -1,6 +1,6 @@
 package app.romail.moodle_plus_plus.services;
 
-import app.romail.moodle_plus_plus.dto.Student;
+import app.romail.moodle_plus_plus.domain.Student;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;

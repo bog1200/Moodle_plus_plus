@@ -1,10 +1,8 @@
-package app.romail.moodle_plus_plus.dto;
+package app.romail.moodle_plus_plus.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Date;
 

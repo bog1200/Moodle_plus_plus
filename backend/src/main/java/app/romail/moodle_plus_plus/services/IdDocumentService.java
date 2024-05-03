@@ -1,6 +1,6 @@
 package app.romail.moodle_plus_plus.services;
 
-import app.romail.moodle_plus_plus.dto.IdDocument;
+import app.romail.moodle_plus_plus.domain.IdDocument;
 
 public interface IdDocumentService {
     void save(IdDocument idDocument);

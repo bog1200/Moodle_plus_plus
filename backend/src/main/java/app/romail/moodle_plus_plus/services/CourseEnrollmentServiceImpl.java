@@ -1,6 +1,6 @@
 package app.romail.moodle_plus_plus.services;
 
-import app.romail.moodle_plus_plus.dto.CourseEnrollment;
+import app.romail.moodle_plus_plus.domain.CourseEnrollment;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;

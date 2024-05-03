@@ -1,5 +1,6 @@
-package app.romail.moodle_plus_plus.dto;
+package app.romail.moodle_plus_plus.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.List;
 
 @Entity
 @Getter
@@ -20,6 +20,7 @@ public class Account implements UserDetails{
 	@GeneratedValue
 	private Long id;
 	@OneToOne
+	@JsonSerialize
 	private Person person;
 	private String username;
 	private String password;

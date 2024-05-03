@@ -1,4 +1,4 @@
-package app.romail.moodle_plus_plus.dto;
+package app.romail.moodle_plus_plus.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

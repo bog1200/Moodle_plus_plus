@@ -1,6 +1,6 @@
 package app.romail.moodle_plus_plus.controllers;
 
-import app.romail.moodle_plus_plus.dto.Student;
+import app.romail.moodle_plus_plus.domain.Student;
 import app.romail.moodle_plus_plus.services.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

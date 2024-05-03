@@ -1,6 +1,6 @@
 package app.romail.moodle_plus_plus.services;
 
-import app.romail.moodle_plus_plus.dto.CourseAttendance;
+import app.romail.moodle_plus_plus.domain.CourseAttendance;
 
 public interface CourseAttendanceService {
     void save(CourseAttendance courseAttendance);

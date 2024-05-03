@@ -1,4 +1,4 @@
-package app.romail.moodle_plus_plus.dto;
+package app.romail.moodle_plus_plus.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,29 +7,22 @@ import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
-
 @Entity
 @lombok.Getter
 @lombok.Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AssignmentSubmission {
+public class IdDocument {
 	@Id
 	@GeneratedValue
 	private Long id;
-
 	@OneToOne
-	private Assignment assignment;
-	@OneToOne
-	private Student student;
-	private Date submissionDate;
-	private Date gradingDate;
-	private Double grade;
-	private Double maxGrade;
-	private String submissionText;
-
-
+	private Account account;
+	private IdDocumentType type;
+	private String number;
+	private String issueDate;
+	private String expirationDate;
+	private String personalNumber;
+	private String issuingCountry;
 
 }

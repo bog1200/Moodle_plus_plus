@@ -1,6 +1,6 @@
 package app.romail.moodle_plus_plus.bootstrap;
 
-import app.romail.moodle_plus_plus.dto.*;
+import app.romail.moodle_plus_plus.domain.*;
 import app.romail.moodle_plus_plus.repositories.AccountRepository;
 import app.romail.moodle_plus_plus.repositories.StudentGroupRepository;
 import app.romail.moodle_plus_plus.repositories.StudentRepository;

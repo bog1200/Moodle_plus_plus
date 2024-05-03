@@ -1,14 +1,11 @@
-package app.romail.moodle_plus_plus.dto;
+package app.romail.moodle_plus_plus.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.List;
 
 @Entity

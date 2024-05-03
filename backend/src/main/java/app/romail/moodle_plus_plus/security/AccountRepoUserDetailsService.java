@@ -1,6 +1,6 @@
 package app.romail.moodle_plus_plus.security;
 
-import app.romail.moodle_plus_plus.dto.Account;
+import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.repositories.AccountRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
