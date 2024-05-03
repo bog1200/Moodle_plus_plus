@@ -1,6 +1,7 @@
 package app.romail.moodle_plus_plus.repositories;
 
+import app.romail.moodle_plus_plus.dto.CourseAttendance;
 import org.springframework.data.repository.CrudRepository;
 
-public interface CourseAttendanceRepository extends CrudRepository<CourseAttendanceRepository, Long> {
+public interface CourseAttendanceRepository extends CrudRepository<CourseAttendance, Long> {
 }
