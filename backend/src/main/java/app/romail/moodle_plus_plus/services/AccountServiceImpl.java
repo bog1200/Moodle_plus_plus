@@ -9,16 +9,16 @@ import org.springframework.stereotype.Service;
 public class AccountServiceImpl implements AccountService{
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	private EntityManager em;
 
 	@Override
 	public Account findById(Long id) {
-		return entityManager.find(Account.class, id);
+		return em.find(Account.class, id);
 	}
 
 	@Override
 	public Account findByUsername(String username) {
-		return entityManager.createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class)
+		return em.createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class)
 				.setParameter("username", username)
 				.getSingleResult();
 	}

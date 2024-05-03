@@ -4,20 +4,20 @@ import app.romail.moodle_plus_plus.dto.Student;
 import app.romail.moodle_plus_plus.dto.StudentGroup;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.stereotype.Service;
 
-import java.util.List;
-
+@Service
 public class StudentGroupServiceImpl implements StudentGroupService {
 
 	@PersistenceContext
-	private EntityManager entityManager;
+	private EntityManager em;
 
 	@Override
 	public void addStudentToGroup(Student student, StudentGroup studentGroup) {
 		studentGroup.getStudents().add(student);
 		student.setGroup(studentGroup);
-		entityManager.persist(studentGroup);
-		entityManager.persist(student);
+		em.persist(studentGroup);
+		em.persist(student);
 
 	}
 
@@ -25,13 +25,13 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 	public void removeStudentFromGroup(Student student, StudentGroup studentGroup) {
 		studentGroup.getStudents().remove(student);
 		student.setGroup(null);
-		entityManager.persist(studentGroup);
-		entityManager.persist(student);
+		em.persist(studentGroup);
+		em.persist(student);
 	}
 
 	@Override
 	public void save(StudentGroup studentGroup) {
-		entityManager.persist(studentGroup);
+		em.persist(studentGroup);
 
 
 	}

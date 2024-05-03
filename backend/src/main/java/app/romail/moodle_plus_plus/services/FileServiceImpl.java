@@ -1,24 +1,24 @@
 package app.romail.moodle_plus_plus.services;
 
-import app.romail.moodle_plus_plus.dto.Course;
+import app.romail.moodle_plus_plus.dto.File;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CourseServiceImpl implements CourseService {
+public class FileServiceImpl implements FileService {
 
     @PersistenceContext
     private EntityManager em;
 
     @Override
-    public void save(Course course) {
-        em.persist(course);
+    public void save(File file) {
+        em.persist(file);
     }
 
     @Override
-    public Course findById(Long id) {
-        return em.find(Course.class, id);
+    public File findById(Long id) {
+        return em.find(File.class, id);
     }
 
 
