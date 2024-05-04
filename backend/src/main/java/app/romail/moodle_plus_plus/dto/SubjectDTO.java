@@ -15,8 +15,8 @@ private Long id;
     private String name;
     private String description;
     private String code;
-    private List<TeacherDTO> teachers;
-    private List<StudentGroupDTO> studentGroups;
-    private List<AssignmentDTO> assignments;
-    private List<CourseDTO> courses;
+    private List<Long> teachers_ids;
+    private List<Long> studentGroups_ids;
+    private List<Long> assignments_ids;
+    private List<Long> courses_ids;
 }

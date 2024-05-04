@@ -20,14 +20,20 @@ public class Subject {
 	private String name;
 	private String description;
 	private String code;
-	@ManyToMany(mappedBy = "courses")
+	@ManyToMany(mappedBy = "subjects")
 	private List<Teacher> teachers = new ArrayList<>();
 	@ManyToMany(mappedBy = "subjects")
 	private List<StudentGroup> studentGroups = new ArrayList<>();
-	@OneToMany
+	@OneToMany(mappedBy = "subject")
 	private List<Assignment> assignments = new ArrayList<>();
-	@OneToMany
+	@OneToMany(mappedBy = "subject")
 	private List<Course> courses = new ArrayList<>();
 
+
+	public Subject(String name, String description, String code) {
+		this.name = name;
+		this.description = description;
+		this.code = code;
+	}
 
 }

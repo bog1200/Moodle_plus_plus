@@ -4,7 +4,6 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -16,10 +15,11 @@ private Long id;
     private String type;
     private String name;
     private String description;
-    private List<Long> files;
+    private List<Long> files_ids;
+    private List<Long> submissions_ids;
     private Long subject_id;
-    private Date startDate;
-    private Date endDate;
-    private Date deadline;
+    private String startDate;
+    private String endDate;
+    private String deadline;
     private int maxPoints;
 }

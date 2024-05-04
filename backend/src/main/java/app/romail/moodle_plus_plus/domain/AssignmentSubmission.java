@@ -1,9 +1,6 @@
 package app.romail.moodle_plus_plus.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
@@ -20,15 +17,21 @@ public class AssignmentSubmission {
 	@GeneratedValue
 	private Long id;
 
-	@OneToOne
+	@ManyToOne
 	private Assignment assignment;
 	@OneToOne
 	private Student student;
 	private Date submissionDate;
-	private Date gradingDate;
 	@OneToOne
 	private Grade grade;
 	private String submissionText;
+
+	public AssignmentSubmission(Assignment assignment, Student student, Date submissionDate, String submissionText) {
+		this.assignment = assignment;
+		this.student = student;
+		this.submissionDate = submissionDate;
+		this.submissionText = submissionText;
+	}
 
 
 

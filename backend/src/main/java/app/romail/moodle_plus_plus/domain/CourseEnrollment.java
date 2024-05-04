@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,9 +21,12 @@ public class CourseEnrollment {
 	@OneToOne
 	private Student student;
 	@OneToMany
-	private List<CourseAttendance> courseAttendances;
+	private List<CourseAttendance> courseAttendances = new ArrayList<>();
 
-//	private List<Grade> grades;
+	public CourseEnrollment(Course course, Student student) {
+		this.course = course;
+		this.student = student;
+	}
 
 
 

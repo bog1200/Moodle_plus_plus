@@ -14,6 +14,5 @@ public class CourseEnrollmentDTO {
 private Long id;
     private Long course_id;
     private Long student_id;
-    private List<CourseAttendanceDTO> courseAttendances;
-    private List<GradeDTO> grades;
+    private List<Long> courseAttendances_ids;
 }

@@ -1,16 +1,15 @@
 package app.romail.moodle_plus_plus.bootstrap;
 
 import app.romail.moodle_plus_plus.domain.*;
-import app.romail.moodle_plus_plus.repositories.AccountRepository;
-import app.romail.moodle_plus_plus.repositories.StudentGroupRepository;
-import app.romail.moodle_plus_plus.repositories.StudentRepository;
-import app.romail.moodle_plus_plus.repositories.TeacherRepository;
+import app.romail.moodle_plus_plus.repositories.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 @Component
 public class DataLoader implements CommandLineRunner {
@@ -19,12 +18,28 @@ public class DataLoader implements CommandLineRunner {
 	private final StudentRepository studentRepository;
 	private final TeacherRepository teacherRepository;
 	private final StudentGroupRepository studentGroupRepository;
+	private final CourseRepository courseRepository;
+	private final SubjectRepository subjectRepository;
+	private final CourseAttendanceRepository courseAttendanceRepository;
+	private final CourseEnrollmentRepository courseEnrollmentRepository;
+	private final AssignmentRepository assignmentRepository;
+	private final AssignmentSubmissionRepository assingmentSubmissionRepository;
+	private final GradeRepository gradeRepository;
+	private final IdDocumentRepository idDocumentRepository;
 
-	public DataLoader(AccountRepository accountRepository, StudentRepository studentRepository, TeacherRepository teacherRepository, StudentGroupRepository studentGroupRepository) {
+	public DataLoader(AccountRepository accountRepository, StudentRepository studentRepository, TeacherRepository teacherRepository, StudentGroupRepository studentGroupRepository, CourseRepository courseRepository, SubjectRepository subjectRepository, CourseAttendanceRepository courseAttendanceRepository, CourseEnrollmentRepository courseEnrollmentRepository, AssignmentRepository assignmentRepository, AssignmentSubmissionRepository assingmentSubmissionRepository, GradeRepository gradeRepository, IdDocumentRepository idDocumentRepository ) {
 		this.accountRepository = accountRepository;
 		this.studentRepository = studentRepository;
 		this.teacherRepository = teacherRepository;
 		this.studentGroupRepository = studentGroupRepository;
+		this.courseRepository = courseRepository;
+		this.subjectRepository = subjectRepository;
+		this.courseAttendanceRepository = courseAttendanceRepository;
+		this.courseEnrollmentRepository = courseEnrollmentRepository;
+		this.assignmentRepository = assignmentRepository;
+		this.assingmentSubmissionRepository = assingmentSubmissionRepository;
+		this.gradeRepository = gradeRepository;
+		this.idDocumentRepository = idDocumentRepository;
 
 	}
 
@@ -61,6 +76,54 @@ public class DataLoader implements CommandLineRunner {
 		student1.setGroup(sg1);
 		studentRepository.save(student1);
 		studentGroupRepository.save(sg1);
+
+		Subject subject1 = new Subject("Math", "Mathematics", "MATH101");
+		subjectRepository.save(subject1);
+
+		Timestamp startDate = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 08:00:00").getTime());
+		Timestamp endDate = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 10:00:00").getTime());
+		Course course1 = new Course(startDate, endDate);
+		course1.setSubject(subject1);
+		courseRepository.save(course1);
+		subject1.getCourses().add(course1);
+		subjectRepository.save(subject1);
+
+
+		subject1.getCourses().add(course1);
+		subject1.getTeachers().add(teacher1);
+		subject1.getStudentGroups().add(sg1);
+		sg1.getSubjects().add(subject1);
+
+		teacher1.getSubjects().add(subject1);
+
+		studentGroupRepository.save(sg1);
+		subjectRepository.save(subject1);
+		teacherRepository.save(teacher1);
+		CourseEnrollment ce1 = new CourseEnrollment(course1, student1);
+		courseEnrollmentRepository.save(ce1);
+		CourseAttendance ca1 = new CourseAttendance(ce1, startDate);
+		ce1.getCourseAttendances().add(ca1);
+		courseAttendanceRepository.save(ca1);
+		courseEnrollmentRepository.save(ce1);
+
+		Assignment assignment1 = new Assignment(AssignmentType.HOMEWORK, "Homework 1", "First homework", subject1, startDate, endDate, endDate, 10);
+		assignmentRepository.save(assignment1);
+		subject1.getAssignments().add(assignment1);
+		subjectRepository.save(subject1);
+
+		AssignmentSubmission assignmentSubmission1 = new AssignmentSubmission(assignment1, student1, startDate, "Homework 1 submission");
+	    assingmentSubmissionRepository.save(assignmentSubmission1);
+		assignment1.getSubmissions().add(assignmentSubmission1);
+		assignmentRepository.save(assignment1);
+
+		Grade grade1 = new Grade(9.0, 10.0, "Good job", "2021-10-01", assignmentSubmission1);
+		gradeRepository.save(grade1);
+		assignmentSubmission1.setGrade(grade1);
+		assingmentSubmissionRepository.save(assignmentSubmission1);
+
+		IdDocument idDocument1 = new IdDocument(studentAccount1, IdDocumentType.EU_ID_CARD, "123456789", "2020-01-01", "2025-01-01", "123456789", "Romania");
+		idDocumentRepository.save(idDocument1);
+
 
 	}
 }

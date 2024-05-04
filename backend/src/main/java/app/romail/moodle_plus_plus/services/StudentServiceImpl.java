@@ -6,8 +6,9 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -26,11 +27,16 @@ public class StudentServiceImpl implements StudentService {
 	}
 
 	@Override
-	public StudentDTO getStudentById(Long id) {
-		return convertToDTO(em.find(Student.class, id));
+	public Optional<StudentDTO> getById(Long id) {
+		Student student = em.find(Student.class, id);
+		if (student == null) {
+			return Optional.empty();
+		}
+		return Optional.of(convertToDTO(student));
 	}
 
-	private StudentDTO convertToDTO(Student student) {
+	@Override
+	public StudentDTO convertToDTO(Student student) {
 		StudentDTO studentDTO = new StudentDTO();
 		BeanUtils.copyProperties(student, studentDTO, "account");
 		studentDTO.setAccount_id(student.getAccount().getId());

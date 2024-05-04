@@ -1,8 +1,11 @@
 package app.romail.moodle_plus_plus.services;
 
 import app.romail.moodle_plus_plus.domain.IdDocument;
+import app.romail.moodle_plus_plus.dto.IdDocumentDTO;
+
+import java.util.Optional;
 
 public interface IdDocumentService {
     void save(IdDocument idDocument);
-    IdDocument findById(Long id);
+    Optional<IdDocumentDTO> getById(Long id);
 }

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Teacher extends Person {
 	@ManyToMany
-	private List<Subject> courses = new ArrayList<>();
+	private List<Subject> subjects = new ArrayList<>();
 	private double salary;
 	private String title;
 

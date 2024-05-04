@@ -25,4 +25,14 @@ public class IdDocument {
 	private String personalNumber;
 	private String issuingCountry;
 
+	public IdDocument(Account account, IdDocumentType type, String number, String issueDate, String expirationDate, String personalNumber, String issuingCountry) {
+		this.account = account;
+		this.type = type;
+		this.number = number;
+		this.issueDate = issueDate;
+		this.expirationDate = expirationDate;
+		this.personalNumber = personalNumber;
+		this.issuingCountry = issuingCountry;
+	}
+
 }

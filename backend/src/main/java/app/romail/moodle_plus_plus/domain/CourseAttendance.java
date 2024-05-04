@@ -15,7 +15,12 @@ public class CourseAttendance {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@OneToOne
+	@ManyToOne
 	private CourseEnrollment courseEnrollment;
 	private Date date;
+
+	public CourseAttendance(CourseEnrollment courseEnrollment, Date date) {
+		this.courseEnrollment = courseEnrollment;
+		this.date = date;
+	}
 }
