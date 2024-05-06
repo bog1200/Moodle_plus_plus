@@ -12,19 +12,24 @@ import java.util.List;
 @lombok.Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CourseEnrollment {
+
+@Table(uniqueConstraints={
+		@UniqueConstraint(columnNames = {"subject_id", "student_id"})
+})
+public class SubjectEnrollment {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@OneToOne
-	private Course course;
-	@OneToOne
+
+	@ManyToOne
+	private Subject subject;
+	@ManyToOne
 	private Student student;
 	@OneToMany
 	private List<CourseAttendance> courseAttendances = new ArrayList<>();
 
-	public CourseEnrollment(Course course, Student student) {
-		this.course = course;
+	public SubjectEnrollment(Subject subject, Student student) {
+		this.subject = subject;
 		this.student = student;
 	}
 

@@ -1,13 +1,12 @@
 package app.romail.moodle_plus_plus.controllers;
 
-import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.dto.AccountDTO;
 import app.romail.moodle_plus_plus.services.AccountService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/account")
@@ -25,7 +24,15 @@ public class AccountController {
 		return ResponseEntity.ok(accountService.findById(id));
 	}
 
-
+//	@PostMapping("/new")
+//	public ResponseEntity<URI> createAccount(@RequestBody AccountDTO accountDTO) {
+//		Optional<URI> uri = accountService.createAccount(accountDTO);
+//		if (uri.isPresent()) {
+//			return ResponseEntity.created(uri.get()).build();
+//		} else {
+//			return ResponseEntity.badRequest().build();
+//		}
+//	}
 
 
 

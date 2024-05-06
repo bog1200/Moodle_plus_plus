@@ -7,6 +7,9 @@ import app.romail.moodle_plus_plus.services.GradeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/grade")
 public class GradeController {
@@ -23,11 +26,11 @@ public class GradeController {
                  .orElse(ResponseEntity.notFound().build());
      }
 
-//     @PostMapping
-//     public ResponseEntity<GradeDTO> createGrade(@RequestBody GradeDTO gradeDTO) {
-//         Grade grade = gradeService.save(gradeDTO);
-//         return ResponseEntity.ok(grade);
-//     }
+     @PostMapping("/new")
+     public ResponseEntity<URI> createGrade(@RequestBody GradeDTO gradeDTO) {
+         Optional<URI> uri = gradeService.createGrade(gradeDTO);
+         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
+     }
 //
 //     @PutMapping("/{id}")
 //     public ResponseEntity<GradeDTO> updateGrade(@PathVariable Long id, @RequestBody GradeDTO gradeDTO) {

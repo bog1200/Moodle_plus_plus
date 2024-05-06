@@ -2,11 +2,11 @@ package app.romail.moodle_plus_plus.controllers;
 
 import app.romail.moodle_plus_plus.dto.AssignmentSubmissionDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import app.romail.moodle_plus_plus.services.AssignmentSubmissionService;
+
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/assignments/submission")
@@ -24,4 +24,9 @@ public class AssignmentSubmissionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/new")
+    public ResponseEntity<URI> createAssignmentSubmission(@RequestBody AssignmentSubmissionDTO assignmentSubmissionDTO) {
+        Optional<URI> uri = assignmentSubmissionService.createAssignmentSubmission(assignmentSubmissionDTO);
+        return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
 }

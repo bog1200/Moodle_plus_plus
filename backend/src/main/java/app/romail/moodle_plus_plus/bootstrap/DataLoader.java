@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 @Component
@@ -80,8 +79,8 @@ public class DataLoader implements CommandLineRunner {
 		Subject subject1 = new Subject("Math", "Mathematics", "MATH101");
 		subjectRepository.save(subject1);
 
-		Timestamp startDate = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 08:00:00").getTime());
-		Timestamp endDate = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 10:00:00").getTime());
+		Date startDate = new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 08:00:00").getTime());
+		Date endDate = new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 10:00:00").getTime());
 		Course course1 = new Course(startDate, endDate);
 		course1.setSubject(subject1);
 		courseRepository.save(course1);
@@ -99,7 +98,7 @@ public class DataLoader implements CommandLineRunner {
 		studentGroupRepository.save(sg1);
 		subjectRepository.save(subject1);
 		teacherRepository.save(teacher1);
-		CourseEnrollment ce1 = new CourseEnrollment(course1, student1);
+		SubjectEnrollment ce1 = new SubjectEnrollment(subject1, student1);
 		courseEnrollmentRepository.save(ce1);
 		CourseAttendance ca1 = new CourseAttendance(ce1, startDate);
 		ce1.getCourseAttendances().add(ca1);
@@ -113,8 +112,10 @@ public class DataLoader implements CommandLineRunner {
 
 		AssignmentSubmission assignmentSubmission1 = new AssignmentSubmission(assignment1, student1, startDate, "Homework 1 submission");
 	    assingmentSubmissionRepository.save(assignmentSubmission1);
-		assignment1.getSubmissions().add(assignmentSubmission1);
-		assignmentRepository.save(assignment1);
+
+		AssignmentSubmission assignmentSubmission2 = new AssignmentSubmission(assignment1, student1, startDate, "Homework 2 submission");
+	    assingmentSubmissionRepository.save(assignmentSubmission2);
+
 
 		Grade grade1 = new Grade(9.0, 10.0, "Good job", "2021-10-01", assignmentSubmission1);
 		gradeRepository.save(grade1);

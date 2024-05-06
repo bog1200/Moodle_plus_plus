@@ -27,13 +27,13 @@ public class SecurityConfig {
 		http
 				.authorizeHttpRequests((authorizeRequests) ->
 						authorizeRequests
-								.anyRequest().anonymous());
+								.anyRequest().anonymous())
 //								.requestMatchers(HttpMethod.POST,"/products/**")
 //								.hasAnyRole("ADMIN")
 //								.requestMatchers(HttpMethod.GET,"/products/**","/cart/**")
 //								.hasAnyRole("USER","ADMIN")
 //								.requestMatchers("/","/css/**","/images/**").permitAll())
-//				.formLogin(withDefaults()).httpBasic().and().csrf().disable();
+				.formLogin(withDefaults()).httpBasic().and().csrf().disable();
 		return http.build();
 	}
 	@Bean

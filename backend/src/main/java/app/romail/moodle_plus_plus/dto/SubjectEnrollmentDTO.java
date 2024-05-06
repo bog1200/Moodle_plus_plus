@@ -10,9 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 @lombok.Getter
 @lombok.Setter
-public class CourseEnrollmentDTO {
+public class SubjectEnrollmentDTO {
 private Long id;
-    private Long course_id;
+    private Long subject_id;
     private Long student_id;
     private List<Long> courseAttendances_ids;
 }

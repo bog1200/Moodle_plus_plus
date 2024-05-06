@@ -2,11 +2,11 @@ package app.romail.moodle_plus_plus.controllers;
 
 import app.romail.moodle_plus_plus.dto.CourseDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import app.romail.moodle_plus_plus.services.CourseService;
-import org.springframework.web.bind.annotation.PathVariable;
+
+import java.net.URI;
+import java.util.Optional;
 
 
 @RestController
@@ -24,6 +24,12 @@ public class CourseController {
         return courseService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<URI> createCourse(@RequestBody CourseDTO courseDTO) {
+        Optional<URI> uri = courseService.createCourse(courseDTO);
+        return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
 

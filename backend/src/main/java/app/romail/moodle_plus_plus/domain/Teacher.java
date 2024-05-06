@@ -5,7 +5,7 @@ import jakarta.persistence.ManyToMany;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 @Entity

@@ -8,6 +8,8 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +29,17 @@ public class AccountServiceImpl implements AccountService{
 				.setParameter("username", username)
 				.getSingleResult()
 		);
+	}
+
+	@Override
+	public Optional<URI> createAccount(AccountDTO accountDTO) {
+		Account account = convertToEntity(accountDTO);
+		try {
+			em.persist(account);
+		} catch (Exception e) {
+			return Optional.empty();
+		}
+		return Optional.of(URI.create("/account/" + account.getId()));
 	}
 
 	private AccountDTO convertToDTO(Account account) {

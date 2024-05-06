@@ -5,6 +5,9 @@ import app.romail.moodle_plus_plus.services.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -19,6 +22,12 @@ public class StudentController {
 		return studentService.getById(id)
 				.map(ResponseEntity::ok)
 				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	@PostMapping("/new")
+	public ResponseEntity<URI> createStudent(@RequestBody StudentDTO studentDTO) {
+		Optional<URI> uri = studentService.createStudent(studentDTO);
+        return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
 	}
 
 //	@PostMapping()

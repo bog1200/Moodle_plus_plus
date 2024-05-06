@@ -5,9 +5,11 @@ import app.romail.moodle_plus_plus.domain.StudentGroup;
 import app.romail.moodle_plus_plus.dto.StudentGroupDTO;
 import jakarta.persistence.EntityManager;
 
+import java.net.URI;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -57,6 +59,20 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		return Optional.of(convertToDTO(studentGroup));
 	}
 
+	@Transactional
+	@Override
+	public Optional<URI> createStudentGroup(StudentGroupDTO studentGroupDTO) {
+		StudentGroup studentGroup;
+		try{
+			studentGroup = convertToEntity(studentGroupDTO);
+			save(studentGroup);
+
+		} catch (Exception e){
+			return Optional.empty();
+		}
+		return Optional.of(URI.create("/students/group/" + studentGroup.getId()));
+	}
+
 	private StudentGroupDTO convertToDTO(StudentGroup studentGroup) {
 		StudentGroupDTO studentGroupDTO = new StudentGroupDTO();
 		studentGroupDTO.setId(studentGroup.getId());
@@ -64,5 +80,18 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		studentGroupDTO.setStudents(studentGroup.getStudents().stream().map(studentService::convertToDTO).collect(Collectors.toList()));
 		studentGroupDTO.setSubjects(studentGroup.getSubjects().stream().map(subjectService::convertToDTO).collect(Collectors.toList()));
 		return studentGroupDTO;
+	}
+
+	private StudentGroup convertToEntity(StudentGroupDTO studentGroupDTO) {
+		StudentGroup studentGroup = new StudentGroup();
+		studentGroup.setId(studentGroupDTO.getId());
+		studentGroup.setName(studentGroupDTO.getName());
+		if(studentGroupDTO.getStudents() != null){
+			studentGroup.setStudents(studentGroupDTO.getStudents().stream().map(studentService::convertToEntity).collect(Collectors.toList()));
+		}
+		if (studentGroupDTO.getSubjects() != null){
+			studentGroup.setSubjects(studentGroupDTO.getSubjects().stream().map(subjectService::convertToEntity).collect(Collectors.toList()));
+		}
+		return studentGroup;
 	}
 }

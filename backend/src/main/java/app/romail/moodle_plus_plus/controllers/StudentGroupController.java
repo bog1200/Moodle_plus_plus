@@ -3,10 +3,10 @@ package app.romail.moodle_plus_plus.controllers;
 import app.romail.moodle_plus_plus.dto.StudentGroupDTO;
 import app.romail.moodle_plus_plus.services.StudentGroupService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/students/group")
@@ -25,4 +25,9 @@ public class StudentGroupController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/new")
+    public ResponseEntity<URI> createStudentGroup(@RequestBody StudentGroupDTO studentGroupDTO) {
+        Optional<URI> uri = studentGroupService.createStudentGroup(studentGroupDTO);
+        return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
 }

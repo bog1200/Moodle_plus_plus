@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
 import java.util.ArrayList;
-import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
@@ -19,14 +19,14 @@ public class Course {
 	@GeneratedValue
 	private Long id;
 	// start and end hour of the course
-	private Timestamp startDate;
-	private Timestamp endDate;
+	private Date startDate;
+	private Date endDate;
 	@ManyToOne
 	private Subject subject;
 	@OneToMany
 	private List<CourseAttendance> courseAttendances = new ArrayList<>();
 
-	public Course(Timestamp startDate, Timestamp endDate) {
+	public Course(Date startDate, Date endDate) {
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}

@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import app.romail.moodle_plus_plus.services.TeacherService;
 
+import java.net.URI;
 import java.util.Optional;
 
 @RestController
@@ -21,6 +22,12 @@ public class TeacherController {
     public ResponseEntity<TeacherDTO> getTeacherById(@PathVariable Long id) {
         Optional<TeacherDTO> teacher = teacherService.getById(id);
         return teacher.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<URI> createTeacher(@RequestBody TeacherDTO teacherDTO) {
+        Optional<URI> uri = teacherService.createTeacher(teacherDTO);
+        return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
 

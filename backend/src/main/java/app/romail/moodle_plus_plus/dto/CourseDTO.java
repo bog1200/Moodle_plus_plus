@@ -12,9 +12,9 @@ import java.util.List;
 @lombok.Getter
 @lombok.Setter
 public class CourseDTO {
-private Long id;
-    private String startDate;
-    private String endDate;
+    private Long id;
+    private Long startDate;
+    private Long endDate;
     private Long subject_id;
     private List<Long> courseAttendances_ids = new ArrayList<>();
 }

@@ -18,8 +18,8 @@ private Long id;
     private List<Long> files_ids;
     private List<Long> submissions_ids;
     private Long subject_id;
-    private String startDate;
-    private String endDate;
-    private String deadline;
+    private Long startDate;
+    private Long endDate;
+    private Long deadline;
     private int maxPoints;
 }

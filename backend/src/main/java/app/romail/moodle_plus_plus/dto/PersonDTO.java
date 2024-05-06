@@ -4,8 +4,6 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Getter
@@ -19,5 +17,5 @@ private Long id;
     private String phone;
     private String address;
     private String gender;
-    private Date dob;
+    private Long dob;
 }

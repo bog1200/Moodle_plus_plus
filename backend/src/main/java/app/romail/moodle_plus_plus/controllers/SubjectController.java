@@ -3,10 +3,10 @@ package app.romail.moodle_plus_plus.controllers;
 import app.romail.moodle_plus_plus.dto.SubjectDTO;
 import app.romail.moodle_plus_plus.services.SubjectService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/subject")
@@ -23,5 +23,11 @@ public class SubjectController {
         return subjectService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<URI> createSubject(@RequestBody SubjectDTO subjectDTO) {
+        Optional<URI> uri = subjectService.createSubject(subjectDTO);
+        return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 }

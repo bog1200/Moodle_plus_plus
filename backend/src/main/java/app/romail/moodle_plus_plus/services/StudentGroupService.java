@@ -4,6 +4,7 @@ import app.romail.moodle_plus_plus.domain.Student;
 import app.romail.moodle_plus_plus.domain.StudentGroup;
 import app.romail.moodle_plus_plus.dto.StudentGroupDTO;
 
+import java.net.URI;
 import java.util.Optional;
 
 public interface StudentGroupService {
@@ -11,4 +12,5 @@ public interface StudentGroupService {
 	void removeStudentFromGroup(Student student, StudentGroup studentGroup);
 	void save(StudentGroup studentGroup);
     Optional<StudentGroupDTO> getById(Long id);
+	Optional<URI> createStudentGroup(StudentGroupDTO studentGroupDTO);
 }
