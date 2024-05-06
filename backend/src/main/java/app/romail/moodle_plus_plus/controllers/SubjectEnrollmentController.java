@@ -29,4 +29,13 @@ public class SubjectEnrollmentController {
         Optional<URI> uri = subjectEnrollmentService.createSubjectEnrollment(subjectEnrollmentDTO);
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteSubjectEnrollment(@PathVariable Long id) {
+        if (subjectEnrollmentService.deleteSubjectEnrollment(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

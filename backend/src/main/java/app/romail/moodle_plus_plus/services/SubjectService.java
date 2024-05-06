@@ -13,4 +13,6 @@ public interface SubjectService {
     SubjectDTO convertToDTO(Subject subject);
     Optional<URI> createSubject(SubjectDTO subjectDTO);
     Subject convertToEntity(SubjectDTO subjectDTO);
+
+    boolean deleteSubject(Long id);
 }

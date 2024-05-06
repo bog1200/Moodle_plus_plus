@@ -10,4 +10,6 @@ public interface IdDocumentService {
     void save(IdDocument idDocument);
     Optional<IdDocumentDTO> getById(Long id);
     Optional<URI> createIdDocument(IdDocumentDTO idDocumentDTO);
+
+    boolean deleteIdDocument(Long id);
 }

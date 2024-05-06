@@ -10,4 +10,6 @@ public interface AssignmentService {
     void save(Assignment assignment);
     Optional<AssignmentDTO> findById(Long id);
     Optional<URI> createAssignment(AssignmentDTO assignmentDTO);
+
+    boolean deleteAssignment(Long id);
 }

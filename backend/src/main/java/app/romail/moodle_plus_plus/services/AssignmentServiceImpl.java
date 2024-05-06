@@ -45,6 +45,17 @@ public class AssignmentServiceImpl implements AssignmentService {
         return Optional.of(URI.create("/assignment/" + assignment.getId()));
     }
 
+    @Transactional
+    @Override
+    public boolean deleteAssignment(Long id) {
+        Assignment assignment = em.find(Assignment.class, id);
+        if (assignment == null) {
+            return false;
+        }
+        em.remove(assignment);
+        return true;
+    }
+
 
     private AssignmentDTO convertToDTO(Assignment assignment) {
         AssignmentDTO assignmentDTO = new AssignmentDTO();

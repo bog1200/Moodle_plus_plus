@@ -13,4 +13,6 @@ public interface StudentGroupService {
 	void save(StudentGroup studentGroup);
     Optional<StudentGroupDTO> getById(Long id);
 	Optional<URI> createStudentGroup(StudentGroupDTO studentGroupDTO);
+
+    boolean deleteStudentGroup(Long id);
 }

@@ -50,6 +50,17 @@ public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionServ
         return Optional.of(URI.create("/assignments/submission/" + assignmentSubmission.getId()));
     }
 
+    @Transactional
+    @Override
+    public boolean deleteAssignmentSubmission(Long id) {
+        AssignmentSubmission assignmentSubmission = em.find(AssignmentSubmission.class, id);
+        if (assignmentSubmission == null) {
+            return false;
+        }
+        em.remove(assignmentSubmission);
+        return true;
+    }
+
     private AssignmentSubmissionDTO convertToDTO(AssignmentSubmission assignmentSubmission) {
         AssignmentSubmissionDTO assignmentSubmissionDTO = new AssignmentSubmissionDTO();
         BeanUtils.copyProperties(assignmentSubmission, assignmentSubmissionDTO, "assignment","student","grade");

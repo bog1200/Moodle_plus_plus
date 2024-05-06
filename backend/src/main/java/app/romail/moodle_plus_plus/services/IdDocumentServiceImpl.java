@@ -47,6 +47,17 @@ public class IdDocumentServiceImpl implements IdDocumentService {
         return Optional.of(URI.create("/idDocument/" + idDocument.getId()));
     }
 
+    @Transactional
+    @Override
+    public boolean deleteIdDocument(Long id) {
+        IdDocument idDocument = em.find(IdDocument.class, id);
+        if (idDocument == null) {
+            return false;
+        }
+        em.remove(idDocument);
+        return true;
+    }
+
 
     private IdDocumentDTO convertToDTO(IdDocument idDocument) {
         IdDocumentDTO idDocumentDTO = new IdDocumentDTO();

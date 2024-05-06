@@ -29,4 +29,13 @@ public class AssignmentSubmissionController {
         Optional<URI> uri = assignmentSubmissionService.createAssignmentSubmission(assignmentSubmissionDTO);
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteAssignmentSubmission(@PathVariable Long id) {
+        if (assignmentSubmissionService.deleteAssignmentSubmission(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

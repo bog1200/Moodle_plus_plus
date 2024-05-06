@@ -10,4 +10,6 @@ public interface SubjectEnrollmentService {
     void save(SubjectEnrollment subjectEnrollment);
     Optional<SubjectEnrollmentDTO> getById(Long id);
     Optional<URI> createSubjectEnrollment(SubjectEnrollmentDTO subjectEnrollmentDTO);
+
+    boolean deleteSubjectEnrollment(Long id);
 }

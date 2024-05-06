@@ -47,6 +47,17 @@ public class CourseServiceImpl implements CourseService {
         return Optional.of(URI.create("/course/" + course.getId()));
     }
 
+    @Transactional
+    @Override
+    public boolean deleteCourse(Long id) {
+        Course course = em.find(Course.class, id);
+        if (course == null) {
+            return false;
+        }
+        em.remove(course);
+        return true;
+    }
+
 
     public CourseDTO convertToDTO(Course course) {
         CourseDTO courseDTO = new CourseDTO();

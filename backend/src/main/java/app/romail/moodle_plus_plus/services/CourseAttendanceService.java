@@ -10,4 +10,6 @@ public interface CourseAttendanceService {
     void save(CourseAttendance courseAttendance);
     Optional<CourseAttendanceDTO> getById(Long id);
     Optional<URI> createCourseAttendance(CourseAttendanceDTO courseAttendanceDTO);
+
+    boolean deleteCourseAttendance(Long id);
 }

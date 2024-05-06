@@ -5,6 +5,7 @@ import app.romail.moodle_plus_plus.dto.AccountDTO;
 import app.romail.moodle_plus_plus.domain.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class AccountServiceImpl implements AccountService{
 		);
 	}
 
+	@Transactional
 	@Override
 	public Optional<URI> createAccount(AccountDTO accountDTO) {
 		Account account = convertToEntity(accountDTO);

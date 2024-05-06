@@ -73,6 +73,17 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		return Optional.of(URI.create("/students/group/" + studentGroup.getId()));
 	}
 
+	@Transactional
+	@Override
+	public boolean deleteStudentGroup(Long id) {
+		StudentGroup studentGroup = em.find(StudentGroup.class, id);
+		if (studentGroup == null) {
+			return false;
+		}
+		em.remove(studentGroup);
+		return true;
+	}
+
 	private StudentGroupDTO convertToDTO(StudentGroup studentGroup) {
 		StudentGroupDTO studentGroupDTO = new StudentGroupDTO();
 		studentGroupDTO.setId(studentGroup.getId());

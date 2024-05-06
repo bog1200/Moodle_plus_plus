@@ -14,4 +14,6 @@ public interface StudentService {
 	Optional<URI> createStudent(StudentDTO studentDTO);
 
 	Student convertToEntity(StudentDTO studentDTO);
+
+    boolean deleteStudent(Long id);
 }

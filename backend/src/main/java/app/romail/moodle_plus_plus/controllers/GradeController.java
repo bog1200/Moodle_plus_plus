@@ -31,6 +31,15 @@ public class GradeController {
          Optional<URI> uri = gradeService.createGrade(gradeDTO);
          return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
      }
+
+        @DeleteMapping("/{id}")
+        public ResponseEntity<Void> deleteGrade(@PathVariable Long id) {
+            if (gradeService.deleteGrade(id)) {
+                return ResponseEntity.noContent().build();
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        }
 //
 //     @PutMapping("/{id}")
 //     public ResponseEntity<GradeDTO> updateGrade(@PathVariable Long id, @RequestBody GradeDTO gradeDTO) {

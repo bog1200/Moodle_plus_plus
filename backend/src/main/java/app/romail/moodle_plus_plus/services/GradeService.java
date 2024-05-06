@@ -10,4 +10,6 @@ public interface GradeService {
     void save(Grade grade);
     Optional<GradeDTO> getById(Long id);
     Optional<URI> createGrade(GradeDTO gradeDTO);
+
+    boolean deleteGrade(Long id);
 }

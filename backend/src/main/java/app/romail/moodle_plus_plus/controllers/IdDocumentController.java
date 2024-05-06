@@ -29,4 +29,13 @@ public class IdDocumentController {
         Optional<URI> uri = idDocumentService.createIdDocument(idDocumentDTO);
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteIdDocument(@PathVariable Long id) {
+        if (idDocumentService.deleteIdDocument(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

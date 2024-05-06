@@ -13,4 +13,6 @@ public interface TeacherService {
 	Optional<URI> createTeacher(TeacherDTO teacherDTO);
 
 	Teacher convertToEntity(TeacherDTO teacherDTO);
+
+    boolean deleteTeacher(Long id);
 }

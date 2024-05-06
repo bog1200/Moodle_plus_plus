@@ -57,6 +57,17 @@ public class SubjectServiceImpl implements SubjectService {
         return Optional.of(URI.create("/subject/" + subject.getId()));
     }
 
+    @Transactional
+    @Override
+    public boolean deleteSubject(Long id) {
+        Subject subject = em.find(Subject.class, id);
+        if (subject == null) {
+            return false;
+        }
+        em.remove(subject);
+        return true;
+    }
+
     public Subject convertToEntity(SubjectDTO subjectDTO) {
         Subject subject = new Subject();
         BeanUtils.copyProperties(subjectDTO, subject, "teachers_ids","studentGroups_ids","assignments_ids","courses_ids");

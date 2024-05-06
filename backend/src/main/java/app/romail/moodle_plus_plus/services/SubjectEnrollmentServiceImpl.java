@@ -43,6 +43,17 @@ public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {
         return Optional.of(URI.create("/courseEnrollments/" + subjectEnrollment.getId()));
     }
 
+    @Transactional
+    @Override
+    public boolean deleteSubjectEnrollment(Long id) {
+        SubjectEnrollment subjectEnrollment = em.find(SubjectEnrollment.class, id);
+        if (subjectEnrollment == null) {
+            return false;
+        }
+        em.remove(subjectEnrollment);
+        return true;
+    }
+
 
     private SubjectEnrollmentDTO convertToDTO(SubjectEnrollment subjectEnrollment) {
         SubjectEnrollmentDTO subjectEnrollmentDTO = new SubjectEnrollmentDTO();

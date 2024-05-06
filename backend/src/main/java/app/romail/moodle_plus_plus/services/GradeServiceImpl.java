@@ -46,6 +46,17 @@ public class GradeServiceImpl implements GradeService {
         return Optional.of(URI.create("/grade/" + grade.getId()));
     }
 
+    @Transactional
+    @Override
+    public boolean deleteGrade(Long id) {
+        Grade grade = em.find(Grade.class, id);
+        if (grade == null) {
+            return false;
+        }
+        em.remove(grade);
+        return true;
+    }
+
     private GradeDTO convertToDTO(Grade grade) {
         GradeDTO gradeDTO = new GradeDTO();
         BeanUtils.copyProperties(grade, gradeDTO,"assignmentSubmission");

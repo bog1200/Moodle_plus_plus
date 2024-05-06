@@ -60,6 +60,17 @@ public class StudentServiceImpl implements StudentService {
 		return Optional.of(URI.create("/student/" + student.getId()));
 	}
 
+	@Transactional
+	@Override
+	public boolean deleteStudent(Long id) {
+		Student student = em.find(Student.class, id);
+		if (student == null) {
+			return false;
+		}
+		em.remove(student);
+		return true;
+	}
+
 	public Student convertToEntity(StudentDTO studentDTO) {
 		Student student = new Student();
 		BeanUtils.copyProperties(studentDTO, student, "account_id","dob","enrollmentDate");

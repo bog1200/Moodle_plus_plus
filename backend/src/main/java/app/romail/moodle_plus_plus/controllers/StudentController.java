@@ -30,6 +30,15 @@ public class StudentController {
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
 	}
 
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+		if (studentService.deleteStudent(id)) {
+			return ResponseEntity.noContent().build();
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
 //	@PostMapping()
 //	public ResponseEntity<StudentDTO> createStudent(@RequestBody Student student) {
 //

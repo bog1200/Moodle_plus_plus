@@ -54,6 +54,17 @@ public class TeacherServiceImpl implements TeacherService{
 		return Optional.of(URI.create("/teacher/" + teacher.getId()));
 	}
 
+	@Transactional
+	@Override
+	public boolean deleteTeacher(Long id) {
+		Teacher teacher = em.find(Teacher.class, id);
+		if (teacher == null) {
+			return false;
+		}
+		em.remove(teacher);
+		return true;
+	}
+
 	@Override
 	public Teacher convertToEntity(TeacherDTO teacherDTO) {
 		Teacher teacher = new Teacher();

@@ -30,4 +30,13 @@ public class StudentGroupController {
         Optional<URI> uri = studentGroupService.createStudentGroup(studentGroupDTO);
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudentGroup(@PathVariable Long id) {
+        if (studentGroupService.deleteStudentGroup(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

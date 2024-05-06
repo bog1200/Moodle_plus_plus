@@ -46,6 +46,17 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         return Optional.of(URI.create("/courses/attendance/" + courseAttendance.getId()));
     }
 
+    @Transactional
+    @Override
+    public boolean deleteCourseAttendance(Long id) {
+        CourseAttendance courseAttendance = em.find(CourseAttendance.class, id);
+        if (courseAttendance == null) {
+            return false;
+        }
+        em.remove(courseAttendance);
+        return true;
+    }
+
     public CourseAttendanceDTO convertToDTO(CourseAttendance courseAttendance) {
         return new CourseAttendanceDTO(courseAttendance.getId(), courseAttendance.getSubjectEnrollment().getId(), courseAttendance.getDate().getTime());
     }
