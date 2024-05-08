@@ -1,5 +1,6 @@
 package app.romail.moodle_plus_plus.controllers;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import app.romail.moodle_plus_plus.dto.GradeDTO;
@@ -11,7 +12,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/grade")
+@RequestMapping("/api/v1/grade")
 public class GradeController {
      private final GradeService gradeService;
 
@@ -19,6 +20,7 @@ public class GradeController {
          this.gradeService = gradeService;
      }
 
+     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
      @GetMapping("/{id}")
      public ResponseEntity<GradeDTO> getGrade(@PathVariable Long id) {
          return gradeService.getById(id)
@@ -26,20 +28,23 @@ public class GradeController {
                  .orElse(ResponseEntity.notFound().build());
      }
 
+     @PreAuthorize("hasRole('TEACHER')")
      @PostMapping("/new")
      public ResponseEntity<URI> createGrade(@RequestBody GradeDTO gradeDTO) {
          Optional<URI> uri = gradeService.createGrade(gradeDTO);
          return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
      }
 
-        @DeleteMapping("/{id}")
-        public ResponseEntity<Void> deleteGrade(@PathVariable Long id) {
-            if (gradeService.deleteGrade(id)) {
-                return ResponseEntity.noContent().build();
-            } else {
-                return ResponseEntity.notFound().build();
-            }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteGrade(@PathVariable Long id) {
+        if (gradeService.deleteGrade(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
         }
+    }
 //
 //     @PutMapping("/{id}")
 //     public ResponseEntity<GradeDTO> updateGrade(@PathVariable Long id, @RequestBody GradeDTO gradeDTO) {

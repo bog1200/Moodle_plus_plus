@@ -3,13 +3,14 @@ package app.romail.moodle_plus_plus.controllers;
 import app.romail.moodle_plus_plus.dto.SubjectDTO;
 import app.romail.moodle_plus_plus.services.SubjectService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/subject")
+@RequestMapping("/api/v1/subject")
 public class SubjectController {
 
     private final SubjectService subjectService;
@@ -18,6 +19,7 @@ public class SubjectController {
         this.subjectService = subjectService;
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<SubjectDTO> getSubjectById(@PathVariable Long id) {
         return subjectService.getById(id)
@@ -25,12 +27,14 @@ public class SubjectController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/new")
     public ResponseEntity<URI> createSubject(@RequestBody SubjectDTO subjectDTO) {
         Optional<URI> uri = subjectService.createSubject(subjectDTO);
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
         if (subjectService.deleteSubject(id)) {

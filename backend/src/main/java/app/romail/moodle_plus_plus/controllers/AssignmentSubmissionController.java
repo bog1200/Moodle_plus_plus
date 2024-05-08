@@ -2,6 +2,7 @@ package app.romail.moodle_plus_plus.controllers;
 
 import app.romail.moodle_plus_plus.dto.AssignmentSubmissionDTO;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import app.romail.moodle_plus_plus.services.AssignmentSubmissionService;
 
@@ -9,7 +10,7 @@ import java.net.URI;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/assignments/submission")
+@RequestMapping("/api/v1/assignments/submission")
 public class AssignmentSubmissionController {
     private final AssignmentSubmissionService assignmentSubmissionService;
 
@@ -17,6 +18,7 @@ public class AssignmentSubmissionController {
         this.assignmentSubmissionService = assignmentSubmissionService;
     }
 
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<AssignmentSubmissionDTO> getAssignmentSubmission(@PathVariable Long id) {
         return assignmentSubmissionService.getById(id)
@@ -24,12 +26,14 @@ public class AssignmentSubmissionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("hasAnyRole('STUDENT')")
     @PostMapping("/new")
     public ResponseEntity<URI> createAssignmentSubmission(@RequestBody AssignmentSubmissionDTO assignmentSubmissionDTO) {
         Optional<URI> uri = assignmentSubmissionService.createAssignmentSubmission(assignmentSubmissionDTO);
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @PreAuthorize("hasRole('STUDENT')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAssignmentSubmission(@PathVariable Long id) {
         if (assignmentSubmissionService.deleteAssignmentSubmission(id)) {

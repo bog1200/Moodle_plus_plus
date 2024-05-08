@@ -46,7 +46,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests((authorizeRequests) ->
 						authorizeRequests
 								.requestMatchers("/api/v1/account/idLogin").permitAll()
-								.requestMatchers("/api/v1/**").permitAll());
+								.requestMatchers("/api/v1/**").authenticated());
 
 		return http.build();
 	}
