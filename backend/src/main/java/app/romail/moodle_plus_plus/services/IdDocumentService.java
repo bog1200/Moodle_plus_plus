@@ -12,4 +12,6 @@ public interface IdDocumentService {
     Optional<URI> createIdDocument(IdDocumentDTO idDocumentDTO);
 
     boolean deleteIdDocument(Long id);
+
+    Optional<IdDocument> getByLogin(String country, String personalNumber);
 }

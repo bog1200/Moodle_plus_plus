@@ -24,6 +24,7 @@ public class IdDocumentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+
     @PostMapping("/new")
     public ResponseEntity<URI> createIdDocument(@RequestBody IdDocumentDTO idDocumentDTO) {
         Optional<URI> uri = idDocumentService.createIdDocument(idDocumentDTO);

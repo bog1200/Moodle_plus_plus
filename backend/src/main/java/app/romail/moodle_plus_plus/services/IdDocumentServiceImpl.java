@@ -58,6 +58,18 @@ public class IdDocumentServiceImpl implements IdDocumentService {
         return true;
     }
 
+    @Override
+    public Optional<IdDocument> getByLogin(String country, String personalNumber) {
+        IdDocument idDocument = em.createQuery("SELECT i FROM IdDocument i WHERE i.issuingCountry = :country AND i.personalNumber = :personalNumber", IdDocument.class)
+                .setParameter("country", country)
+                .setParameter("personalNumber", personalNumber)
+                .getSingleResult();
+        if (idDocument == null) {
+            return Optional.empty();
+        }
+        return Optional.of(idDocument);
+    }
+
 
     private IdDocumentDTO convertToDTO(IdDocument idDocument) {
         IdDocumentDTO idDocumentDTO = new IdDocumentDTO();

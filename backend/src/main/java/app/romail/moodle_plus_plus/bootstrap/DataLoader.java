@@ -122,7 +122,7 @@ public class DataLoader implements CommandLineRunner {
 		assignmentSubmission1.setGrade(grade1);
 		assingmentSubmissionRepository.save(assignmentSubmission1);
 
-		IdDocument idDocument1 = new IdDocument(studentAccount1, IdDocumentType.EU_ID_CARD, "123456789", "2020-01-01", "2025-01-01", "123456789", "Romania");
+		IdDocument idDocument1 = new IdDocument(studentAccount1, IdDocumentType.EU_ID_CARD, "123456789", "2020-01-01", "2025-01-01", "1234567890", "ROU");
 		idDocumentRepository.save(idDocument1);
 
 

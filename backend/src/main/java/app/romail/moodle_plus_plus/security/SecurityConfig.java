@@ -1,55 +1,77 @@
 package app.romail.moodle_plus_plus.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
-	private final UserDetailsService userDetailsService;
 
-	public SecurityConfig(UserDetailsService userDetailsService) {
-		this.userDetailsService = userDetailsService;
+
+	@Bean
+	public UserDetailsServiceImpl userDetailsService() {
+		return new UserDetailsServiceImpl();
 	}
+
+	@Autowired
+	private JwtAuthFilter jwtAuthFilter;
 
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http
+				.csrf(AbstractHttpConfigurer::disable)
+				.formLogin(withDefaults())
+				.httpBasic(withDefaults())
+				//.authenticationProvider(idDocumentAuthenticationProviders())
+				.authenticationProvider(authenticationProvider())
+				.sessionManagement((sessionManagement) -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.authorizeHttpRequests((authorizeRequests) ->
 						authorizeRequests
-								.anyRequest().anonymous())
-//								.requestMatchers(HttpMethod.POST,"/products/**")
-//								.hasAnyRole("ADMIN")
-//								.requestMatchers(HttpMethod.GET,"/products/**","/cart/**")
-//								.hasAnyRole("USER","ADMIN")
-//								.requestMatchers("/","/css/**","/images/**").permitAll())
-				.formLogin(withDefaults()).httpBasic().and().csrf().disable();
+								.requestMatchers("/api/v1/account/idLogin").permitAll()
+								.requestMatchers("/api/v1/**").permitAll());
+
 		return http.build();
 	}
+
 	@Bean
-	PasswordEncoder passwordEncoder(){
-		return  new BCryptPasswordEncoder();
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
+
 	@Bean
-	public ProviderManager authManagerBean(HttpSecurity security) throws Exception {
-		return (ProviderManager) security.getSharedObject(AuthenticationManagerBuilder.class)
-				.authenticationProvider(authProvider()).
-				build();
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+		authenticationProvider.setUserDetailsService(userDetailsService());
+		authenticationProvider.setPasswordEncoder(passwordEncoder());
+		return authenticationProvider;
+
 	}
+
+//	@Bean
+//	public AuthenticationProvider idDocumentAuthenticationProviders() {
+//        return new IdDocumentAuthenticationProvider();
+//	}
+
 	@Bean
-	public DaoAuthenticationProvider authProvider() {
-		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-		authProvider.setUserDetailsService(userDetailsService);
-		authProvider.setPasswordEncoder(passwordEncoder());
-		return authProvider;
-	}}
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
+	}
+}
