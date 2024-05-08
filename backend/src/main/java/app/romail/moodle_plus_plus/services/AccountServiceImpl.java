@@ -3,6 +3,12 @@ package app.romail.moodle_plus_plus.services;
 import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.dto.AccountDTO;
 import app.romail.moodle_plus_plus.domain.Role;
+import dev.samstevens.totp.code.DefaultCodeVerifier;
+import dev.samstevens.totp.code.CodeVerifier;
+import dev.samstevens.totp.code.DefaultCodeGenerator;
+import dev.samstevens.totp.code.CodeGenerator;
+import dev.samstevens.totp.time.SystemTimeProvider;
+import dev.samstevens.totp.time.TimeProvider;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -42,6 +48,23 @@ public class AccountServiceImpl implements AccountService{
 			return Optional.empty();
 		}
 		return Optional.of(URI.create("/account/" + account.getId()));
+	}
+
+	@Override
+	public Optional<Account> validateTotp(String username, String totp) {
+		Account account = em.createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class)
+				.setParameter("username", username)
+				.getSingleResult();
+		if (account.getTotpSecret() == null) {
+			return Optional.empty();
+		}
+		TimeProvider timeProvider = new SystemTimeProvider();
+		CodeGenerator codeGenerator = new DefaultCodeGenerator();
+		CodeVerifier verifier = new DefaultCodeVerifier(codeGenerator, timeProvider);
+		if (verifier.isValidCode(account.getTotpSecret(), totp)) {
+			return Optional.of(account);
+		}
+		return Optional.empty();
 	}
 
 	private AccountDTO convertToDTO(Account account) {

@@ -1,5 +1,7 @@
 package app.romail.moodle_plus_plus.domain;
 
+import dev.samstevens.totp.secret.DefaultSecretGenerator;
+import dev.samstevens.totp.secret.SecretGenerator;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -22,6 +24,7 @@ public class Account{
 	private Person person;
 	private String username;
 	private String password;
+	private String totpSecret = "24WDMEBQJOLLXOO32YBCLV5NWD2Y55AL";// new DefaultSecretGenerator().generate();
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Getter
 	private List<Role> roles = new ArrayList<>();

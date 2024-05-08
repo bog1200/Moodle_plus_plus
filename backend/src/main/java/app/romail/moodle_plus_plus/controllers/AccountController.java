@@ -1,13 +1,16 @@
 package app.romail.moodle_plus_plus.controllers;
 
+import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.domain.IdDocument;
 import app.romail.moodle_plus_plus.dto.AccountDTO;
 import app.romail.moodle_plus_plus.dto.JwtTokenDTO;
+import app.romail.moodle_plus_plus.repositories.AccountRepository;
 import app.romail.moodle_plus_plus.security.JwtUtil;
 import app.romail.moodle_plus_plus.security.SecurityAccount;
 import app.romail.moodle_plus_plus.services.AccountService;
 import app.romail.moodle_plus_plus.services.IdDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +30,8 @@ public class AccountController {
 
 	@Autowired
 	private AuthenticationManager authenticationManager;
+    @Autowired
+    private AccountRepository accountRepository;
 
 	public AccountController(AccountService accountService, JwtUtil jwtUtil) {
 		this.accountService = accountService;
@@ -51,6 +56,34 @@ public class AccountController {
 			}
 		return ResponseEntity.notFound().build();
     }
+
+	@PostMapping("/totpLogin")
+	public ResponseEntity<JwtTokenDTO> getAccountByTotp(@RequestParam String username, @RequestParam String totp) {
+		Optional<Account> account = accountService.validateTotp(username, totp);
+		if (account.isPresent()) {
+			SecurityAccount securityAccount = new SecurityAccount(account.get());
+			new UsernamePasswordAuthenticationToken(securityAccount.getUsername(), null, securityAccount.getAuthorities());
+			return ResponseEntity.ok(JwtTokenDTO.builder()
+					.accessToken(jwtUtil.generateToken(account.get().getUsername())).build());
+		}
+		return ResponseEntity.notFound().build();
+	}
+
+	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
+	@GetMapping("/me/accountSecret")
+	public ResponseEntity<String> getAccountSecret(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+
+
+		String username = jwtUtil.extractUsername(token.substring(7).trim());
+		Account account = accountRepository.findByUsername(username);
+		if (account == null) {
+			return ResponseEntity.notFound().build();
+		}
+		if (jwtUtil.validateToken(token.substring(7).trim(), account.getUsername())) {
+			return ResponseEntity.ok(account.getTotpSecret());
+		}
+		return ResponseEntity.notFound().build();
+	}
 
 //	@PostMapping("/new")
 //	public ResponseEntity<URI> createAccount(@RequestBody AccountDTO accountDTO) {
