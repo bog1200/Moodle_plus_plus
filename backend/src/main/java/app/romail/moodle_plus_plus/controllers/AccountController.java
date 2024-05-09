@@ -53,7 +53,9 @@ public class AccountController {
 			SecurityAccount account = new SecurityAccount(idDocumentDTO.get().getAccount());
 			new UsernamePasswordAuthenticationToken(account.getUsername(), null, account.getAuthorities());
 				return ResponseEntity.ok(JwtTokenDTO.builder()
-						.accessToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount().getId())).build());
+						.accessToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount().getId(),false))
+						.refreshToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount().getId(),true))
+						.build());
 			}
 		return ResponseEntity.notFound().build();
     }
@@ -65,7 +67,7 @@ public class AccountController {
 			SecurityAccount securityAccount = new SecurityAccount(account.get());
 			new UsernamePasswordAuthenticationToken(securityAccount.getUsername(), null, securityAccount.getAuthorities());
 			return ResponseEntity.ok(JwtTokenDTO.builder()
-					.accessToken(jwtUtil.generateToken(account.get().getId())).build());
+					.accessToken(jwtUtil.generateToken(account.get().getId(),false)).build());
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -85,6 +87,17 @@ public class AccountController {
 		}
 		return ResponseEntity.notFound().build();
 	}
+
+	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
+	@GetMapping("/me/refreshToken")
+	public ResponseEntity<JwtTokenDTO> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+		Long accountId = jwtUtil.extractId(token.substring(7).trim());
+		jwtUtil.validateToken(token.substring(7).trim(), accountId);
+		return ResponseEntity.ok(JwtTokenDTO.builder()
+				.accessToken(jwtUtil.generateToken(accountId,false))
+				.build());
+	}
+
 
 //	@PostMapping("/new")
 //	public ResponseEntity<URI> createAccount(@RequestBody AccountDTO accountDTO) {

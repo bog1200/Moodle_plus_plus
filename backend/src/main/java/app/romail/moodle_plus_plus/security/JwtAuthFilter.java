@@ -29,12 +29,21 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String token = null;
         Long id = null;
+        String scope = null;
         if(authHeader != null && authHeader.startsWith("Bearer ")){
             token = authHeader.substring(7);
             id = jwtService.extractId(token);
+            scope = jwtService.extractScope(token);
+
         }
 
+
+
         if(id != null && SecurityContextHolder.getContext().getAuthentication() == null){
+            if (scope.equals("app.romail.moodle_plus_plus.refresh_token") && !request.getRequestURI().equals("/api/v1/account/me/refreshToken")) {
+                response.setStatus(403);
+                return;
+            }
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(String.valueOf(id));
             if(jwtService.validateToken(token, Long.valueOf(userDetails.getUsername()))){
                 UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

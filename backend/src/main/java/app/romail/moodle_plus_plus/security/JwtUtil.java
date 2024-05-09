@@ -20,6 +20,10 @@ public class JwtUtil {
         return Long.parseLong(extractClaim(token, Claims::getSubject));
     }
 
+    public String extractScope(String token) {
+        return extractClaim(token, Claims::getAudience);
+    }
+
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
@@ -41,17 +45,20 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(Long id) {
-        return createToken(id);
+    public String generateToken(Long id, boolean isRefreshToken) {
+        if (isRefreshToken) {
+            return createToken(id, (1000L * 60 * 60 * 24 * 30), "app.romail.moodle_plus_plus.refresh_token" ); // Refresh token expires in 30 days
+        }
+        return createToken(id, (1000L * 60 * 60 * 10), "app.romail.moodle_plus_plus.access_token"); // Access token expires in 10 hours
     }
 
-    private String createToken(Long subject) {
+    private String createToken(Long subject, Long expirationTime, String scope) {
         return Jwts.builder()
                 .setSubject(String.valueOf(subject))
-                .setAudience("app.romail.moodle_plus_plus")
+                .setAudience(scope)
                 .setIssuer("app.romail.moodle_plus_plus")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // 10 hours
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256).compact();
     }
 
