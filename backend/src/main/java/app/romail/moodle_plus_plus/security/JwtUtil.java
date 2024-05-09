@@ -16,8 +16,8 @@ public class JwtUtil {
 
     private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public Long extractId(String token) {
+        return Long.parseLong(extractClaim(token, Claims::getSubject));
     }
 
     public Date extractExpiration(String token) {
@@ -41,18 +41,22 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String username) {
-        return createToken(username);
+    public String generateToken(Long id) {
+        return createToken(id);
     }
 
-    private String createToken(String subject) {
-        return Jwts.builder().setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
+    private String createToken(Long subject) {
+        return Jwts.builder()
+                .setSubject(String.valueOf(subject))
+                .setAudience("app.romail.moodle_plus_plus")
+                .setIssuer("app.romail.moodle_plus_plus")
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256).compact();
     }
 
-    public Boolean validateToken(String token, String username) {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && !isTokenExpired(token));
+    public Boolean validateToken(String token, Long id) {
+        final Long extractedUsername = extractId(token);
+        return (extractedUsername.equals(id) && !isTokenExpired(token));
     }
 }

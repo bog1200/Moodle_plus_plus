@@ -2,6 +2,7 @@ package app.romail.moodle_plus_plus.security;
 
 import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.domain.Role;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,11 +12,12 @@ import java.util.Collection;
 import java.util.List;
 
 public class SecurityAccount extends Account implements UserDetails {
+    @Getter
     private final String username;
     private final String password;
     private final List<GrantedAuthority> authorities;
     public SecurityAccount(Account account) {
-        this.username = account.getUsername();
+        this.username = String.valueOf(account.getId());
         this.password = account.getPassword();
         List<GrantedAuthority> auths = new ArrayList<>();
 

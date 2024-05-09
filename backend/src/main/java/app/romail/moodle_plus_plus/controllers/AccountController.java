@@ -3,6 +3,7 @@ package app.romail.moodle_plus_plus.controllers;
 import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.domain.IdDocument;
 import app.romail.moodle_plus_plus.dto.AccountDTO;
+import app.romail.moodle_plus_plus.dto.IdDocumentLoginDTO;
 import app.romail.moodle_plus_plus.dto.JwtTokenDTO;
 import app.romail.moodle_plus_plus.repositories.AccountRepository;
 import app.romail.moodle_plus_plus.security.JwtUtil;
@@ -46,13 +47,13 @@ public class AccountController {
 	}
 
 	@PostMapping("/idLogin")
-	public ResponseEntity<JwtTokenDTO> getAccountByIdDocument(@RequestParam String country, @RequestParam String pin) {
-		Optional<IdDocument> idDocumentDTO = idDocumentService.getByLogin(country, pin);
+	public ResponseEntity<JwtTokenDTO> getAccountByIdDocument(@RequestBody IdDocumentLoginDTO idDocumentLoginDTO) {
+		Optional<IdDocument> idDocumentDTO = idDocumentService.getByLogin(idDocumentLoginDTO.getCountry(), idDocumentLoginDTO.getPin());
 		if (idDocumentDTO.isPresent()) {
 			SecurityAccount account = new SecurityAccount(idDocumentDTO.get().getAccount());
 			new UsernamePasswordAuthenticationToken(account.getUsername(), null, account.getAuthorities());
 				return ResponseEntity.ok(JwtTokenDTO.builder()
-						.accessToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount().getUsername())).build());
+						.accessToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount().getId())).build());
 			}
 		return ResponseEntity.notFound().build();
     }
@@ -64,7 +65,7 @@ public class AccountController {
 			SecurityAccount securityAccount = new SecurityAccount(account.get());
 			new UsernamePasswordAuthenticationToken(securityAccount.getUsername(), null, securityAccount.getAuthorities());
 			return ResponseEntity.ok(JwtTokenDTO.builder()
-					.accessToken(jwtUtil.generateToken(account.get().getUsername())).build());
+					.accessToken(jwtUtil.generateToken(account.get().getId())).build());
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -74,12 +75,12 @@ public class AccountController {
 	public ResponseEntity<String> getAccountSecret(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
 
-		String username = jwtUtil.extractUsername(token.substring(7).trim());
-		Account account = accountRepository.findByUsername(username);
+		Long accountId = jwtUtil.extractId(token.substring(7).trim());
+		Account account = accountRepository.findById(accountId).orElse(null);
 		if (account == null) {
 			return ResponseEntity.notFound().build();
 		}
-		if (jwtUtil.validateToken(token.substring(7).trim(), account.getUsername())) {
+		if (jwtUtil.validateToken(token.substring(7).trim(), account.getId())) {
 			return ResponseEntity.ok(account.getTotpSecret());
 		}
 		return ResponseEntity.notFound().build();
