@@ -1,4 +1,4 @@
-package app.romail.moodle_plus_plus.dto;
+package app.romail.moodle_plus_plus.dto.login;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

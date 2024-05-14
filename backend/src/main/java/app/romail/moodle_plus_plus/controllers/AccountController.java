@@ -3,8 +3,10 @@ package app.romail.moodle_plus_plus.controllers;
 import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.domain.IdDocument;
 import app.romail.moodle_plus_plus.dto.AccountDTO;
-import app.romail.moodle_plus_plus.dto.IdDocumentLoginDTO;
+import app.romail.moodle_plus_plus.dto.login.IdDocumentLoginDTO;
 import app.romail.moodle_plus_plus.dto.JwtTokenDTO;
+import app.romail.moodle_plus_plus.dto.login.ServiceLoginDTO;
+import app.romail.moodle_plus_plus.dto.login.TotpLoginDTO;
 import app.romail.moodle_plus_plus.repositories.AccountRepository;
 import app.romail.moodle_plus_plus.security.JwtUtil;
 import app.romail.moodle_plus_plus.security.SecurityAccount;
@@ -12,6 +14,7 @@ import app.romail.moodle_plus_plus.services.AccountService;
 import app.romail.moodle_plus_plus.services.IdDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,19 +60,31 @@ public class AccountController {
 						.refreshToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount().getId(),true))
 						.build());
 			}
-		return ResponseEntity.notFound().build();
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
 	@PostMapping("/totpLogin")
-	public ResponseEntity<JwtTokenDTO> getAccountByTotp(@RequestParam String username, @RequestParam String totp) {
-		Optional<Account> account = accountService.validateTotp(username, totp);
+	public ResponseEntity<JwtTokenDTO> getAccountByTotp(@RequestBody TotpLoginDTO totpLoginDTO) {
+		Optional<Account> account = accountService.validateTotp(totpLoginDTO.getUsername(), totpLoginDTO.getTotp());
 		if (account.isPresent()) {
 			SecurityAccount securityAccount = new SecurityAccount(account.get());
 			new UsernamePasswordAuthenticationToken(securityAccount.getUsername(), null, securityAccount.getAuthorities());
 			return ResponseEntity.ok(JwtTokenDTO.builder()
 					.accessToken(jwtUtil.generateToken(account.get().getId(),false)).build());
 		}
-		return ResponseEntity.notFound().build();
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
+
+	@PostMapping("/serviceLogin")
+	public ResponseEntity<JwtTokenDTO> getAccountByService(@RequestBody ServiceLoginDTO serviceLoginDTO) {
+		Optional<Account> account = accountService.validateService(serviceLoginDTO.getUsername(), serviceLoginDTO.getKey());
+		if (account.isPresent()) {
+			SecurityAccount securityAccount = new SecurityAccount(account.get());
+			new UsernamePasswordAuthenticationToken(securityAccount.getUsername(), null, securityAccount.getAuthorities());
+			return ResponseEntity.ok(JwtTokenDTO.builder()
+					.accessToken(jwtUtil.generateToken(account.get().getId(),true)).build());
+		}
+		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")

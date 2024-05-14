@@ -13,6 +13,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
@@ -24,6 +26,9 @@ public class AccountServiceImpl implements AccountService{
 
 	@PersistenceContext
 	private EntityManager em;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public AccountDTO findById(Long id) {
@@ -55,13 +60,24 @@ public class AccountServiceImpl implements AccountService{
 		Account account = em.createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class)
 				.setParameter("username", username)
 				.getSingleResult();
-		if (account.getTotpSecret() == null) {
+		if (account.getTotpSecret() == null || account.getRoles().contains(Role.ROLE_SYSTEM)) {
 			return Optional.empty();
 		}
 		TimeProvider timeProvider = new SystemTimeProvider();
 		CodeGenerator codeGenerator = new DefaultCodeGenerator();
 		CodeVerifier verifier = new DefaultCodeVerifier(codeGenerator, timeProvider);
 		if (verifier.isValidCode(account.getTotpSecret(), totp)) {
+			return Optional.of(account);
+		}
+		return Optional.empty();
+	}
+
+	@Override
+	public Optional<Account> validateService(String username, String password) {
+		Account account = em.createQuery("SELECT a FROM Account a WHERE a.username = :username", Account.class)
+				.setParameter("username", username)
+				.getSingleResult();
+		if (account.getRoles().contains(Role.ROLE_SYSTEM) && passwordEncoder.matches(password, account.getPassword())) {
 			return Optional.of(account);
 		}
 		return Optional.empty();

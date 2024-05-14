@@ -15,4 +15,6 @@ public interface AccountService {
 	Optional<URI> createAccount(AccountDTO accountDTO);
 
     Optional<Account> validateTotp(String username, String totp);
+
+    Optional<Account> validateService(String username, String password);
 }
