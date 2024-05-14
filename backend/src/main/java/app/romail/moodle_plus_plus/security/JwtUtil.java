@@ -49,7 +49,7 @@ public class JwtUtil {
         if (isRefreshToken) {
             return createToken(id, (1000L * 60 * 60 * 24 * 30), "app.romail.moodle_plus_plus.refresh_token" ); // Refresh token expires in 30 days
         }
-        return createToken(id, (1000L * 60 * 60 * 10), "app.romail.moodle_plus_plus.access_token"); // Access token expires in 10 hours
+        return createToken(id, (1000L * 60 * 60 * 5), "app.romail.moodle_plus_plus.access_token"); // Access token expires in 5 hours
     }
 
     private String createToken(Long subject, Long expirationTime, String scope) {
