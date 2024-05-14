@@ -3,6 +3,7 @@ package app.romail.moodle_plus_plus.bootstrap;
 import app.romail.moodle_plus_plus.domain.*;
 import app.romail.moodle_plus_plus.repositories.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -45,6 +46,10 @@ public class DataLoader implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		PasswordEncoder bcrypt = new BCryptPasswordEncoder();
+
+		if (accountRepository.count() > 0) {
+			return;
+		}
 		Account studentAccount1 = new Account("john.doe", bcrypt.encode("1234"));
 		studentAccount1.getRoles().add(Role.ROLE_STUDENT);
 		accountRepository.save(studentAccount1);

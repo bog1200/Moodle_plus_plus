@@ -32,8 +32,6 @@ public class AccountController {
 	private IdDocumentService idDocumentService;
 	private final JwtUtil jwtUtil;
 
-	@Autowired
-	private AuthenticationManager authenticationManager;
     @Autowired
     private AccountRepository accountRepository;
 

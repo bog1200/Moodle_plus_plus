@@ -24,7 +24,7 @@ public class Account{
 	private Person person;
 	private String username;
 	private String password;
-	private String totpSecret = "24WDMEBQJOLLXOO32YBCLV5NWD2Y55AL";// new DefaultSecretGenerator().generate();
+	private String totpSecret = new DefaultSecretGenerator().generate();
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Getter
 	private List<Role> roles = new ArrayList<>();
