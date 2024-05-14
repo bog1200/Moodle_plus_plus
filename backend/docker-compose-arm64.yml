@@ -1,5 +1,6 @@
 services:
   mariadb:
+    platform: linux/arm64
     image: mariadb:latest
     ports:
       - 3306:3306
@@ -11,6 +12,7 @@ services:
     volumes:
       - mysqlvol:/var/lib/mysql
   app:
+    platform: linux/arm64
     image: bog1200/mpp_server
     ports:
       - 6777:8080
