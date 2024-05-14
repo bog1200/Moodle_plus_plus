@@ -19,7 +19,7 @@ public class StudentGroupController {
         this.studentGroupService = studentGroupService;
     }
 
-    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'SERVICE')")
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'SYSTEM')")
     @GetMapping("/{id}")
     public ResponseEntity<StudentGroupDTO> getStudentGroupById(@PathVariable Long id) {
         return studentGroupService.getById(id)
@@ -27,14 +27,14 @@ public class StudentGroupController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasAnyRole('TEACHER', 'SERVICE')")
+    @PreAuthorize("hasAnyRole('TEACHER', 'SYSTEM')")
     @PostMapping("/new")
     public ResponseEntity<URI> createStudentGroup(@RequestBody StudentGroupDTO studentGroupDTO) {
         Optional<URI> uri = studentGroupService.createStudentGroup(studentGroupDTO);
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @PreAuthorize("hasAnyRole('TEACHER', 'SERVICE')")
+    @PreAuthorize("hasAnyRole('TEACHER', 'SYSTEM')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteStudentGroup(@PathVariable Long id) {
         if (studentGroupService.deleteStudentGroup(id)) {

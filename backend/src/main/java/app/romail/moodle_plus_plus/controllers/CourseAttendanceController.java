@@ -18,7 +18,7 @@ public class CourseAttendanceController {
         this.courseAttendanceService = courseAttendanceService;
     }
 
-    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT','SERVICE')")
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT','SYSTEM')")
     @GetMapping("/{id}")
     public ResponseEntity<CourseAttendanceDTO> getCourseAttendanceById(@PathVariable Long id) {
         return courseAttendanceService.getById(id)
@@ -26,7 +26,7 @@ public class CourseAttendanceController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('SERVICE')")
+    @PreAuthorize("hasRole('SYSTEM')")
     @PostMapping("/new")
     public ResponseEntity<URI> createCourseAttendance(@RequestBody CourseAttendanceDTO courseAttendanceDTO) {
         Optional<URI> uri = courseAttendanceService.createCourseAttendance(courseAttendanceDTO);
