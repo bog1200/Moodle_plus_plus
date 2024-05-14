@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @lombok.Getter
 @lombok.Setter
+
 public class IdDocumentLoginDTO {
     private String country;
     private String pin;

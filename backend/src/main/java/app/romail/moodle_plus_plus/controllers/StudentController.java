@@ -18,7 +18,7 @@ public class StudentController {
 		this.studentService = studentService;
 	}
 
-	@PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'SERVICE' )")
+	@PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'SYSTEM' )")
 	@GetMapping("/{id}")
 	public ResponseEntity<StudentDTO> getStudentById(@PathVariable("id") Long id) {
 		return studentService.getById(id)
@@ -26,14 +26,14 @@ public class StudentController {
 				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
-	@PreAuthorize("hasRole('SERVICE')")
+	@PreAuthorize("hasRole('SYSTEM')")
 	@PostMapping("/new")
 	public ResponseEntity<URI> createStudent(@RequestBody StudentDTO studentDTO) {
 		Optional<URI> uri = studentService.createStudent(studentDTO);
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
 	}
 
-	@PreAuthorize("hasRole('SERVICE')")
+	@PreAuthorize("hasRole('SYSTEM')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
 		if (studentService.deleteStudent(id)) {
