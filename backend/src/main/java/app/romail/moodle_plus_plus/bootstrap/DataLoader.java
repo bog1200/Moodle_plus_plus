@@ -130,6 +130,8 @@ public class DataLoader implements CommandLineRunner {
 		IdDocument idDocument1 = new IdDocument(studentAccount1, IdDocumentType.EU_ID_CARD, "123456789", "2020-01-01", "2025-01-01", "1234567890", "ROU");
 		idDocumentRepository.save(idDocument1);
 
+		IdDocument idDocument2 = new IdDocument(teacherAccount1, IdDocumentType.PASSPORT, "123456789", "2020-01-01", "2025-01-01", "1234567891", "ROU");
+		idDocumentRepository.save(idDocument2);
 
 	}
 }
