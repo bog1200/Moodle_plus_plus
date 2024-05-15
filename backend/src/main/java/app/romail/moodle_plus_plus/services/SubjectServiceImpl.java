@@ -9,6 +9,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -32,6 +33,15 @@ public class SubjectServiceImpl implements SubjectService {
             return Optional.empty();
         }
         return Optional.of(convertToDTO(subject));
+    }
+
+    @Override
+    public List<SubjectDTO> getByTeacherId(Long id) {
+        //There are multiple teachers for a subject, so we need to use a join query
+        List<Subject> subjects = em.createQuery("SELECT s FROM Subject s JOIN s.teachers t WHERE t.id = :id", Subject.class)
+                .setParameter("id", id)
+                .getResultList();
+        return subjects.stream().map(this::convertToDTO).toList();
     }
 
 

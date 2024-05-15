@@ -1,5 +1,6 @@
 package app.romail.moodle_plus_plus.controllers;
 
+import app.romail.moodle_plus_plus.dto.CourseDTO;
 import app.romail.moodle_plus_plus.dto.SubjectDTO;
 import app.romail.moodle_plus_plus.services.SubjectService;
 import org.springframework.http.ResponseEntity;
@@ -7,6 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -43,4 +45,12 @@ public class SubjectController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    //show all courses of a teacher, using account id
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping("/teacher/{id}")
+    public ResponseEntity<List<SubjectDTO>> getSubjectsByTeacherId(@PathVariable Long id) {
+        return ResponseEntity.ok(subjectService.getByTeacherId(id));
+    }
+
 }
