@@ -3,6 +3,7 @@ package app.romail.moodle_plus_plus.controllers;
 import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.domain.IdDocument;
 import app.romail.moodle_plus_plus.dto.AccountDTO;
+import app.romail.moodle_plus_plus.dto.TotpSecretDTO;
 import app.romail.moodle_plus_plus.dto.login.IdDocumentLoginDTO;
 import app.romail.moodle_plus_plus.dto.JwtTokenDTO;
 import app.romail.moodle_plus_plus.dto.login.ServiceLoginDTO;
@@ -17,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,17 +28,17 @@ import java.util.Optional;
 
 public class AccountController {
 	private final AccountService accountService;
-	@Autowired
-	private IdDocumentService idDocumentService;
+	private final IdDocumentService idDocumentService;
 	private final JwtUtil jwtUtil;
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-	public AccountController(AccountService accountService, JwtUtil jwtUtil) {
+	public AccountController(AccountService accountService, IdDocumentService idDocumentService, JwtUtil jwtUtil, AccountRepository accountRepository) {
 		this.accountService = accountService;
-		this.jwtUtil = jwtUtil;
-	}
+        this.idDocumentService = idDocumentService;
+        this.jwtUtil = jwtUtil;
+        this.accountRepository = accountRepository;
+    }
 
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
 	@GetMapping("/{id}")
@@ -87,7 +87,7 @@ public class AccountController {
 
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
 	@GetMapping("/me/accountSecret")
-	public ResponseEntity<String> getAccountSecret(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+	public ResponseEntity<TotpSecretDTO> getAccountSecret(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
 
 		Long accountId = jwtUtil.extractId(token.substring(7).trim());
@@ -96,7 +96,7 @@ public class AccountController {
 			return ResponseEntity.notFound().build();
 		}
 		if (jwtUtil.validateToken(token.substring(7).trim(), account.getId())) {
-			return ResponseEntity.ok(account.getTotpSecret());
+			return ResponseEntity.ok(new TotpSecretDTO(account.getTotpSecret()));
 		}
 		return ResponseEntity.notFound().build();
 	}
