@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {
@@ -60,7 +61,7 @@ public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {
         subjectEnrollmentDTO.setId(subjectEnrollment.getId());
         subjectEnrollmentDTO.setSubject_id(subjectEnrollment.getSubject().getId());
         subjectEnrollmentDTO.setStudent_id(subjectEnrollment.getStudent().getId());
-        subjectEnrollmentDTO.setCourseAttendances_ids(subjectEnrollment.getCourseAttendances().stream().map(CourseAttendance::getId).toList());
+        subjectEnrollmentDTO.setCourseAttendances_ids(subjectEnrollment.getCourseAttendances().stream().map(CourseAttendance::getId).collect(Collectors.toSet()));
         return subjectEnrollmentDTO;
     }
 
@@ -71,7 +72,7 @@ public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {
         subjectEnrollment.setStudent(em.find(Student.class, subjectEnrollmentDTO.getStudent_id()));
         if (subjectEnrollmentDTO.getCourseAttendances_ids() != null)
         {
-            subjectEnrollment.setCourseAttendances(subjectEnrollmentDTO.getCourseAttendances_ids().stream().map(id -> em.find(CourseAttendance.class, id)).toList());
+            subjectEnrollment.setCourseAttendances(subjectEnrollmentDTO.getCourseAttendances_ids().stream().map(id -> em.find(CourseAttendance.class, id)).collect(Collectors.toSet()));
         }
         return subjectEnrollment;
     }

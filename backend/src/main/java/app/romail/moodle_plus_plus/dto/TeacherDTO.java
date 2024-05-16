@@ -4,7 +4,7 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,5 +13,5 @@ import java.util.List;
 public class TeacherDTO extends PersonDTO{
     private String title;
     private double salary;
-    List<Long> subjects_ids;
+    Set<Long> subjects_ids;
 }

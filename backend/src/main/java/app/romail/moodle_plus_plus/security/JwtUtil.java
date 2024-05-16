@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 @Component
@@ -55,7 +55,7 @@ public class JwtUtil {
         return createToken(account.getId(), (1000L * 60 * 60 * 5), "app.romail.moodle_plus_plus.access_token", account.getRoles()); // Access token expires in 5 hours
     }
 
-    private String createToken(Long subject, Long expirationTime, String scope, List<Role> roles) {
+    private String createToken(Long subject, Long expirationTime, String scope, Set<Role> roles) {
         return Jwts.builder()
                 .setSubject(String.valueOf(subject))
                 .setAudience(scope)

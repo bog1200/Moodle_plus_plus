@@ -4,7 +4,7 @@ import app.romail.moodle_plus_plus.domain.Subject;
 import app.romail.moodle_plus_plus.dto.SubjectDTO;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 public interface SubjectService {
@@ -17,5 +17,5 @@ public interface SubjectService {
 
     boolean deleteSubject(Long id);
 
-    List<SubjectDTO> getByTeacherId(Long id);
+    Set<SubjectDTO> getByTeacherId(Long id);
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.sql.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -21,6 +22,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
+        if (course.getSubject() != null) {
+            course.getSubject().getCourses().add(course);
+        }
+
         em.persist(course);
     }
 
@@ -65,7 +70,7 @@ public class CourseServiceImpl implements CourseService {
         courseDTO.setSubject_id(course.getSubject().getId());
         courseDTO.setStartDate(course.getStartDate().getTime());
         courseDTO.setEndDate(course.getEndDate().getTime());
-        courseDTO.setCourseAttendances_ids(course.getCourseAttendances().stream().map(CourseAttendance::getId).toList());
+        courseDTO.setCourseAttendances_ids(course.getCourseAttendances().stream().map(CourseAttendance::getId).collect(Collectors.toSet()));
         return courseDTO;
     }
 

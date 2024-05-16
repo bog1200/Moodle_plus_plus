@@ -6,18 +6,18 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 
 public class SecurityAccount extends Account implements UserDetails {
     private final String username;
     private final String password;
-    private final List<GrantedAuthority> authorities;
+    private final Set<GrantedAuthority> authorities;
     public SecurityAccount(Account account) {
         this.username = String.valueOf(account.getId());
         this.password = account.getPassword();
-        List<GrantedAuthority> auths = new ArrayList<>();
+        Set<GrantedAuthority> auths = new HashSet<>();
 
         for (Role role : account.getRoles()) {
 

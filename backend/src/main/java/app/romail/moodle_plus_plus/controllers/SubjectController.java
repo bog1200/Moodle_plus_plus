@@ -8,7 +8,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 import java.util.Optional;
 
 @RestController
@@ -49,7 +49,7 @@ public class SubjectController {
     //show all courses of a teacher, using account id
     @PreAuthorize("hasRole('TEACHER')")
     @GetMapping("/teacher/{id}")
-    public ResponseEntity<List<SubjectDTO>> getSubjectsByTeacherId(@PathVariable Long id) {
+    public ResponseEntity<Set<SubjectDTO>> getSubjectsByTeacherId(@PathVariable Long id) {
         return ResponseEntity.ok(subjectService.getByTeacherId(id));
     }
 

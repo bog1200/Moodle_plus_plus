@@ -4,8 +4,8 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,5 +16,5 @@ public class CourseDTO {
     private Long startDate;
     private Long endDate;
     private Long subject_id;
-    private List<Long> courseAttendances_ids = new ArrayList<>();
+    private Set<Long> courseAttendances_ids = new HashSet<>();
 }

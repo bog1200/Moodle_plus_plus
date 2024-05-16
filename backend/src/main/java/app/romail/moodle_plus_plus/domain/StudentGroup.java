@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -19,9 +19,9 @@ public class StudentGroup {
 	private Long id;
 	private String name;
 	@OneToMany(mappedBy = "group")
-	private List<Student> students = new ArrayList<>();
+	private Set<Student> students = new HashSet<>();
 	@ManyToMany
-	private List<Subject> subjects = new ArrayList<>();
+	private Set<Subject> subjects = new HashSet<>();
 
 	public StudentGroup(String name) {
 		this.name = name;

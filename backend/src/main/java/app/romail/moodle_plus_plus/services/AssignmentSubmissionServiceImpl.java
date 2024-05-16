@@ -24,6 +24,11 @@ public class AssignmentSubmissionServiceImpl implements AssignmentSubmissionServ
     @Transactional
     @Override
     public void save(AssignmentSubmission assignmentSubmission) {
+        if (assignmentSubmission.getGrade() != null) {
+            if (assignmentSubmission.getGrade().getAssignmentSubmission() != assignmentSubmission) {
+                assignmentSubmission.getGrade().setAssignmentSubmission(assignmentSubmission);
+            }
+        }
         em.persist(assignmentSubmission);
     }
 

@@ -20,6 +20,11 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public void save(Grade grade) {
+        if (grade.getAssignmentSubmission() != null) {
+            if (grade.getAssignmentSubmission().getGrade() != grade) {
+                grade.getAssignmentSubmission().setGrade(grade);
+            }
+        }
         em.persist(grade);
     }
 

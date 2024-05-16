@@ -4,7 +4,7 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,5 +14,5 @@ public class SubjectEnrollmentDTO {
 private Long id;
     private Long subject_id;
     private Long student_id;
-    private List<Long> courseAttendances_ids;
+    private Set<Long> courseAttendances_ids;
 }

@@ -11,6 +11,7 @@ import app.romail.moodle_plus_plus.domain.Subject;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TeacherServiceImpl implements TeacherService{
@@ -21,6 +22,9 @@ public class TeacherServiceImpl implements TeacherService{
 	@Override
 	@Transactional
 	public void save(Teacher teacher) {
+		for (Subject subject : teacher.getSubjects()) {
+            subject.getTeachers().add(teacher);
+		}
 		em.persist(teacher);
 	}
 
@@ -38,7 +42,7 @@ public class TeacherServiceImpl implements TeacherService{
 		TeacherDTO teacherDTO = new TeacherDTO();
 		BeanUtils.copyProperties(teacher, teacherDTO, "account","courses");
 		teacherDTO.setAccount_id(teacher.getAccount().getId());
-		teacherDTO.setSubjects_ids(teacher.getSubjects().stream().map(Subject::getId).toList());
+		teacherDTO.setSubjects_ids(teacher.getSubjects().stream().map(Subject::getId).collect(Collectors.toSet()));
 		return teacherDTO;
 	}
 
@@ -70,7 +74,7 @@ public class TeacherServiceImpl implements TeacherService{
 		Teacher teacher = new Teacher();
 		BeanUtils.copyProperties(teacherDTO, teacher, "account_id","courses_ids");
 		teacher.setAccount(em.find(app.romail.moodle_plus_plus.domain.Account.class, teacherDTO.getAccount_id()));
-		teacher.setSubjects(teacherDTO.getSubjects_ids().stream().map(id -> em.find(Subject.class, id)).toList());
+		teacher.setSubjects(teacherDTO.getSubjects_ids().stream().map(id -> em.find(Subject.class, id)).collect(Collectors.toSet()));
 		return teacher;
 	}
 
