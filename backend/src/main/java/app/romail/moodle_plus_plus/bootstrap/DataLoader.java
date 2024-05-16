@@ -3,7 +3,6 @@ package app.romail.moodle_plus_plus.bootstrap;
 import app.romail.moodle_plus_plus.domain.*;
 import app.romail.moodle_plus_plus.repositories.*;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -84,6 +83,9 @@ public class DataLoader implements CommandLineRunner {
 		Subject subject1 = new Subject("Math", "Mathematics", "MATH101");
 		subjectRepository.save(subject1);
 
+		Subject subject2 = new Subject("Physics", "Physics", "PHYS101");
+		subjectRepository.save(subject2);
+
 		Date startDate = new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 08:00:00").getTime());
 		Date endDate = new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 10:00:00").getTime());
 		Course course1 = new Course(startDate, endDate);
@@ -99,6 +101,12 @@ public class DataLoader implements CommandLineRunner {
 		sg1.getSubjects().add(subject1);
 
 		teacher1.getSubjects().add(subject1);
+
+		subject2.getTeachers().add(teacher1);
+		teacher1.getSubjects().add(subject2);
+
+		subjectRepository.save(subject1);
+
 
 		studentGroupRepository.save(sg1);
 		subjectRepository.save(subject1);
