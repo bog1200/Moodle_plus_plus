@@ -4,8 +4,6 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Getter

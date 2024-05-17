@@ -26,6 +26,14 @@ public class StudentController {
 				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
+	@PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'SYSTEM' )")
+	@GetMapping("/getByEnrollmentId/{id}")
+	public ResponseEntity<StudentDTO> getStudentByEnrollmentId(@PathVariable("id") Long id) {
+		return studentService.getByEnrollmentId(id)
+				.map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
 	@PreAuthorize("hasRole('SYSTEM')")
 	@PostMapping("/new")
 	public ResponseEntity<URI> createStudent(@RequestBody StudentDTO studentDTO) {

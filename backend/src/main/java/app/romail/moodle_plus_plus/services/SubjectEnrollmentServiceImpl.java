@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {

@@ -16,4 +16,6 @@ public interface StudentService {
 	Student convertToEntity(StudentDTO studentDTO);
 
     boolean deleteStudent(Long id);
+
+    Optional<StudentDTO> getByEnrollmentId(Long id);
 }
