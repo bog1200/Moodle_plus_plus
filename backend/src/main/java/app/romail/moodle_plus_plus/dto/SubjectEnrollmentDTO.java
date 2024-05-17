@@ -14,5 +14,4 @@ public class SubjectEnrollmentDTO {
 private Long id;
     private Long subject_id;
     private Long student_id;
-    private Set<Long> courseAttendances_ids;
 }

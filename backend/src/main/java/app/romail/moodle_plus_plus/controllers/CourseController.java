@@ -8,6 +8,7 @@ import app.romail.moodle_plus_plus.services.CourseService;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 
 @RestController
@@ -26,6 +27,13 @@ public class CourseController {
         return courseService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
+    @GetMapping("/getBySubject/{id}")
+    public ResponseEntity<Set<CourseDTO>> getCourseBySubjectId(@PathVariable Long id) {
+        Set<CourseDTO> courses = courseService.getBySubjectId(id);
+        return ResponseEntity.ok(courses);
     }
 
     @PreAuthorize("hasRole('TEACHER')")

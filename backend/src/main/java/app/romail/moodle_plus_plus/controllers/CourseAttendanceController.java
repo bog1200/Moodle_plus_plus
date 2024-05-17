@@ -8,6 +8,7 @@ import app.romail.moodle_plus_plus.services.CourseAttendanceService;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/courses/attendance")
@@ -24,6 +25,12 @@ public class CourseAttendanceController {
         return courseAttendanceService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT','SYSTEM')")
+    @GetMapping("/course/{id}")
+    public ResponseEntity<Set<CourseAttendanceDTO>> getCourseAttendancesByCourseId(@PathVariable Long id) {
+        return ResponseEntity.ok(courseAttendanceService.getByCourseId(id));
     }
 
     @PreAuthorize("hasRole('SYSTEM')")

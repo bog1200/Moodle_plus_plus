@@ -16,6 +16,8 @@ public class CourseAttendance {
 	@GeneratedValue
 	private Long id;
 	@ManyToOne
+	private Course course;
+	@ManyToOne
 	private SubjectEnrollment subjectEnrollment;
 	private Date date;
 

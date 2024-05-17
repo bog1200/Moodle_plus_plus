@@ -19,6 +19,12 @@ public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {
 
     @Override
     public void save(SubjectEnrollment subjectEnrollment) {
+        if (subjectEnrollment.getSubject() != null) {
+            subjectEnrollment.setSubject(em.find(Subject.class, subjectEnrollment.getSubject().getId()));
+        }
+       if (subjectEnrollment.getStudent() != null) {
+           subjectEnrollment.setStudent(em.find(Student.class, subjectEnrollment.getStudent().getId()));
+       }
         em.persist(subjectEnrollment);
     }
 
@@ -61,7 +67,6 @@ public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {
         subjectEnrollmentDTO.setId(subjectEnrollment.getId());
         subjectEnrollmentDTO.setSubject_id(subjectEnrollment.getSubject().getId());
         subjectEnrollmentDTO.setStudent_id(subjectEnrollment.getStudent().getId());
-        subjectEnrollmentDTO.setCourseAttendances_ids(subjectEnrollment.getCourseAttendances().stream().map(CourseAttendance::getId).collect(Collectors.toSet()));
         return subjectEnrollmentDTO;
     }
 
@@ -70,10 +75,6 @@ public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {
         subjectEnrollment.setId(subjectEnrollmentDTO.getId());
         subjectEnrollment.setSubject(em.find(Subject.class, subjectEnrollmentDTO.getSubject_id()));
         subjectEnrollment.setStudent(em.find(Student.class, subjectEnrollmentDTO.getStudent_id()));
-        if (subjectEnrollmentDTO.getCourseAttendances_ids() != null)
-        {
-            subjectEnrollment.setCourseAttendances(subjectEnrollmentDTO.getCourseAttendances_ids().stream().map(id -> em.find(CourseAttendance.class, id)).collect(Collectors.toSet()));
-        }
         return subjectEnrollment;
     }
 

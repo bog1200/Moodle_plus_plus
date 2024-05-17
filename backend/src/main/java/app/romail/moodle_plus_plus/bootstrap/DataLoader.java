@@ -47,8 +47,10 @@ public class DataLoader implements CommandLineRunner {
 		PasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
 		if (accountRepository.count() > 0) {
+			System.out.println("Data already loaded");
 			return;
 		}
+		System.out.println("Loading data...");
 		Account studentAccount1 = new Account("john.doe", bcrypt.encode("1234"));
 		studentAccount1.getRoles().add(Role.ROLE_STUDENT);
 		accountRepository.save(studentAccount1);
@@ -114,9 +116,10 @@ public class DataLoader implements CommandLineRunner {
 		SubjectEnrollment ce1 = new SubjectEnrollment(subject1, student1);
 		courseEnrollmentRepository.save(ce1);
 		CourseAttendance ca1 = new CourseAttendance(ce1, startDate);
-		ce1.getCourseAttendances().add(ca1);
+		course1.getCourseAttendances().add(ca1);
+		ca1.setCourse(course1);
 		courseAttendanceRepository.save(ca1);
-		courseEnrollmentRepository.save(ce1);
+		courseRepository.save(course1);
 
 		Assignment assignment1 = new Assignment(AssignmentType.HOMEWORK, "Homework 1", "First homework", subject1, startDate, endDate, endDate, 10);
 		assignmentRepository.save(assignment1);
@@ -140,6 +143,8 @@ public class DataLoader implements CommandLineRunner {
 
 		IdDocument idDocument2 = new IdDocument(teacherAccount1, IdDocumentType.PASSPORT, "123456789", "2020-01-01", "2025-01-01", "1234567891", "ROU");
 		idDocumentRepository.save(idDocument2);
+
+		System.out.println("Data loaded");
 
 	}
 }

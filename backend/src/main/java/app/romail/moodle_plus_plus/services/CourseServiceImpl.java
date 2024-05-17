@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.sql.Date;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,11 +23,19 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
-        if (course.getSubject() != null) {
-            course.getSubject().getCourses().add(course);
-        }
+      Subject subject = course.getSubject();
+    if (subject != null) {
+        subject.getCourses().add(course);
+    }
 
-        em.persist(course);
+    Set<CourseAttendance> courseAttendance = course.getCourseAttendances();
+    if (courseAttendance != null) {
+        for (CourseAttendance ca : courseAttendance) {
+            ca.setCourse(course);
+        }
+    }
+
+    em.persist(course);
     }
 
     @Override
@@ -61,6 +70,15 @@ public class CourseServiceImpl implements CourseService {
         }
         em.remove(course);
         return true;
+    }
+
+    @Override
+    public Set<CourseDTO> getBySubjectId(Long id) {
+        Subject subject = em.find(Subject.class, id);
+        if (subject == null) {
+            return Set.of();
+        }
+        return subject.getCourses().stream().map(this::convertToDTO).collect(Collectors.toSet());
     }
 
 
