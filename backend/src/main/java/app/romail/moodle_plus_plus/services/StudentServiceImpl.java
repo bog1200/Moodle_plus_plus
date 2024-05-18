@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.sql.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StudentServiceImpl implements StudentService {
@@ -25,6 +26,10 @@ public class StudentServiceImpl implements StudentService {
 	public StudentDTO save(Student stud) {
 		if (stud.getAccount().getId() == null) {
 			throw new IllegalArgumentException("Account must be persisted before saving student");
+		}
+
+		for (SubjectEnrollment se : stud.getSubjectEnrollments()) {
+			se.setStudent(stud);
 		}
 		em.persist(stud);
 		return convertToDTO(stud);
@@ -46,6 +51,7 @@ public class StudentServiceImpl implements StudentService {
 		studentDTO.setAccount_id(student.getAccount().getId());
 		studentDTO.setDob(student.getDob().getTime());
 		studentDTO.setEnrollmentDate(student.getEnrollmentDate().getTime());
+		studentDTO.setSubjectEnrollments_ids(student.getSubjectEnrollments().stream().map(SubjectEnrollment::getId).collect(Collectors.toSet()));
 		return studentDTO;
 	}
 
@@ -87,6 +93,7 @@ public class StudentServiceImpl implements StudentService {
 		student.setAccount(em.find(Account.class, studentDTO.getAccount_id()));
 		student.setDob(new Date(studentDTO.getDob()));
 		student.setEnrollmentDate(new Date(studentDTO.getEnrollmentDate()));
+		student.setSubjectEnrollments(studentDTO.getSubjectEnrollments_ids().stream().map(se -> em.find(SubjectEnrollment.class, se)).collect(Collectors.toSet()));
 		return student;
 	}
 

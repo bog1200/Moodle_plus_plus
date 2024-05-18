@@ -31,7 +31,6 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		studentGroup.getStudents().add(student);
 		student.setGroup(studentGroup);
 		em.persist(studentGroup);
-		em.persist(student);
 
 	}
 
@@ -40,7 +39,6 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		studentGroup.getStudents().remove(student);
 		student.setGroup(null);
 		em.persist(studentGroup);
-		em.persist(student);
 	}
 
 	@Override

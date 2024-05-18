@@ -1,6 +1,5 @@
 package app.romail.moodle_plus_plus.controllers;
 
-import app.romail.moodle_plus_plus.dto.CourseDTO;
 import app.romail.moodle_plus_plus.dto.SubjectDTO;
 import app.romail.moodle_plus_plus.services.SubjectService;
 import org.springframework.http.ResponseEntity;
@@ -51,6 +50,13 @@ public class SubjectController {
     @GetMapping("/teacher/{id}")
     public ResponseEntity<Set<SubjectDTO>> getSubjectsByTeacherId(@PathVariable Long id) {
         return ResponseEntity.ok(subjectService.getByTeacherId(id));
+    }
+
+    //show all courses of a student, using account id
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/student/{id}")
+    public ResponseEntity<Set<SubjectDTO>> getSubjectsByStudentId(@PathVariable Long id) {
+        return ResponseEntity.ok(subjectService.getByStudentId(id));
     }
 
 }

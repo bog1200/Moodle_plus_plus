@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.util.HashSet;
 import java.sql.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -19,10 +18,10 @@ public class Student extends Person {
 	private Long id;
 	private String studentId;
 	private Date enrollmentDate;
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne
 	private StudentGroup group;
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	private Set<Subject> subjects = new HashSet<>();
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "student")
+	private Set<SubjectEnrollment> subjectEnrollments = new HashSet<>();
 
 	public Student(String firstName, String lastName, String email, String phone, String address, String gender, Date dob, String studentId, Date enrollmentDate) {
 		super(firstName, lastName, email, phone, address, gender, dob);

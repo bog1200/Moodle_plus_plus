@@ -16,14 +16,11 @@ public class SubjectEnrollmentServiceImpl implements SubjectEnrollmentService {
     @PersistenceContext
     private EntityManager em;
 
+    @Transactional
     @Override
     public void save(SubjectEnrollment subjectEnrollment) {
-        if (subjectEnrollment.getSubject() != null) {
-            subjectEnrollment.setSubject(em.find(Subject.class, subjectEnrollment.getSubject().getId()));
-        }
-       if (subjectEnrollment.getStudent() != null) {
-           subjectEnrollment.setStudent(em.find(Student.class, subjectEnrollment.getStudent().getId()));
-       }
+        Student student = subjectEnrollment.getStudent();
+        student.getSubjectEnrollments().add(subjectEnrollment);
         em.persist(subjectEnrollment);
     }
 

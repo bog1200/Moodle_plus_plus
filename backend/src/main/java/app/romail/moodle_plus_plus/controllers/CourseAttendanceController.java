@@ -33,6 +33,13 @@ public class CourseAttendanceController {
         return ResponseEntity.ok(courseAttendanceService.getByCourseId(id));
     }
 
+
+    @PreAuthorize("hasAnyRole('Teacher','STUDENT','SYSTEM')")
+    @GetMapping("/student/{id}")
+    public ResponseEntity<Set<CourseAttendanceDTO>> getCourseAttendancesByStudentId(@PathVariable Long id) {
+        return ResponseEntity.ok(courseAttendanceService.getByStudentId(id));
+    }
+
     @PreAuthorize("hasRole('SYSTEM')")
     @PostMapping("/new")
     public ResponseEntity<URI> createCourseAttendance(@RequestBody CourseAttendanceDTO courseAttendanceDTO) {

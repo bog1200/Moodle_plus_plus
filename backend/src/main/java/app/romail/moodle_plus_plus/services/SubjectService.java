@@ -11,6 +11,8 @@ public interface SubjectService {
     void save(Subject subject);
     Optional<SubjectDTO> getById(Long id);
 
+    Set<SubjectDTO> getByStudentId(Long id);
+
     SubjectDTO convertToDTO(Subject subject);
     Optional<URI> createSubject(SubjectDTO subjectDTO);
     Subject convertToEntity(SubjectDTO subjectDTO);

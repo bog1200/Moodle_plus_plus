@@ -59,6 +59,15 @@ public class SubjectServiceImpl implements SubjectService {
         return subjects.stream().map(this::convertToDTO).collect(Collectors.toSet());
     }
 
+    @Override
+    public Set<SubjectDTO> getByStudentId(Long id) {
+        //There are multiple student groups for a subject, so we need to use a join query
+        List<Subject> subjects = em.createQuery("SELECT s FROM SubjectEnrollment se JOIN se.subject s WHERE se.student.id = :id", Subject.class)
+                .setParameter("id", id)
+                .getResultList();
+        return subjects.stream().map(this::convertToDTO).collect(Collectors.toSet());
+    }
+
 
     public SubjectDTO convertToDTO(Subject subject) {
         SubjectDTO subjectDTO = new SubjectDTO();

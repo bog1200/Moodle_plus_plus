@@ -16,4 +16,6 @@ public interface CourseAttendanceService {
     boolean deleteCourseAttendance(Long id);
 
     Set<CourseAttendanceDTO> getByCourseId(Long id);
+
+    Set<CourseAttendanceDTO> getByStudentId(Long id);
 }
