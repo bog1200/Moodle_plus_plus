@@ -1,15 +1,8 @@
 import Aside from "./Aside.jsx";
 import PageTitleUp from "./PageTitleUp.jsx";
 import {Outlet} from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
 import * as React from "react";
-import {useState} from "react";
-
-
-
-
-//const [products, addProduct] = useState([]);
-
-
 
 export function AppAsideTitleComponent() {
     return(

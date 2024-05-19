@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 
 export default function AddProduct(props) {
   const inputVal = useRef("");
@@ -9,7 +9,18 @@ export default function AddProduct(props) {
       name: inputVal.current.value,
       category: "utility",
     };
-    props.onAddProduct(newProduct);
+
+    fetch('http://localhost:5000/api/products', { // replace with your actual backend API endpoint
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newProduct),
+    })
+    .then(response => response.json())
+    .then(data => {
+      props.onAddProduct(data);
+    });
   };
 
   return (

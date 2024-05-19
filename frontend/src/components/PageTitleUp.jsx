@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react';
 import searchIcon from 'bootstrap-icons/icons/search.svg';
 import bellIcon from 'bootstrap-icons/icons/bell.svg';

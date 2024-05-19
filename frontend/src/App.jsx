@@ -1,40 +1,13 @@
-import Products from "./components/Products";
-import { useState, useEffect } from "react";
-import Card from "./components/Card.jsx";
-import Aside from "./components/Aside.jsx";
-import MainPage from './components/pages/MainPage.jsx';
-import PageTitleUp from "./components/PageTitleUp.jsx";
+//import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
 import * as React from "react";
-import * as ReactDOM from "react-dom/client";
-import {createBrowserRouter, RouterProvider,} from "react-router-dom";
-import { Outlet, Link } from "react-router-dom";
-import {AppAsideTitleComponent} from "./components/AppAsideTitleComponent.jsx";
-
-
+import { Outlet } from "react-router-dom";
 
 export default function App() {
 
-    const [products, addProduct] = useState([]);
+   // const [products] = useState([]);
 
     return (
         <Outlet/>
     );
 }
-
-
-
-
-
-
-
-
-// const [isLoading, setIsLoading] = useState(false);
-// useEffect(() => {
-//   fetchProductHandler();
-// }, []);
-
-// async function fetchProductHandler() {
-//   setIsLoading(true);
-//
-//   setIsLoading(false);
-// }

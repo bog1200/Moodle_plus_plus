@@ -1,12 +1,9 @@
-// course title, description, and price
-// then i will call the API and populate the data in the Course component
-
-// Course.jsx
+// eslint-disable-next-line no-unused-vars
 import React from 'react';
 import './Course.css';
 import {Link} from "react-router-dom";
 
-
+// eslint-disable-next-line react/prop-types
 function Course({ name, professor, subject }) {
     return (
         <Link to={`/subject/${subject}`} style={{ textDecoration: 'none', color: 'inherit' }}>

@@ -1,14 +1,14 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react';
 import './Aside.css';
 
 import mortarboardFill from 'bootstrap-icons/icons/mortarboard-fill.svg';
 import calendarCheck from 'bootstrap-icons/icons/calendar-check.svg';
 import calendarEventFill from 'bootstrap-icons/icons/calendar-event-fill.svg';
-import lightbulbFill from 'bootstrap-icons/icons/lightbulb-fill.svg';
 import personFill from 'bootstrap-icons/icons/person-fill.svg';
 import logo from '../static/photos/logo.jpg';
 import {Link} from "react-router-dom";
-import coursesPage from "./pages/CoursesPage.jsx";
+
 const Aside = () => {
     return (
         <aside>
