@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @lombok.Getter
@@ -19,9 +19,9 @@ public class CourseAttendance {
 	private Course course;
 	@ManyToOne
 	private SubjectEnrollment subjectEnrollment;
-	private Date date;
+	private Timestamp date;
 
-	public CourseAttendance(SubjectEnrollment subjectEnrollment, Date date) {
+	public CourseAttendance(SubjectEnrollment subjectEnrollment, Timestamp date) {
 		this.subjectEnrollment = subjectEnrollment;
 		this.date = date;
 	}

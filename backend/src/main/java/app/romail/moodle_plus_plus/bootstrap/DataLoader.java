@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 @Component
@@ -120,7 +121,9 @@ public class DataLoader implements CommandLineRunner {
 		teacherRepository.save(teacher1);
 		SubjectEnrollment ce1 = new SubjectEnrollment(subject1, student1);
 		subjectEnrollmentServiceImpl.save(ce1);
-		CourseAttendance ca1 = new CourseAttendance(ce1, startDate);
+		Student studentDB = studentRepository.findById(student1.getId()).get();
+		assert studentDB.getSubjectEnrollments().size() == 1;
+		CourseAttendance ca1 = new CourseAttendance(ce1, Timestamp.valueOf("2021-10-01 08:00:00"));
 		course1.getCourseAttendances().add(ca1);
 		ca1.setCourse(course1);
 		courseAttendanceRepository.save(ca1);

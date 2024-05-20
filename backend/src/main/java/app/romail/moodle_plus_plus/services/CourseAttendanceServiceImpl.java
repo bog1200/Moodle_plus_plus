@@ -8,7 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -108,7 +108,7 @@ public class CourseAttendanceServiceImpl implements CourseAttendanceService {
         courseAttendance.setId(courseAttendanceDTO.getId());
         courseAttendance.setCourse(em.find(Course.class, courseAttendanceDTO.getCourse_id()));
         courseAttendance.setSubjectEnrollment(em.find(SubjectEnrollment.class, courseAttendanceDTO.getSubjectEnrollment_id()));
-        courseAttendance.setDate(new Date(courseAttendanceDTO.getDate()));
+        courseAttendance.setDate(new Timestamp(courseAttendanceDTO.getDate()));
         return courseAttendance;
     }
 
