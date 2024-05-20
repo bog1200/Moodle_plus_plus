@@ -40,6 +40,7 @@ public class AccountController {
         this.accountRepository = accountRepository;
     }
 
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
 	@GetMapping("/{id}")
 	public ResponseEntity<AccountDTO> getAccountById(@PathVariable("id") Long id) {
@@ -47,6 +48,7 @@ public class AccountController {
 		return ResponseEntity.ok(accountService.findById(id));
 	}
 
+	@CrossOrigin(origins = "*")
 	@PostMapping("/idLogin")
 	public ResponseEntity<JwtTokenDTO> getAccountByIdDocument(@RequestBody IdDocumentLoginDTO idDocumentLoginDTO) {
 		Optional<IdDocument> idDocumentDTO = idDocumentService.getByLogin(idDocumentLoginDTO.getCountry(), idDocumentLoginDTO.getPin());
@@ -61,6 +63,7 @@ public class AccountController {
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
+	@CrossOrigin(origins = "*")
 	@PostMapping("/totpLogin")
 	public ResponseEntity<JwtTokenDTO> getAccountByTotp(@RequestBody TotpLoginDTO totpLoginDTO) {
 		Optional<Account> account = accountService.validateTotp(totpLoginDTO.getUsername(), totpLoginDTO.getTotp());
@@ -73,6 +76,7 @@ public class AccountController {
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@CrossOrigin(origins = "*")
 	@PostMapping("/serviceLogin")
 	public ResponseEntity<JwtTokenDTO> getAccountByService(@RequestBody ServiceLoginDTO serviceLoginDTO) {
 		Optional<Account> account = accountService.validateService(serviceLoginDTO.getUsername(), serviceLoginDTO.getKey());
@@ -85,6 +89,7 @@ public class AccountController {
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
 	@GetMapping("/me/accountSecret")
 	public ResponseEntity<TotpSecretDTO> getAccountSecret(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
@@ -101,6 +106,7 @@ public class AccountController {
 		return ResponseEntity.notFound().build();
 	}
 
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
 	@GetMapping("/me/refreshToken")
 	public ResponseEntity<JwtTokenDTO> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {

@@ -20,6 +20,7 @@ public class GradeController {
          this.gradeService = gradeService;
      }
 
+     @CrossOrigin(origins = "*")
      @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
      @GetMapping("/{id}")
      public ResponseEntity<GradeDTO> getGrade(@PathVariable Long id) {
@@ -28,6 +29,7 @@ public class GradeController {
                  .orElse(ResponseEntity.notFound().build());
      }
 
+     @CrossOrigin(origins = "*")
      @PreAuthorize("hasRole('TEACHER')")
      @PostMapping("/new")
      public ResponseEntity<URI> createGrade(@RequestBody GradeDTO gradeDTO) {
@@ -36,6 +38,7 @@ public class GradeController {
      }
 
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasRole('TEACHER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteGrade(@PathVariable Long id) {

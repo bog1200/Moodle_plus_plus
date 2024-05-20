@@ -19,6 +19,7 @@ public class CourseAttendanceController {
         this.courseAttendanceService = courseAttendanceService;
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT','SYSTEM')")
     @GetMapping("/{id}")
     public ResponseEntity<CourseAttendanceDTO> getCourseAttendanceById(@PathVariable Long id) {
@@ -27,6 +28,7 @@ public class CourseAttendanceController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT','SYSTEM')")
     @GetMapping("/course/{id}")
     public ResponseEntity<Set<CourseAttendanceDTO>> getCourseAttendancesByCourseId(@PathVariable Long id) {
@@ -34,12 +36,14 @@ public class CourseAttendanceController {
     }
 
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER','STUDENT','SYSTEM')")
     @GetMapping("/student/{id}")
     public ResponseEntity<Set<CourseAttendanceDTO>> getCourseAttendancesByStudentId(@PathVariable Long id) {
         return ResponseEntity.ok(courseAttendanceService.getByStudentId(id));
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('SYSTEM', 'TEACHER')")
     @PostMapping("/new")
     public ResponseEntity<URI> createCourseAttendance(@RequestBody CourseAttendanceDTO courseAttendanceDTO) {

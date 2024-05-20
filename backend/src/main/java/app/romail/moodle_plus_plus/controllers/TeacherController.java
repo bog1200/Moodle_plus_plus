@@ -19,6 +19,7 @@ public class TeacherController {
         this.teacherService = teacherService;
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'SYSTEM')")
     @GetMapping("/{id}")
     public ResponseEntity<TeacherDTO> getTeacherById(@PathVariable Long id) {
@@ -26,6 +27,7 @@ public class TeacherController {
         return teacher.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasRole('SYSTEM')")
     @PostMapping("/new")
     public ResponseEntity<URI> createTeacher(@RequestBody TeacherDTO teacherDTO) {
@@ -33,6 +35,7 @@ public class TeacherController {
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasRole('SYSTEM')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeacher(@PathVariable Long id) {
