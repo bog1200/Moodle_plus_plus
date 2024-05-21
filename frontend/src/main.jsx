@@ -10,6 +10,7 @@ import {AppAsideTitleComponent} from "./components/AppAsideTitleComponent.jsx";
 import LoginPage from "./components/pages/LoginPage.jsx";
 import SchedulePage from "./components/pages/SchedulePage.jsx";
 import ProfilePage from "./components/pages/ProfilePage.jsx";
+import SubjectPage from "./components/pages/SubjectPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
                     {
                         path: "/",
                         element: <MainPage />
+                    },
+                    {
+                        path: `/subject/:subjectId`,
+                        element: <SubjectPage />
                     }
                 ]
             },
