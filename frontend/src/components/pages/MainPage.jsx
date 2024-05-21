@@ -15,6 +15,9 @@ function MainPage() {
     const [courses, setCourses] = useState([]);
 
     useEffect(() => {
+        if (localStorage.getItem('accessToken') == null) {
+            window.location.href = '/login';
+        }
         const fetchCourses = async () => {
             //let initialCourses = [];
             const response = await fetch('https://mpp.romail.app/api/v1/subject/student/1', {
