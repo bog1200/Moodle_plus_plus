@@ -17,7 +17,7 @@ const Aside = () => {
     }
     return (
         <aside>
-            <div className="d-flex flex-column align- items-center py-3 bordered bg-secondary-subtle shadow-sm rounded-3">
+            <div className="d-flex flex-column align-items-center py-3 bordered bg-secondary-subtle shadow-sm rounded-3">
                 <br/>
 
                 <img src={logo} alt="Logo" width="50" height="auto"/><br/>

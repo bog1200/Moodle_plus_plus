@@ -58,8 +58,7 @@ function LoginPage() {
                                        onChange={event => setTotp(event.target.value)}/>
                             </div>
                             <div className="mb-3 form-check">
-                                <input type="checkbox" className="form-check-input" id="remember"/>
-                                <label className="form-check-label" htmlFor="remember">Remember me</label>
+
                             </div>
                             <button type="submit" className="btn btn-primary">Submit</button>
                         </form>
