@@ -25,8 +25,6 @@ function CoursesPage() {
         fetchCourses().catch(error => console.error('Failed to fetch courses:', error));
     }, []);
 
-
-
     const [courses, setCourses] = useState([]);
 
     useEffect(() => {
