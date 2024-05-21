@@ -12,26 +12,74 @@ function CoursesPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const coursesPerPage = 9;
 
-    // Create an array of 25 courses
-    // HARD CODED UNTIL API IS READY
-    const [courses, setCourses] = useState(() => {
-        let initialCourses = [];
-        for(let i = 1; i <= 50; i++) {
-            initialCourses.push({ name: `Course ${i}`, professor: `Professor ${i}` });
-        }
-        return initialCourses;
-    });
+
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchCourses = async () => {
+            let initialCourses = [];
+            // ... fetch request
+            setCourses(initialCourses);
+            setLoading(false); // Set loading to false after the data has been fetched
+        };
+
+        fetchCourses().catch(error => console.error('Failed to fetch courses:', error));
+    }, []);
+
+
+
+    const [courses, setCourses] = useState([]);
+
+    useEffect(() => {
+        const fetchCourses = async () => {
+            //let initialCourses = [];
+            const response = await fetch('https://mpp.romail.app/api/v1/subject/student/1', {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + localStorage.getItem('accessToken')
+                },
+            });
+            const data = await response.json();
+            console.log(data);
+            let initialCourses = data.map(item => ({
+                name: item.name,
+                professor: item.description
+            }));
+            // for() // for each data element i retrieve and make name and description
+            // if (data.name && data.description) {
+            //     initialCourses.push({name: `${data.name}`, professor: `${data.description}`});
+            // }
+            console.log("initial courses array: ");console.log(initialCourses);
+            setCourses(initialCourses);
+            setLoading(false);
+        };
+
+        fetchCourses().catch(error => console.error('Failed to fetch courses:', error));
+    }, []);
+    console.log("courses array afterwards: ");console.log(courses);
+
+    // const [courses, setCourses] = useState(() => {
+    //     let initialCourses = [];
+    //     for(let i = 1; i <= 50; i++) {
+    //         initialCourses.push({ name: `Course ${i}`, professor: `Professor ${i}` });
+    //     }
+    //     return initialCourses;
+    // });
 
     // Initialize displayedCourses with the initial list of courses
     const [displayedCourses, setDisplayedCourses] = useState(courses);
-
     useEffect(() => {
-        // Replace with your actual API endpoint
-        // fetch('https://api.example.com/courses?username=' + encodeURIComponent('XCriwn'))
-        fetch('https://mpp.romail.app/api/v1/course/getBySubject/')
-            .then(response => response.json())
-            .then(data => setCourses(data));
-    }, []);
+        setDisplayedCourses(courses);
+    }, [courses]);
+
+    // useEffect(() => {
+    //     // Replace with your actual API endpoint
+    //     // fetch('https://api.example.com/courses?username=' + encodeURIComponent('XCriwn'))
+    //     fetch('https://mpp.romail.app/api/v1/course/getBySubject/')
+    //         .then(response => response.json())
+    //         .then(data => setCourses(data));
+    // }, []);
 
     const handleSelectChange = (event) => {
         setSelectedOption(parseInt(event.target.value));
@@ -53,9 +101,13 @@ function CoursesPage() {
         setDisplayedCourses(filteredCourses); // Update courses state variable
     };
 
+    if (loading) {
+        return <div>Loading...</div>; // Display a loading message or a spinner
+    }
+
     const startIndex = (currentPage - 1) * coursesPerPage;
     const selectedCourses = displayedCourses.slice(startIndex, startIndex + coursesPerPage);
-
+    console.log("Courses.name variable is: ");console.log(courses.name);
     return (
         <div className="row">
             <div className="col-10">
@@ -73,8 +125,9 @@ function CoursesPage() {
 
                 <div className="courses_div d-flex align-items-center mb-3">
                     {selectedOption === 0 ? (
-                        selectedCourses.map((course, index) => (
-                            <Course key={index} name={course.name} professor={course.professor}/>
+                        selectedCourses.map((courses, index) => (
+
+                            <Course key={index} name={courses.name} professor={courses.professor}/>
                         ))
                     ) : (
 
