@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.sql.Date;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,6 +56,15 @@ public class AssignmentServiceImpl implements AssignmentService {
         }
         em.remove(assignment);
         return true;
+    }
+
+    @Override
+    public Set<AssignmentDTO> findBySubjectId(Long id) {
+        Subject subject = em.find(Subject.class, id);
+        if (subject == null) {
+            return Set.of();
+        }
+        return subject.getAssignments().stream().map(this::convertToDTO).collect(Collectors.toSet());
     }
 
 

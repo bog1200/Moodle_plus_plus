@@ -5,6 +5,7 @@ import app.romail.moodle_plus_plus.dto.AssignmentDTO;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 public interface AssignmentService {
     void save(Assignment assignment);
@@ -12,4 +13,6 @@ public interface AssignmentService {
     Optional<URI> createAssignment(AssignmentDTO assignmentDTO);
 
     boolean deleteAssignment(Long id);
+
+    Set<AssignmentDTO> findBySubjectId(Long id);
 }

@@ -8,6 +8,7 @@ import app.romail.moodle_plus_plus.services.AssignmentSubmissionService;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/assignments/submission")
@@ -25,6 +26,14 @@ public class AssignmentSubmissionController {
         return assignmentSubmissionService.getById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
+    @GetMapping("/assignment/{id}")
+    public ResponseEntity<Set<AssignmentSubmissionDTO>> getAssignmentSubmissionByAssignmentId(@PathVariable Long id) {
+        return ResponseEntity.ok(assignmentSubmissionService.getByAssignmentId(id));
+
     }
 
     @CrossOrigin(origins = "*")
