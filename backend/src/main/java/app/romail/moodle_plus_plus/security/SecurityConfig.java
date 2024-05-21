@@ -46,6 +46,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests((authorizeRequests) ->
 						authorizeRequests
 								.requestMatchers("/api/v1/account/idLogin", "/api/v1/account/totpLogin", "/api/v1/account/serviceLogin").permitAll()
+								.requestMatchers("/api/v1/docs/**","/swagger-ui/**", "*.html").permitAll()
 								.requestMatchers("/api/v1/**").authenticated());
 
 		return http.build();
