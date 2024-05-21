@@ -1,11 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import searchIcon from "bootstrap-icons/icons/search.svg";
-import uploadIcon from "bootstrap-icons/icons/upload.svg";
 import Course from '../Course.jsx';
-import RecentCourses from "../RecentCourses.jsx";
 import './CoursesPage.css'
 import CourseAsList from "../CourseAsList.jsx";
-import courseAsList from "../CourseAsList.jsx";
 
 
 function CoursesPage() {
@@ -28,12 +25,13 @@ function CoursesPage() {
     // Initialize displayedCourses with the initial list of courses
     const [displayedCourses, setDisplayedCourses] = useState(courses);
 
-    // useEffect(() => {
-    //     // Replace with your actual API endpoint
-    //     fetch('https://api.example.com/courses?username=' + encodeURIComponent('XCriwn'))
-    //         .then(response => response.json())
-    //         .then(data => setCourses(data));
-    // }, []);
+    useEffect(() => {
+        // Replace with your actual API endpoint
+        // fetch('https://api.example.com/courses?username=' + encodeURIComponent('XCriwn'))
+        fetch('https://mpp.romail.app/api/v1/course/getBySubject/')
+            .then(response => response.json())
+            .then(data => setCourses(data));
+    }, []);
 
     const handleSelectChange = (event) => {
         setSelectedOption(parseInt(event.target.value));

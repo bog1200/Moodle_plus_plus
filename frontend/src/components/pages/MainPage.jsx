@@ -1,19 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
-import searchIcon from "bootstrap-icons/icons/search.svg";
-import uploadIcon from "bootstrap-icons/icons/upload.svg";
 import DueSubmissionAlert from "../DueSubmissionAlert.jsx";
 import RecentCourses from "../RecentCourses.jsx";
+import * as subjects from "react-bootstrap/ElementChildren";
+import {useNavigate} from "react-router-dom";
 
 function MainPage() {
+    const [id, setCourseId] = useState('');
+    const [subject_id, setSubjectId] = useState('');
+    const [courses, setCourses] = useState([]);
+    const navigate = useNavigate();
 
-    const courses = [
-        { name: 'Course 1', professor: 'Professor 1' },
-        { name: 'Course 2', professor: 'Professor 2' },
-        { name: 'Course 3', professor: 'Professor 3' },
-    ];
-    let subjects = ["Subject 1", "Subject 2", "Subject 3"];
-    let texts = ["Text 1", "Text 2", "Text 3"];
+    const handleSubmit = async (event) => {
+    event.preventDefault();
+
+
+        await fetch('https://mpp.romail.app/api/v1/course/getBySubject', {
+            mode: 'cors',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                course_id: id,
+                subject_id: subject_id,
+            }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.accessToken) {
+                    localStorage.setItem('accessToken', data.accessToken);
+                    navigate('/');
+                } else {
+                    alert('Incorrect username or password');
+                }
+            });
+    }
+
 
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-device-width: 1224px)'
@@ -23,19 +47,25 @@ function MainPage() {
     });
 
     return (
+        <>
         <div className="row">
             <div className={isDesktopOrLaptop ? "desktop-class" : "mobile-class"}>
                 <h2>Timeline</h2>
 
-                <DueSubmissionAlert subject={subjects[0]} text={texts[0]} />
-                <DueSubmissionAlert subject={subjects[1]} text={texts[1]} />
-                <DueSubmissionAlert subject={subjects[2]} text={texts[2]} />
+                {subjects.map((subject, index) => (
+                    //<DueSubmissionAlert key={index} subject={subject} text={texts[index]} />
+                    <DueSubmissionAlert key={index} subject={subject} text={subjects[index]}
+                    // onChange={event => setSubjectId(event.target.value)
+                    //     event => setCourseId(event.target.value)}/>
+                    />
+                ))}
 
                 <RecentCourses courses={courses} />
 
             </div>
 
         </div>
+        </>
     );
 }
 
