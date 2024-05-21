@@ -42,7 +42,8 @@ function CoursesPage() {
             console.log(data);
             let initialCourses = data.map(item => ({
                 name: item.name,
-                professor: item.description
+                professor: item.description,
+                subject: item.id
             }));
             // for() // for each data element i retrieve and make name and description
             // if (data.name && data.description) {
@@ -125,14 +126,14 @@ function CoursesPage() {
                     {selectedOption === 0 ? (
                         selectedCourses.map((courses, index) => (
 
-                            <Course key={index} name={courses.name} professor={courses.professor}/>
+                            <Course key={index} name={courses.name} professor={courses.professor} subject={courses.subject}/>
                         ))
                     ) : (
 
                         <ul>
                             {selectedCourses.map((course, index) => (
                                 <li key={index}>
-                                    <CourseAsList name={course.name} professor={course.professor}/>
+                                    <CourseAsList name={course.name} professor={course.professor} subject={courses.subject}/>
                                 </li>
                             ))}
                         </ul>
