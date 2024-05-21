@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { useMediaQuery } from 'react-responsive';
 import DueSubmissionAlert from "../DueSubmissionAlert.jsx";
 import RecentCourses from "../RecentCourses.jsx";
@@ -8,43 +8,46 @@ import {useNavigate} from "react-router-dom";
 function MainPage() {
     const [id, setCourseId] = useState('');
     const [subject_id, setSubjectId] = useState('');
-    const [courses, setCourses] = useState([]);
+    //const [courses, setCourses] = useState([]);
     const navigate = useNavigate();
 
 
-    React.useEffect(() => {
-        if (localStorage.getItem('accessToken') === null) {
-            navigate('/login');
-        }
-    });
+    const [courses, setCourses] = useState([]);
 
-    const handleSubmit = async (event) => {
-    event.preventDefault();
-
-
-        await fetch('https://mpp.romail.app/api/v1/course/getBySubject', {
-            mode: 'cors',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                course_id: id,
-                subject_id: subject_id,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.accessToken) {
-                    localStorage.setItem('accessToken', data.accessToken);
-                    navigate('/');
-                } else {
-                    alert('Incorrect username or password');
-                }
+    useEffect(() => {
+        const fetchCourses = async () => {
+            //let initialCourses = [];
+            const response = await fetch('https://mpp.romail.app/api/v1/subject/student/1', {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': "Bearer " + localStorage.getItem('accessToken')
+                },
             });
-    }
+            const data = await response.json();
+            console.log(data);
+            let initialCourses = data.map(item => ({
+                name: item.name,
+                professor: item.description
+            }));
+            // for() // for each data element i retrieve and make name and description
+            // if (data.name && data.description) {
+            //     initialCourses.push({name: `${data.name}`, professor: `${data.description}`});
+            // }
+            console.log("initial courses array: ");console.log(initialCourses);
+            setCourses(initialCourses);
+            setLoading(false);
+        };
 
+        fetchCourses().catch(error => console.error('Failed to fetch courses:', error));
+    }, []);
+    console.log("courses array afterwards: ");console.log(courses);
+
+    const [displayedCourses, setDisplayedCourses] = useState(courses);
+    useEffect(() => {
+        setDisplayedCourses(courses);
+    }, [courses]);
 
     const isDesktopOrLaptop = useMediaQuery({
         query: '(min-device-width: 1224px)'
@@ -59,9 +62,9 @@ function MainPage() {
             <div className={isDesktopOrLaptop ? "desktop-class" : "mobile-class"}>
                 <h2>Timeline</h2>
 
-                {subjects.map((subject, index) => (
+                {courses.map((courses, index) => (
                     //<DueSubmissionAlert key={index} subject={subject} text={texts[index]} />
-                    <DueSubmissionAlert key={index} subject={subject} text={subjects[index]}
+                    <DueSubmissionAlert key={index} subject={courses.name} text={courses.professor + " is due."}
                     // onChange={event => setSubjectId(event.target.value)
                     //     event => setCourseId(event.target.value)}/>
                     />
