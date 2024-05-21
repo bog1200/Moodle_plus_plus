@@ -3,7 +3,7 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,7 +13,7 @@ public class AccountDTO {
 	private Long id;
 	private String username;
 	private Long person_id;
-	private List<String> roles;
+	private Set<String> roles;
 
 
 

@@ -1,34 +1,35 @@
 package app.romail.moodle_plus_plus.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Date;
 
 
 @Entity
 @lombok.Getter
 @lombok.Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class AssignmentSubmission {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@OneToOne
+	@ManyToOne
 	private Assignment assignment;
-	@OneToOne
+	@ManyToOne
 	private Student student;
 	private Date submissionDate;
-	private Date gradingDate;
 	@OneToOne
 	private Grade grade;
 	private String submissionText;
+
+	public AssignmentSubmission(Assignment assignment, Student student, Date submissionDate, String submissionText) {
+		this.assignment = assignment;
+		this.student = student;
+		this.submissionDate = submissionDate;
+		this.submissionText = submissionText;
+	}
 
 
 

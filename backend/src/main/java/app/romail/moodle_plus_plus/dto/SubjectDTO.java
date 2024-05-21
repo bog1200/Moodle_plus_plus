@@ -4,7 +4,7 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,8 +15,8 @@ private Long id;
     private String name;
     private String description;
     private String code;
-    private List<TeacherDTO> teachers;
-    private List<StudentGroupDTO> studentGroups;
-    private List<AssignmentDTO> assignments;
-    private List<CourseDTO> courses;
+    private Set<Long> teachers_ids;
+    private Set<Long> studentGroups_ids;
+    private Set<Long> assignments_ids;
+    private Set<Long> courses_ids;
 }

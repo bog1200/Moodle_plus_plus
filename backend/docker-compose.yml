@@ -1,0 +1,25 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mpp
+    networks:
+        - spring1
+    volumes:
+      - mysqlvol:/var/lib/mysql
+  app:
+    image: bog1200/mpp_server
+    ports:
+      - 6777:8080
+    build: .
+    networks:
+      - spring1
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb:3306/mpp
+    depends_on:
+      - mariadb
+volumes:
+  mysqlvol: {}
+networks:
+  spring1: {}

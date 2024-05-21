@@ -23,5 +23,13 @@ public class Grade {
 	private String comment;
 	private String date;
 	@OneToOne
-	private Student student;
+	private AssignmentSubmission assignmentSubmission;
+
+	public Grade(Double grade, Double maxGrade, String comment, String date, AssignmentSubmission assignmentSubmission) {
+		this.grade = grade;
+		this.maxGrade = maxGrade;
+		this.comment = comment;
+		this.date = date;
+		this.assignmentSubmission = assignmentSubmission;
+	}
 }

@@ -4,9 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToMany;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
+import java.sql.Date;
+import java.util.Set;
 
 @Entity
 @lombok.Getter
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Teacher extends Person {
 	@ManyToMany
-	private List<Subject> courses = new ArrayList<>();
+	private Set<Subject> subjects = new HashSet<>();
 	private double salary;
 	private String title;
 
