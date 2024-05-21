@@ -18,6 +18,7 @@ public class SubjectEnrollmentController {
         this.subjectEnrollmentService = subjectEnrollmentService;
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<SubjectEnrollmentDTO> getSubjectEnrollmentById(@PathVariable Long id) {
@@ -26,6 +27,7 @@ public class SubjectEnrollmentController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
     @PostMapping("/new")
     public ResponseEntity<URI> createSubjectEnrollment(@RequestBody SubjectEnrollmentDTO subjectEnrollmentDTO) {
@@ -33,6 +35,7 @@ public class SubjectEnrollmentController {
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSubjectEnrollment(@PathVariable Long id) {

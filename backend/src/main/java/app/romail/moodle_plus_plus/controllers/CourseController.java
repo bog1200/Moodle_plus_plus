@@ -8,6 +8,7 @@ import app.romail.moodle_plus_plus.services.CourseService;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 
 @RestController
@@ -20,6 +21,7 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<CourseDTO> getCourseById(@PathVariable Long id) {
@@ -28,6 +30,15 @@ public class CourseController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
+    @GetMapping("/getBySubject/{id}")
+    public ResponseEntity<Set<CourseDTO>> getCourseBySubjectId(@PathVariable Long id) {
+        Set<CourseDTO> courses = courseService.getBySubjectId(id);
+        return ResponseEntity.ok(courses);
+    }
+
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/new")
     public ResponseEntity<URI> createCourse(@RequestBody CourseDTO courseDTO) {

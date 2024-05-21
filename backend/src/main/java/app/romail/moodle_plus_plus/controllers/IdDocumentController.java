@@ -18,6 +18,7 @@ public class IdDocumentController {
         this.idDocumentService = idDocumentService;
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT','SYSTEM')")
     @GetMapping("/{id}")
     public ResponseEntity<IdDocumentDTO> getIdDocument(@PathVariable Long id) {
@@ -26,14 +27,15 @@ public class IdDocumentController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
-@PreAuthorize("hasRole('SYSTEM')")
-    @PostMapping("/new")
-    public ResponseEntity<URI> createIdDocument(@RequestBody IdDocumentDTO idDocumentDTO) {
-        Optional<URI> uri = idDocumentService.createIdDocument(idDocumentDTO);
-        return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasRole('SYSTEM')")
+        @PostMapping("/new")
+        public ResponseEntity<URI> createIdDocument(@RequestBody IdDocumentDTO idDocumentDTO) {
+            Optional<URI> uri = idDocumentService.createIdDocument(idDocumentDTO);
+            return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasRole('SYSTEM')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteIdDocument(@PathVariable Long id) {

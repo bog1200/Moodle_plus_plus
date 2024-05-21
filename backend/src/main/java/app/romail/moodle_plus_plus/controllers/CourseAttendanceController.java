@@ -8,6 +8,7 @@ import app.romail.moodle_plus_plus.services.CourseAttendanceService;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/courses/attendance")
@@ -18,6 +19,7 @@ public class CourseAttendanceController {
         this.courseAttendanceService = courseAttendanceService;
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT','SYSTEM')")
     @GetMapping("/{id}")
     public ResponseEntity<CourseAttendanceDTO> getCourseAttendanceById(@PathVariable Long id) {
@@ -26,7 +28,23 @@ public class CourseAttendanceController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('SYSTEM')")
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT','SYSTEM')")
+    @GetMapping("/course/{id}")
+    public ResponseEntity<Set<CourseAttendanceDTO>> getCourseAttendancesByCourseId(@PathVariable Long id) {
+        return ResponseEntity.ok(courseAttendanceService.getByCourseId(id));
+    }
+
+
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasAnyRole('TEACHER','STUDENT','SYSTEM')")
+    @GetMapping("/student/{id}")
+    public ResponseEntity<Set<CourseAttendanceDTO>> getCourseAttendancesByStudentId(@PathVariable Long id) {
+        return ResponseEntity.ok(courseAttendanceService.getByStudentId(id));
+    }
+
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasAnyRole('SYSTEM', 'TEACHER')")
     @PostMapping("/new")
     public ResponseEntity<URI> createCourseAttendance(@RequestBody CourseAttendanceDTO courseAttendanceDTO) {
         Optional<URI> uri = courseAttendanceService.createCourseAttendance(courseAttendanceDTO);

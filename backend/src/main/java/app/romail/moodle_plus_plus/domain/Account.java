@@ -8,8 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -27,7 +27,7 @@ public class Account{
 	private String totpSecret = new DefaultSecretGenerator().generate();
 	@ElementCollection(fetch = FetchType.EAGER)
 	@Getter
-	private List<Role> roles = new ArrayList<>();
+	private Set<Role> roles = new HashSet<>();
 
 	public Account(String username, String password) {
 		this.username = username;

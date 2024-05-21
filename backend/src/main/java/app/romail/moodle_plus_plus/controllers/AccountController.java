@@ -3,6 +3,7 @@ package app.romail.moodle_plus_plus.controllers;
 import app.romail.moodle_plus_plus.domain.Account;
 import app.romail.moodle_plus_plus.domain.IdDocument;
 import app.romail.moodle_plus_plus.dto.AccountDTO;
+import app.romail.moodle_plus_plus.dto.TotpSecretDTO;
 import app.romail.moodle_plus_plus.dto.login.IdDocumentLoginDTO;
 import app.romail.moodle_plus_plus.dto.JwtTokenDTO;
 import app.romail.moodle_plus_plus.dto.login.ServiceLoginDTO;
@@ -17,7 +18,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,18 +28,19 @@ import java.util.Optional;
 
 public class AccountController {
 	private final AccountService accountService;
-	@Autowired
-	private IdDocumentService idDocumentService;
+	private final IdDocumentService idDocumentService;
 	private final JwtUtil jwtUtil;
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-	public AccountController(AccountService accountService, JwtUtil jwtUtil) {
+	public AccountController(AccountService accountService, IdDocumentService idDocumentService, JwtUtil jwtUtil, AccountRepository accountRepository) {
 		this.accountService = accountService;
-		this.jwtUtil = jwtUtil;
-	}
+        this.idDocumentService = idDocumentService;
+        this.jwtUtil = jwtUtil;
+        this.accountRepository = accountRepository;
+    }
 
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
 	@GetMapping("/{id}")
 	public ResponseEntity<AccountDTO> getAccountById(@PathVariable("id") Long id) {
@@ -47,6 +48,7 @@ public class AccountController {
 		return ResponseEntity.ok(accountService.findById(id));
 	}
 
+	@CrossOrigin(origins = "*")
 	@PostMapping("/idLogin")
 	public ResponseEntity<JwtTokenDTO> getAccountByIdDocument(@RequestBody IdDocumentLoginDTO idDocumentLoginDTO) {
 		Optional<IdDocument> idDocumentDTO = idDocumentService.getByLogin(idDocumentLoginDTO.getCountry(), idDocumentLoginDTO.getPin());
@@ -54,13 +56,14 @@ public class AccountController {
 			SecurityAccount account = new SecurityAccount(idDocumentDTO.get().getAccount());
 			new UsernamePasswordAuthenticationToken(account.getUsername(), null, account.getAuthorities());
 				return ResponseEntity.ok(JwtTokenDTO.builder()
-						.accessToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount().getId(),false))
-						.refreshToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount().getId(),true))
+						.accessToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount(),false))
+						.refreshToken(jwtUtil.generateToken(idDocumentDTO.get().getAccount(),true))
 						.build());
 			}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
+	@CrossOrigin(origins = "*")
 	@PostMapping("/totpLogin")
 	public ResponseEntity<JwtTokenDTO> getAccountByTotp(@RequestBody TotpLoginDTO totpLoginDTO) {
 		Optional<Account> account = accountService.validateTotp(totpLoginDTO.getUsername(), totpLoginDTO.getTotp());
@@ -68,11 +71,12 @@ public class AccountController {
 			SecurityAccount securityAccount = new SecurityAccount(account.get());
 			new UsernamePasswordAuthenticationToken(securityAccount.getUsername(), null, securityAccount.getAuthorities());
 			return ResponseEntity.ok(JwtTokenDTO.builder()
-					.accessToken(jwtUtil.generateToken(account.get().getId(),false)).build());
+					.accessToken(jwtUtil.generateToken(account.get(),false)).build());
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@CrossOrigin(origins = "*")
 	@PostMapping("/serviceLogin")
 	public ResponseEntity<JwtTokenDTO> getAccountByService(@RequestBody ServiceLoginDTO serviceLoginDTO) {
 		Optional<Account> account = accountService.validateService(serviceLoginDTO.getUsername(), serviceLoginDTO.getKey());
@@ -80,14 +84,15 @@ public class AccountController {
 			SecurityAccount securityAccount = new SecurityAccount(account.get());
 			new UsernamePasswordAuthenticationToken(securityAccount.getUsername(), null, securityAccount.getAuthorities());
 			return ResponseEntity.ok(JwtTokenDTO.builder()
-					.accessToken(jwtUtil.generateToken(account.get().getId(),true)).build());
+					.accessToken(jwtUtil.generateToken(account.get(),false)).build());
 		}
 		return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
 	@GetMapping("/me/accountSecret")
-	public ResponseEntity<String> getAccountSecret(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+	public ResponseEntity<TotpSecretDTO> getAccountSecret(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 
 
 		Long accountId = jwtUtil.extractId(token.substring(7).trim());
@@ -96,18 +101,20 @@ public class AccountController {
 			return ResponseEntity.notFound().build();
 		}
 		if (jwtUtil.validateToken(token.substring(7).trim(), account.getId())) {
-			return ResponseEntity.ok(account.getTotpSecret());
+			return ResponseEntity.ok(new TotpSecretDTO(account.getTotpSecret()));
 		}
 		return ResponseEntity.notFound().build();
 	}
 
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
 	@GetMapping("/me/refreshToken")
 	public ResponseEntity<JwtTokenDTO> refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
 		Long accountId = jwtUtil.extractId(token.substring(7).trim());
+		Account account = accountRepository.findById(accountId).orElse(null);
 		jwtUtil.validateToken(token.substring(7).trim(), accountId);
 		return ResponseEntity.ok(JwtTokenDTO.builder()
-				.accessToken(jwtUtil.generateToken(accountId,false))
+				.accessToken(jwtUtil.generateToken(account,false))
 				.build());
 	}
 

@@ -5,6 +5,7 @@ import app.romail.moodle_plus_plus.dto.CourseDTO;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CourseService {
     void save(Course course);
@@ -12,4 +13,6 @@ public interface CourseService {
     Optional<URI> createCourse(CourseDTO courseDTO);
 
     boolean deleteCourse(Long id);
+
+    Set<CourseDTO> getBySubjectId(Long id);
 }

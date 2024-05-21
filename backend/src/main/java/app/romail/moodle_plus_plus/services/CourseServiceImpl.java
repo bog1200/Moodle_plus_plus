@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.sql.Date;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -21,7 +23,19 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void save(Course course) {
-        em.persist(course);
+      Subject subject = course.getSubject();
+    if (subject != null) {
+        subject.getCourses().add(course);
+    }
+
+    Set<CourseAttendance> courseAttendance = course.getCourseAttendances();
+    if (courseAttendance != null) {
+        for (CourseAttendance ca : courseAttendance) {
+            ca.setCourse(course);
+        }
+    }
+
+    em.persist(course);
     }
 
     @Override
@@ -58,6 +72,15 @@ public class CourseServiceImpl implements CourseService {
         return true;
     }
 
+    @Override
+    public Set<CourseDTO> getBySubjectId(Long id) {
+        Subject subject = em.find(Subject.class, id);
+        if (subject == null) {
+            return Set.of();
+        }
+        return subject.getCourses().stream().map(this::convertToDTO).collect(Collectors.toSet());
+    }
+
 
     public CourseDTO convertToDTO(Course course) {
         CourseDTO courseDTO = new CourseDTO();
@@ -65,7 +88,7 @@ public class CourseServiceImpl implements CourseService {
         courseDTO.setSubject_id(course.getSubject().getId());
         courseDTO.setStartDate(course.getStartDate().getTime());
         courseDTO.setEndDate(course.getEndDate().getTime());
-        courseDTO.setCourseAttendances_ids(course.getCourseAttendances().stream().map(CourseAttendance::getId).toList());
+        courseDTO.setCourseAttendances_ids(course.getCourseAttendances().stream().map(CourseAttendance::getId).collect(Collectors.toSet()));
         return courseDTO;
     }
 

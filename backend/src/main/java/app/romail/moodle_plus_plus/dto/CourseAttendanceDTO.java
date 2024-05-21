@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @lombok.Setter
 public class CourseAttendanceDTO {
     private Long id;
+    private Long course_id;
     private Long subjectEnrollment_id;
     private Long date;
 }

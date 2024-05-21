@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.Set;
 import java.util.Optional;
 
 @RestController
@@ -19,6 +20,7 @@ public class SubjectController {
         this.subjectService = subjectService;
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<SubjectDTO> getSubjectById(@PathVariable Long id) {
@@ -27,6 +29,7 @@ public class SubjectController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping("/new")
     public ResponseEntity<URI> createSubject(@RequestBody SubjectDTO subjectDTO) {
@@ -34,6 +37,7 @@ public class SubjectController {
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasRole('TEACHER')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSubject(@PathVariable Long id) {
@@ -43,4 +47,21 @@ public class SubjectController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    //show all courses of a teacher, using account id
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping("/teacher/{id}")
+    public ResponseEntity<Set<SubjectDTO>> getSubjectsByTeacherId(@PathVariable Long id) {
+        return ResponseEntity.ok(subjectService.getByTeacherId(id));
+    }
+
+    //show all courses of a student, using account id
+    @CrossOrigin(origins = "*")
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/student/{id}")
+    public ResponseEntity<Set<SubjectDTO>> getSubjectsByStudentId(@PathVariable Long id) {
+        return ResponseEntity.ok(subjectService.getByStudentId(id));
+    }
+
 }

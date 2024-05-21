@@ -18,6 +18,7 @@ public class AssignmentSubmissionController {
         this.assignmentSubmissionService = assignmentSubmissionService;
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
     @GetMapping("/{id}")
     public ResponseEntity<AssignmentSubmissionDTO> getAssignmentSubmission(@PathVariable Long id) {
@@ -26,6 +27,7 @@ public class AssignmentSubmissionController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasAnyRole('STUDENT')")
     @PostMapping("/new")
     public ResponseEntity<URI> createAssignmentSubmission(@RequestBody AssignmentSubmissionDTO assignmentSubmissionDTO) {
@@ -33,6 +35,7 @@ public class AssignmentSubmissionController {
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
+    @CrossOrigin(origins = "*")
     @PreAuthorize("hasRole('STUDENT')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAssignmentSubmission(@PathVariable Long id) {

@@ -4,7 +4,7 @@ package app.romail.moodle_plus_plus.dto;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @lombok.Getter
@@ -12,6 +12,6 @@ import java.util.List;
 public class StudentGroupDTO {
 private Long id;
     private String name;
-    private List<StudentDTO> students;
-    private List<SubjectDTO> subjects;
+    private Set<StudentDTO> students;
+    private Set<SubjectDTO> subjects;
 }

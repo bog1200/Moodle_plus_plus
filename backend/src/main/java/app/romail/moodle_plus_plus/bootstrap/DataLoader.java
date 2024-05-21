@@ -2,13 +2,15 @@ package app.romail.moodle_plus_plus.bootstrap;
 
 import app.romail.moodle_plus_plus.domain.*;
 import app.romail.moodle_plus_plus.repositories.*;
+import app.romail.moodle_plus_plus.services.SubjectEnrollmentServiceImpl;
+import app.romail.moodle_plus_plus.services.SubjectServiceImpl;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 
 @Component
@@ -21,13 +23,15 @@ public class DataLoader implements CommandLineRunner {
 	private final CourseRepository courseRepository;
 	private final SubjectRepository subjectRepository;
 	private final CourseAttendanceRepository courseAttendanceRepository;
-	private final CourseEnrollmentRepository courseEnrollmentRepository;
+	private final SubjectEnrollmentRepository subjectEnrollmentRepository;
 	private final AssignmentRepository assignmentRepository;
 	private final AssignmentSubmissionRepository assingmentSubmissionRepository;
 	private final GradeRepository gradeRepository;
 	private final IdDocumentRepository idDocumentRepository;
+	private final SubjectServiceImpl subjectServiceImpl;
+	private final SubjectEnrollmentServiceImpl subjectEnrollmentServiceImpl;
 
-	public DataLoader(AccountRepository accountRepository, StudentRepository studentRepository, TeacherRepository teacherRepository, StudentGroupRepository studentGroupRepository, CourseRepository courseRepository, SubjectRepository subjectRepository, CourseAttendanceRepository courseAttendanceRepository, CourseEnrollmentRepository courseEnrollmentRepository, AssignmentRepository assignmentRepository, AssignmentSubmissionRepository assingmentSubmissionRepository, GradeRepository gradeRepository, IdDocumentRepository idDocumentRepository ) {
+	public DataLoader(AccountRepository accountRepository, StudentRepository studentRepository, TeacherRepository teacherRepository, StudentGroupRepository studentGroupRepository, CourseRepository courseRepository, SubjectRepository subjectRepository, CourseAttendanceRepository courseAttendanceRepository, SubjectEnrollmentRepository subjectEnrollmentRepository, AssignmentRepository assignmentRepository, AssignmentSubmissionRepository assingmentSubmissionRepository, GradeRepository gradeRepository, IdDocumentRepository idDocumentRepository, SubjectServiceImpl subjectServiceImpl, SubjectEnrollmentServiceImpl subjectEnrollmentServiceImpl) {
 		this.accountRepository = accountRepository;
 		this.studentRepository = studentRepository;
 		this.teacherRepository = teacherRepository;
@@ -35,12 +39,13 @@ public class DataLoader implements CommandLineRunner {
 		this.courseRepository = courseRepository;
 		this.subjectRepository = subjectRepository;
 		this.courseAttendanceRepository = courseAttendanceRepository;
-		this.courseEnrollmentRepository = courseEnrollmentRepository;
+		this.subjectEnrollmentRepository = subjectEnrollmentRepository;
 		this.assignmentRepository = assignmentRepository;
 		this.assingmentSubmissionRepository = assingmentSubmissionRepository;
 		this.gradeRepository = gradeRepository;
 		this.idDocumentRepository = idDocumentRepository;
-
+		this.subjectServiceImpl = subjectServiceImpl;
+		this.subjectEnrollmentServiceImpl = subjectEnrollmentServiceImpl;
 	}
 
 	@Override
@@ -48,8 +53,10 @@ public class DataLoader implements CommandLineRunner {
 		PasswordEncoder bcrypt = new BCryptPasswordEncoder();
 
 		if (accountRepository.count() > 0) {
+			System.out.println("Data already loaded");
 			return;
 		}
+		System.out.println("Loading data...");
 		Account studentAccount1 = new Account("john.doe", bcrypt.encode("1234"));
 		studentAccount1.getRoles().add(Role.ROLE_STUDENT);
 		accountRepository.save(studentAccount1);
@@ -84,6 +91,9 @@ public class DataLoader implements CommandLineRunner {
 		Subject subject1 = new Subject("Math", "Mathematics", "MATH101");
 		subjectRepository.save(subject1);
 
+		Subject subject2 = new Subject("Physics", "Physics", "PHYS101");
+		subjectRepository.save(subject2);
+
 		Date startDate = new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 08:00:00").getTime());
 		Date endDate = new Date(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2021-10-01 10:00:00").getTime());
 		Course course1 = new Course(startDate, endDate);
@@ -100,15 +110,24 @@ public class DataLoader implements CommandLineRunner {
 
 		teacher1.getSubjects().add(subject1);
 
+		subject2.getTeachers().add(teacher1);
+		teacher1.getSubjects().add(subject2);
+
+		subjectRepository.save(subject1);
+
+
 		studentGroupRepository.save(sg1);
 		subjectRepository.save(subject1);
 		teacherRepository.save(teacher1);
 		SubjectEnrollment ce1 = new SubjectEnrollment(subject1, student1);
-		courseEnrollmentRepository.save(ce1);
-		CourseAttendance ca1 = new CourseAttendance(ce1, startDate);
-		ce1.getCourseAttendances().add(ca1);
+		subjectEnrollmentServiceImpl.save(ce1);
+		Student studentDB = studentRepository.findById(student1.getId()).get();
+		assert studentDB.getSubjectEnrollments().size() == 1;
+		CourseAttendance ca1 = new CourseAttendance(ce1, Timestamp.valueOf("2021-10-01 08:00:00"));
+		course1.getCourseAttendances().add(ca1);
+		ca1.setCourse(course1);
 		courseAttendanceRepository.save(ca1);
-		courseEnrollmentRepository.save(ce1);
+		courseRepository.save(course1);
 
 		Assignment assignment1 = new Assignment(AssignmentType.HOMEWORK, "Homework 1", "First homework", subject1, startDate, endDate, endDate, 10);
 		assignmentRepository.save(assignment1);
@@ -130,6 +149,10 @@ public class DataLoader implements CommandLineRunner {
 		IdDocument idDocument1 = new IdDocument(studentAccount1, IdDocumentType.EU_ID_CARD, "123456789", "2020-01-01", "2025-01-01", "1234567890", "ROU");
 		idDocumentRepository.save(idDocument1);
 
+		IdDocument idDocument2 = new IdDocument(teacherAccount1, IdDocumentType.PASSPORT, "123456789", "2020-01-01", "2025-01-01", "1234567891", "ROU");
+		idDocumentRepository.save(idDocument2);
+
+		System.out.println("Data loaded");
 
 	}
 }

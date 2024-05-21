@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.sql.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AssignmentServiceImpl implements AssignmentService {
@@ -62,8 +63,8 @@ public class AssignmentServiceImpl implements AssignmentService {
         BeanUtils.copyProperties(assignment, assignmentDTO, "files", "submissions", "subject", "type");
         assignmentDTO.setType(assignment.getType().toString());
         assignmentDTO.setSubject_id(assignment.getSubject().getId());
-        assignmentDTO.setFiles_ids(assignment.getFiles().stream().map(File::getId).toList());
-        assignmentDTO.setSubmissions_ids(assignment.getSubmissions().stream().map(AssignmentSubmission::getId).toList());
+        //assignmentDTO.setFiles_ids(assignment.getFiles().stream().map(File::getId).collect(Collectors.toSet()));
+        assignmentDTO.setSubmissions_ids(assignment.getSubmissions().stream().map(AssignmentSubmission::getId).collect(Collectors.toSet()));
         return assignmentDTO;
     }
 
@@ -76,8 +77,8 @@ public class AssignmentServiceImpl implements AssignmentService {
         assignment.setDeadline(new Date(assignmentDTO.getDeadline()));
         assignment.setEndDate(new Date(assignmentDTO.getEndDate()));
         assignment.setStartDate(new Date(assignmentDTO.getStartDate()));
-        assignment.setFiles(assignmentDTO.getFiles_ids().stream().map(id -> em.find(File.class, id)).toList());
-        assignment.setSubmissions(assignmentDTO.getSubmissions_ids().stream().map(id -> em.find(AssignmentSubmission.class, id)).toList());
+        //assignment.setFiles(assignmentDTO.getFiles_ids().stream().map(id -> em.find(File.class, id)).collect(Collectors.toSet()));
+        assignment.setSubmissions(assignmentDTO.getSubmissions_ids().stream().map(id -> em.find(AssignmentSubmission.class, id)).collect(Collectors.toSet()));
         assignment.setSubject(em.find(Subject.class, assignmentDTO.getSubject_id()));
         return assignment;
     }

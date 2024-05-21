@@ -1,0 +1,8 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mpp
+    ports:
+     - "3306:3306"

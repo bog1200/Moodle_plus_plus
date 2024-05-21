@@ -2,12 +2,14 @@ package app.romail.moodle_plus_plus.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@EqualsAndHashCode(exclude = {"id","teachers", "studentGroups", "assignments", "courses"})
 @lombok.Getter
 @lombok.Setter
 @AllArgsConstructor
@@ -21,13 +23,13 @@ public class Subject {
 	private String description;
 	private String code;
 	@ManyToMany(mappedBy = "subjects")
-	private List<Teacher> teachers = new ArrayList<>();
+	private Set<Teacher> teachers = new HashSet<>();
 	@ManyToMany(mappedBy = "subjects")
-	private List<StudentGroup> studentGroups = new ArrayList<>();
+	private Set<StudentGroup> studentGroups = new HashSet<>();
 	@OneToMany(mappedBy = "subject")
-	private List<Assignment> assignments = new ArrayList<>();
+	private Set<Assignment> assignments = new HashSet<>();
 	@OneToMany(mappedBy = "subject")
-	private List<Course> courses = new ArrayList<>();
+	private Set<Course> courses = new HashSet<>();
 
 
 	public Subject(String name, String description, String code) {

@@ -31,7 +31,6 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		studentGroup.getStudents().add(student);
 		student.setGroup(studentGroup);
 		em.persist(studentGroup);
-		em.persist(student);
 
 	}
 
@@ -40,7 +39,6 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		studentGroup.getStudents().remove(student);
 		student.setGroup(null);
 		em.persist(studentGroup);
-		em.persist(student);
 	}
 
 	@Override
@@ -88,8 +86,8 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		StudentGroupDTO studentGroupDTO = new StudentGroupDTO();
 		studentGroupDTO.setId(studentGroup.getId());
 		studentGroupDTO.setName(studentGroup.getName());
-		studentGroupDTO.setStudents(studentGroup.getStudents().stream().map(studentService::convertToDTO).collect(Collectors.toList()));
-		studentGroupDTO.setSubjects(studentGroup.getSubjects().stream().map(subjectService::convertToDTO).collect(Collectors.toList()));
+		studentGroupDTO.setStudents(studentGroup.getStudents().stream().map(studentService::convertToDTO).collect(Collectors.toSet()));
+		studentGroupDTO.setSubjects(studentGroup.getSubjects().stream().map(subjectService::convertToDTO).collect(Collectors.toSet()));
 		return studentGroupDTO;
 	}
 
@@ -98,10 +96,10 @@ public class StudentGroupServiceImpl implements StudentGroupService {
 		studentGroup.setId(studentGroupDTO.getId());
 		studentGroup.setName(studentGroupDTO.getName());
 		if(studentGroupDTO.getStudents() != null){
-			studentGroup.setStudents(studentGroupDTO.getStudents().stream().map(studentService::convertToEntity).collect(Collectors.toList()));
+			studentGroup.setStudents(studentGroupDTO.getStudents().stream().map(studentService::convertToEntity).collect(Collectors.toSet()));
 		}
 		if (studentGroupDTO.getSubjects() != null){
-			studentGroup.setSubjects(studentGroupDTO.getSubjects().stream().map(subjectService::convertToEntity).collect(Collectors.toList()));
+			studentGroup.setSubjects(studentGroupDTO.getSubjects().stream().map(subjectService::convertToEntity).collect(Collectors.toSet()));
 		}
 		return studentGroup;
 	}

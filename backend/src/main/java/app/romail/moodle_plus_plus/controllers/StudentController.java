@@ -18,6 +18,7 @@ public class StudentController {
 		this.studentService = studentService;
 	}
 
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'SYSTEM' )")
 	@GetMapping("/{id}")
 	public ResponseEntity<StudentDTO> getStudentById(@PathVariable("id") Long id) {
@@ -26,6 +27,16 @@ public class StudentController {
 				.orElseGet(() -> ResponseEntity.notFound().build());
 	}
 
+	@CrossOrigin(origins = "*")
+	@PreAuthorize("hasAnyRole('TEACHER', 'STUDENT', 'SYSTEM' )")
+	@GetMapping("/getByEnrollmentId/{id}")
+	public ResponseEntity<StudentDTO> getStudentByEnrollmentId(@PathVariable("id") Long id) {
+		return studentService.getByEnrollmentId(id)
+				.map(ResponseEntity::ok)
+				.orElseGet(() -> ResponseEntity.notFound().build());
+	}
+
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasRole('SYSTEM')")
 	@PostMapping("/new")
 	public ResponseEntity<URI> createStudent(@RequestBody StudentDTO studentDTO) {
@@ -33,6 +44,7 @@ public class StudentController {
         return uri.<ResponseEntity<URI>>map(value -> ResponseEntity.created(value).build()).orElseGet(() -> ResponseEntity.badRequest().build());
 	}
 
+	@CrossOrigin(origins = "*")
 	@PreAuthorize("hasRole('SYSTEM')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {

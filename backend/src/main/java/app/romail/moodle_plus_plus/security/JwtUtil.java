@@ -1,5 +1,7 @@
 package app.romail.moodle_plus_plus.security;
 
+import app.romail.moodle_plus_plus.domain.Account;
+import app.romail.moodle_plus_plus.domain.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.Set;
 import java.util.function.Function;
 
 @Component
@@ -45,18 +48,19 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(Long id, boolean isRefreshToken) {
+    public String generateToken(Account account, boolean isRefreshToken) {
         if (isRefreshToken) {
-            return createToken(id, (1000L * 60 * 60 * 24 * 30), "app.romail.moodle_plus_plus.refresh_token" ); // Refresh token expires in 30 days
+            return createToken(account.getId(), (1000L * 60 * 60 * 24 * 30), "app.romail.moodle_plus_plus.refresh_token", account.getRoles() ); // Refresh token expires in 30 days
         }
-        return createToken(id, (1000L * 60 * 60 * 5), "app.romail.moodle_plus_plus.access_token"); // Access token expires in 5 hours
+        return createToken(account.getId(), (1000L * 60 * 60 * 5), "app.romail.moodle_plus_plus.access_token", account.getRoles()); // Access token expires in 5 hours
     }
 
-    private String createToken(Long subject, Long expirationTime, String scope) {
+    private String createToken(Long subject, Long expirationTime, String scope, Set<Role> roles) {
         return Jwts.builder()
                 .setSubject(String.valueOf(subject))
                 .setAudience(scope)
                 .setIssuer("app.romail.moodle_plus_plus")
+                .claim("roles", roles)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime)) // 10 hours
                 .signWith(SECRET_KEY, SignatureAlgorithm.HS256).compact();

@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @lombok.Getter
@@ -24,7 +24,7 @@ public class Course {
 	@ManyToOne
 	private Subject subject;
 	@OneToMany
-	private List<CourseAttendance> courseAttendances = new ArrayList<>();
+	private Set<CourseAttendance> courseAttendances = new HashSet<>();
 
 	public Course(Date startDate, Date endDate) {
 		this.startDate = startDate;

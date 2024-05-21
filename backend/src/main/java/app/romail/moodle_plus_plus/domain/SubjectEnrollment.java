@@ -4,8 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @lombok.Getter
@@ -26,7 +26,7 @@ public class SubjectEnrollment {
 	@ManyToOne
 	private Student student;
 	@OneToMany
-	private List<CourseAttendance> courseAttendances = new ArrayList<>();
+	private Set<CourseAttendance> courseAttendances = new HashSet<>();
 
 	public SubjectEnrollment(Subject subject, Student student) {
 		this.subject = subject;

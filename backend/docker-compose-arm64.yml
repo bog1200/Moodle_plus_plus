@@ -2,8 +2,6 @@ services:
   mariadb:
     platform: linux/arm64
     image: mariadb:latest
-    ports:
-      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=mpp
@@ -13,7 +11,7 @@ services:
       - mysqlvol:/var/lib/mysql
   app:
     platform: linux/arm64
-    image: bog1200/mpp_server
+    image: bog1200/mpp_server:arm64
     ports:
       - 6777:8080
     build: .
