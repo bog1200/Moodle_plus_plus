@@ -1,80 +1,100 @@
-import React from 'react';
-import {useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import './ProfilePage.css'
+import {decodeToken, useJwt} from "react-jwt";
 
-async function ProfilePage() {
-    const [email, setEmail] = React.useState('');
-    const [fistName, setName] = React.useState('');
-    const [lastName, setLastName] = React.useState('');
-    const [id, setGroupId] = React.useState('');
-    const navigate = useNavigate();
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+function ProfilePage() {
+    const [profile, setProfile] = useState([]);
+    // const [email, setEmail] = useState('');
+    // const [firstName, setFirstName] = useState('');
+    // const [lastName, setLastName] = useState('');
+    const token = decodeToken(localStorage.getItem('accessToken'));
+    const [studentId, setStudentId] = useState(token.sub);
+    const [studentGroupId, setStudentGroupId] = useState('');
+    const [id, setGroupId] = useState('');
 
-       //TODO: Read the token from the local storage
-        const accessToken = localStorage.getItem('accessToken');
 
-        await fetch('https://mpp.romail.app/api/v1/students', {
-            mode: 'cors',
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.id) {
-                    localStorage.setItem('id', data.id);
-                    navigate('/');
-                }
+    console.log("student id: ");
+    console.log(studentId);
+
+
+
+
+    useEffect(() => {
+        let studentGroupId;
+
+
+        const fetchProfile = async () => {
+            const response = await fetch(`https://mpp.romail.app/api/v1/student/${studentId}`, {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
+                },
             });
-        }
+            const data = await response.json();
+            console.log(data);
+            let initialProfile = {
+                email: data.email,
+                firstName: data.firstName,
+                lastName: data.lastName,
+                studentGroupId: data.studentGroupId,
+            }
+            console.log("group id of each student: ");
+            setProfile(initialProfile);
+            studentGroupId = initialProfile[0].studentGroupId;
+        };
+        fetchProfile().catch(error => console.error('Failed to fetch email, firstname and lastname of the student', error));
 
-        await fetch('https://mpp.romail.app/api/v1/students/group', {
-            mode: 'cors',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                group_id: id,
-            }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                if (data.id) {
-                    localStorage.setItem('id', data.id);
-                    navigate('/');
-                }
+
+        const fetchProfileGroup = async () => {
+            const response = await fetch(`https://mpp.romail.app/api/v1/students/group/${studentGroupId}`, {
+                mode: 'cors',
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken'),
+                },
             });
+            const data = await response.json();
+            console.log(data);
+            let initialProfile = data.map(item => ({
+                name: item.name,
+            }));
+            console.log("group id of each student: ");
+            setProfile(initialProfile);
+        };
+        fetchProfile().catch(error => console.error('Failed to fetch group id', error));
+    }, []);
+
+
 
 
     return (
         <>
-        <div className="row">
-            <div className="col-8">
-                <h2>Profile</h2><br/>
-                <div className="card bg-light mb-3">
-                    <div className="card-body">
-                        <h3 className="card-title">User details</h3>
-                        <p className="card-text"><strong>Email: </strong></p>
-                        {event => setEmail(event.target.value)}
-                        <p className="card-text"><strong>First name: </strong></p>
-                        {event => setName(event.target.value)}
-                        <p className="card-text"><strong>Last name: </strong> </p>
-                        {event => setLastName(event.target.value)}
-                        <p className="card-text"><strong>Group: </strong></p>
-                        {event => setGroupId(event.target.value)}
+            <div className="row">
+                <div className="col-8">
+                    <h2>Profile</h2><br/>
+                    <div className="card bg-light mb-3">
+                        <div className="card-body">
+                            <h3 className="card-title">User details</h3>
+                            {/*<p className="card-text"><strong>Email: </strong> {(event) => setEmail(event.target.value)}</p>*/}
+                            <p className="card-text"><strong>Email: </strong>{profile.email}</p>
+                            <p className="card-text"><strong>First name: </strong>{profile.firstName}</p>
+                            <p className="card-text"><strong>Last name: </strong>{profile.lastName}</p>
+                            <p className="card-text"><strong>Group: </strong>{profile.id}</p>
+
+                        </div>
                     </div>
                 </div>
+                <div className="col-4">
+                </div>
             </div>
-            <div className="col-4">
-            </div>
-        </div>
         </>
     );
 }
 
+
 export default ProfilePage;
+

@@ -36,7 +36,7 @@ function LoginPage() {
         return (
             <>
                 <div className="d-flex justify-content-center pt-3">
-                    <img src={logo} alt="Logo" className="mb-3"/>
+                    <img src={logo} alt="Logo" className="mb-3" width={300} height= {250}/>
                 </div>
 
                 <div className="row justify-content-center align-items-center pt-3">
@@ -75,7 +75,4 @@ function LoginPage() {
 
 export default LoginPage;
 
-//TODO: Add the following to src/components/pages/LoginPage.jsx:
-// 1.save the totp
-// 2.redirect to the main page (MainPage.jsx) if the login is successful
-// 3.display an error message if the login is unsuccessful
+
