@@ -11,6 +11,13 @@ function MainPage() {
     const [courses, setCourses] = useState([]);
     const navigate = useNavigate();
 
+
+    React.useEffect(() => {
+        if (localStorage.getItem('accessToken') === null) {
+            navigate('/login');
+        }
+    });
+
     const handleSubmit = async (event) => {
     event.preventDefault();
 

@@ -49,7 +49,6 @@ async function ProfilePage() {
                     navigate('/');
                 }
             });
-    }
 
 
     return (
