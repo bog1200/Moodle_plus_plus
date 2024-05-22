@@ -1,41 +1,13 @@
-import Products from "./components/Products";
-import { useState, useEffect } from "react";
+//import { useState } from "react";
+// eslint-disable-next-line no-unused-vars
+import * as React from "react";
+import { Outlet } from "react-router-dom";
 
 export default function App() {
 
-  const [products, addProduct] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  useEffect(() => {
-    fetchProductHandler();
-  }, []);
+   // const [products] = useState([]);
 
-
-
-  async function fetchProductHandler() {
-    setIsLoading(true);
-    const response = await fetch('http://localhost:8080/api/v1/products/')
-    const data = await response.json();
-    const cleanedProducts = data.map((productData) => {
-      return {
-        id: productData.id,
-        price: productData.price,
-        category: productData.type,
-      };
-    });
-    addProduct(cleanedProducts);
-    setIsLoading(false);
-  }
-
-
-
-
-  return (
-    <>
-      <Products items={products} />
-      {isLoading && <p>Loading...</p>}
-    </>
-  );
-
-
+    return (
+        <Outlet/>
+    );
 }
-
