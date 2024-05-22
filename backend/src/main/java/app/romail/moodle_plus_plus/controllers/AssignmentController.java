@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/v1/assignment")
@@ -25,6 +26,13 @@ public class AssignmentController {
         return assignmentService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @CrossOrigin
+    @PreAuthorize("hasAnyRole('TEACHER', 'STUDENT')")
+    @GetMapping("/subject/{id}")
+    public ResponseEntity<Set<AssignmentDTO>> getAssignmentsBySubjectId(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(assignmentService.findBySubjectId(id));
     }
 
     @CrossOrigin(origins = "*")
