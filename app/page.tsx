@@ -1,4 +1,7 @@
 import Image from "next/image";
+import {signIn} from "@/auth";
+
+
 
 export default function Home() {
   return (
@@ -12,6 +15,11 @@ export default function Home() {
           height={38}
           priority
         />
+        <form  action={async () => {
+          "use server"
+          await signIn("romailsso", { redirectTo: '/dashboard'});}} className="flex flex-col gap-4" >
+        <button type={"submit"} className={"size-20 bg-green-500"}> Sign In</button>
+        </form>
         <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
           <li className="mb-2">
             Get started by editing{" "}
