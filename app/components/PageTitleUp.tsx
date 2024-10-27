@@ -3,7 +3,7 @@ import searchIcon from 'bootstrap-icons/icons/search.svg';
 import bellIcon from 'bootstrap-icons/icons/bell.svg';
 import gearIcon from 'bootstrap-icons/icons/gear.svg';
 
-const PageTitleUp = () => {
+export function PageTitleUp(){
   return (
     <div className="flex justify-between items-center py-3">
       <h1>Index</h1>
@@ -15,6 +15,6 @@ const PageTitleUp = () => {
       </div>
     </div>
   );
-};
+}
 
-export default PageTitleUp;
+// export default PageTitleUp;

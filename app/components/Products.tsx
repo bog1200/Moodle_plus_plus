@@ -1,15 +1,11 @@
-import ProductItem from './ProductItem';
-import Card from './Card';
+import {ProductItem} from './ProductItem';
+import {Card} from './Card';
 
-interface ProductsProps {
-  items: { id: string; name: string; price: string; category: string }[];
-}
+export function Products(props: {items: { id: string; name: string; price: string; category: string }[]}) {
+  let productDisplay: React.ReactNode = <p className="text-white text-center text-xl mt-8">No products</p>;
 
-const Products: React.FC<ProductsProps> = ({ items }) => {
-  let productDisplay = <p className="text-white text-center text-xl mt-8">No products</p>;
-
-  if (items.length > 0) {
-    productDisplay = items.map((product) => (
+  if (props.items.length > 0) {
+    productDisplay = props.items.map((product) => (
       <ProductItem key={product.id} item={product} />
     ));
   }
@@ -19,6 +15,6 @@ const Products: React.FC<ProductsProps> = ({ items }) => {
       {productDisplay}
     </Card>
   );
-};
+}
 
-export default Products;
+// export default Products;
