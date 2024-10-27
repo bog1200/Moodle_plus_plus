@@ -32,7 +32,7 @@ export const {
             authorization: "https://auth.romail.app/oauth2/authorize",
             token: "https://auth.romail.app/oauth2/token",
             userinfo: "https://auth.romail.app/oauth2/userinfo",
-            checks: ["state"],
+            checks: ["none"],
             clientId: process.env.AUTH_ROMAILSSO_ID,
             clientSecret: process.env.AUTH_ROMAILSSO_SECRET,
         },
