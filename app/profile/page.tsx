@@ -1,4 +1,6 @@
-import { decodeToken } from 'react-jwt'; //TODO
+import {auth} from "@/auth";
+import {PrismaClient} from "@prisma/client";
+import {redirect} from "next/navigation"; //TODO
 
 type ProfileType = {
   email: string;
@@ -8,25 +10,40 @@ type ProfileType = {
 };
 
 export default async function ProfilePage() {
-  const token = decodeToken(localStorage.getItem('accessToken') || '');
-  const studentId = token?.sub || '';
 
-  const response = await fetch(`https://mpp.romail.app/api/v1/student/${studentId}`, {
-    mode: 'cors',
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${localStorage.getItem('accessToken')}`
-    },
-  });
-  const data = await response.json();
+    const session = await auth();
 
-  const profile: ProfileType = {
-    email: data.email,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    studentGroupId: data.studentGroupId
-  };
+    if (session == null)
+        return redirect("/")
+
+    const user = session?.user;
+
+    if (!user) {
+        return <div>User not found</div>;
+    }
+
+    const prisma = new PrismaClient();
+
+    const student = await prisma.student.findUnique({
+        where: {
+            id: parseInt(user.id)
+        }
+    })
+
+    if (student == null)
+    {
+        return;
+    }
+
+    const person = await prisma.person.findUnique({
+        where: {
+            id: student.personId
+        }
+    })
+
+    if (person == null) return
+
+
 
   return (
       <div className="flex flex-col items-center">
