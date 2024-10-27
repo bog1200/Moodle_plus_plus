@@ -6,7 +6,6 @@ export const {
     signIn,
     signOut,
 } = NextAuth({
-    debug: true,
     session: {
         strategy: 'jwt',
     },
@@ -34,6 +33,13 @@ export const {
             checks: ["pkce", "state"],
             clientId: process.env.AUTH_ROMAILSSO_ID,
             clientSecret: process.env.AUTH_ROMAILSSO_SECRET,
+            profile: (profile) => {
+                return {
+                    id: profile.sub,
+                    name: profile.name,
+                    email: profile.email
+                };
+            }
         },
     ],
 });
