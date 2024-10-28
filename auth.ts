@@ -1,4 +1,6 @@
 import NextAuth, { type DefaultSession} from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter"
+import { prisma } from "@/prisma"
 
 declare module "next-auth" {
     /**
@@ -26,6 +28,7 @@ export const {
     session: {
         strategy: 'jwt',
     },
+    adapter: PrismaAdapter(prisma),
     callbacks:
         {
             jwt: async ({ token, account, profile }) => {
