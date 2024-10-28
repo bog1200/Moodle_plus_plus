@@ -6,8 +6,8 @@ declare module "next-auth" {
      */
     interface Session {
         user: {
-           familyName: string;
-           givenName: string;
+           family_name: string;
+           given_name: string;
             /**
              * By default, TypeScript merges new interface properties and overwrites existing ones.
              * In this case, the default session user properties will be overwritten,
@@ -26,12 +26,25 @@ export const {
     session: {
         strategy: 'jwt',
     },
-    callbacks: {
+    callbacks:
+        {
+            jwt: async ({ token, account, profile }) => {
+
+                if (account && profile) {
+                    token.sub = profile.sub!;
+                }
+                if (profile) {
+                    token.family_name = profile.family_name;
+                    token.given_name = profile.given_name;
+                }
+                return token;
+            },
         session: async ({ session, token }) => {
             return {
                 ...session,
                 user: {
                     ...session.user,
+                    id: token.sub,
                     familyName: token.family_name,
                     givenName: token.given_name,
                 },
