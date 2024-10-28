@@ -1,5 +1,22 @@
-import NextAuth from "next-auth";
+import NextAuth, { type DefaultSession} from "next-auth";
 
+declare module "next-auth" {
+    /**
+     * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+     */
+    interface Session {
+        user: {
+           family_name: string;
+           given_name: string;
+            /**
+             * By default, TypeScript merges new interface properties and overwrites existing ones.
+             * In this case, the default session user properties will be overwritten,
+             * with the new ones defined above. To keep the default session user properties,
+             * you need to add them back into the newly declared interface.
+             */
+        } & DefaultSession["user"]
+    }
+}
 export const {
     handlers: { GET, POST },
     auth,
@@ -9,14 +26,29 @@ export const {
     session: {
         strategy: 'jwt',
     },
-    callbacks: {
-        session: async ({ session, token }) => {
-            if (session?.user) {
-                if (token.sub != null) {
-                    session.user.id = token.sub;
+    callbacks:
+        {
+            jwt: async ({ token, account, profile }) => {
+
+                if (account && profile) {
+                    token.sub = profile.sub!;
                 }
+                if (profile) {
+                    token.family_name = profile.family_name;
+                    token.given_name = profile.given_name;
+                }
+                return token;
+            },
+        session: async ({ session, token }) => {
+            return {
+                ...session,
+                user: {
+                    ...session.user,
+                    id: token.sub,
+                    familyName: token.family_name,
+                    givenName: token.given_name,
+                },
             }
-            return session;
         },
     },
     providers: [
