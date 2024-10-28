@@ -2,13 +2,6 @@ import {auth} from "@/auth";
 import {PrismaClient} from "@prisma/client";
 import {redirect} from "next/navigation"; //TODO
 
-type ProfileType = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  studentGroupId: string;
-};
-
 export default async function ProfilePage() {
 
     const session = await auth();
@@ -24,37 +17,41 @@ export default async function ProfilePage() {
 
     const prisma = new PrismaClient();
 
-    const student = await prisma.student.findUnique({
+    const account = await prisma.account.findFirst({
         where: {
-            id: parseInt(user.id)
+            providerAccountId: user.id
         }
     })
+
+    if(!account){
+        return <div>Account not found</div>;
+    }
+
+    const student = await prisma.student.findMany({
+        where: {
+            accountId: account.id!
+        }
+    })
+
+    //TODO: check-uri separate daca e doar un cont sau mai multe
 
     if (student == null)
     {
         return;
     }
 
-    const person = await prisma.person.findUnique({
-        where: {
-            id: student.personId
-        }
-    })
-
-    if (person == null) return
-
 
 
   return (
       <div className="flex flex-col items-center">
-        <h2 className="text-2xl font-bold mb-4">Profile</h2>
-        <div className="bg-gray-100 p-4 rounded-lg shadow-md w-full max-w-md">
-          <h3 className="text-xl font-semibold mb-2">User details</h3>
-          <p className="mb-2"><strong>Email: </strong>{profile.email}</p>
-          <p className="mb-2"><strong>First name: </strong>{profile.firstName}</p>
-          <p className="mb-2"><strong>Last name: </strong>{profile.lastName}</p>
-          <p className="mb-2"><strong>Group: </strong>{profile.studentGroupId}</p>
-        </div>
+        <h2 className="text-2xl font-bold mb-4 text-gray-300">Profile</h2>
+          <div className="bg-purple-950 p-4 rounded-lg shadow-md w-full max-w-md text-gray-300">
+              <h3 className="text-xl font-semibold mb-2">User details</h3>
+              <p className="mb-2"><strong>Email: </strong>{user.email}</p>
+              <p className="mb-2"><strong>Name: </strong>{user.name}</p>
+              {/*<p className="mb-2"><strong>Group: </strong>{student[0].groupId}</p>*/}
+              <p className="mb-2"><strong>Rest of data here....</strong></p>
+          </div>
       </div>
   );
 }

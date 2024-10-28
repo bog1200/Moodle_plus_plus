@@ -1,51 +1,52 @@
-import Image from 'next/image';
+// import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
-import mortarboardFill from 'bootstrap-icons/icons/mortarboard-fill.svg';
-import calendarCheck from 'bootstrap-icons/icons/calendar-check.svg';
-import calendarEventFill from 'bootstrap-icons/icons/calendar-event-fill.svg';
-import personFill from 'bootstrap-icons/icons/person-fill.svg';
-import logoutFill from 'bootstrap-icons/icons/box-arrow-left.svg';
-import logo from '../public/static/photos/logo.jpg';
+import AcademicCap from "@/icons/AcademicCap";
+import BookOpen from "@/icons/BookOpen";
+import Calendar from "@/icons/Calendar";
+import Logout from "@/icons/Logout";
+import User from "@/icons/User";
+import {signOut} from "@/auth";
 
-const Aside = () => {
-  const router = useRouter();
+// import logo from '../public/static/photos/logo.jpg';
 
-  const handleLogout = () => {
-    localStorage.removeItem('accessToken');
-    router.push('/');
-  };
 
-  return (
-    <aside className="flex flex-col items-center py-3 border bg-gray-100 shadow-sm rounded-lg">
-      <div className="mb-4">
-        <Image src={logo} alt="Logo" width={50} height={50} className="rounded-full" />
-      </div>
-      <Link href="/dashboard">
-        <a className="mb-4">
-          <Image src={mortarboardFill} alt="mortarboard" width={30} height={30} />
-        </a>
-      </Link>
-      <Link href="/courses">
-        <a className="mb-4">
-          <Image src={calendarCheck} alt="calendar check" width={30} height={30} />
-        </a>
-      </Link>
-      <Link href="/schedule">
-        <a className="mb-4">
-          <Image src={calendarEventFill} alt="calendar event" width={30} height={30} />
-        </a>
-      </Link>
-      <Link href="/profile">
-        <a className="mb-4">
-          <Image src={personFill} alt="profile" width={30} height={30} />
-        </a>
-      </Link>
-      <button onClick={handleLogout} className="mb-4">
-        <Image src={logoutFill} alt="logout" width={30} height={30} />
-      </button>
-    </aside>
-  );
+export default async function Aside() {
+
+
+    return (
+        <aside className="flex justify-center items-center py-3 border bg-gray-500 shadow-sm rounded-lg">
+            <div className="flex">
+                {/*<Image src={logo} alt="Logo" width={50} height={50} className="rounded-full"/>*/}
+                <Link href="/dashboard" className="mr-10">
+                    <AcademicCap heading={"Logo"}/>
+                </Link>
+            </div>
+
+            <Link href="/dashboard" className="mr-10">
+                <AcademicCap heading={"Dashboard"} color={"rgb(134, 8, 140)"}/>
+            </Link>
+            {/*TODO: Add the rest of the links and make them linear*/}
+            <Link href="/courses" className="mr-10">
+                {/*<Image src={calendarCheck} alt="calendar check" width={30} height={30}/>*/}
+                <BookOpen heading={"Courses"} color={"rgb(22, 87, 171)"}/>
+            </Link>
+            <Link href="/schedule" className="mr-10">
+                {/*<Image src={calendarEventFill} alt="calendar event" width={30} height={30}/>*/}
+                <Calendar heading={"Schedule"} color={"#e8ca20"}/>
+            </Link>
+            <Link href="/profile" className="mr-10">
+                {/*<Image src={personFill} alt="profile" width={30} height={30}/>*/}
+                <User heading={"Profile"} color={"#3dc461"}/>
+            </Link>
+
+            <form action={async () => {
+                "use server"
+                return await signOut({redirectTo: "/"});
+
+
+            }}>
+                <button type="submit" className="mr-10"><Logout heading={"Log out"}/></button>
+            </form>
+        </aside>
+    );
 };
-
-export default Aside;
