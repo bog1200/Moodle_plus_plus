@@ -46,7 +46,7 @@ model IdDocumentType {
 }
 
 model IdDocument {
-  id               Int            @id @default(autoincrement())
+  id               String  @id @default(cuid())
   documentNumber   String
   issueDate        DateTime
   expiryDate       DateTime
@@ -57,12 +57,12 @@ model IdDocument {
 }
 
 model Grade {
-  id           Int        @id @default(autoincrement())
+  id           String  @id @default(cuid())
   gradeValue   String
   student      Student    @relation(fields: [studentId], references: [id])
-  studentId    Int
+  studentId    String
   assignment   Assignment @relation(fields: [assignmentId], references: [id])
-  assignmentId Int
+  assignmentId String
 }
 
 model File {
@@ -75,35 +75,35 @@ model File {
 }
 
 model CourseAttendance {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(cuid())
   student   Student  @relation(fields: [studentId], references: [id])
-  studentId Int
+  studentId String
   course    Course   @relation(fields: [courseId], references: [id])
-  courseId  Int
+  courseId  String
   date      DateTime
   present   Boolean
 }
 
 model Course {
-  id          Int                @id @default(autoincrement())
+  id          String             @id @default(cuid())
   name        String
   description String
   teacher     Teacher            @relation(fields: [teacherId], references: [id])
-  teacherId   Int
+  teacherId   String
   attendances CourseAttendance[]
 }
 
 model AssignmentSubmission {
-  id             Int        @id @default(autoincrement())
+  id             String     @id @default(cuid())
   submissionDate DateTime
   student        Student    @relation(fields: [studentId], references: [id])
-  studentId      Int
+  studentId      String
   assignment     Assignment @relation(fields: [assignmentId], references: [id])
-  assignmentId   Int
+  assignmentId   String
 }
 
 model Assignment {
-  id             Int                    @id @default(autoincrement())
+  id             String                 @id @default(cuid())
   title          String
   description    String
   dueDate        DateTime
@@ -113,17 +113,28 @@ model Assignment {
 }
 
 model Account {
-  id       Int     @id @default(autoincrement())
-  ssoId    String  @unique
-  username String  @unique
-  password String
-  person   Person? @relation(fields: [personId], references: [id])
-  personId Int?    @unique
-  roles    Role
+  id                       String  @id @default(cuid())
+  person                   Person? @relation(fields: [personId], references: [id])
+  personId                 Int?    @unique
+  roles                    Role
+  // Authjs
+  userId                   String  @unique
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String? @db.Text
+  access_token             String? @db.Text
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String? @db.Text
+  session_state            String?
+  refresh_token_expires_in Int?
+  user                     User?   @relation(fields: [userId], references: [id])
 }
 
 model Teacher {
-  id       Int       @id @default(autoincrement())
+  id       String  @id @default(cuid())
   person   Person    @relation(fields: [personId], references: [id])
   personId Int
   courses  Course[]
@@ -131,11 +142,11 @@ model Teacher {
 }
 
 model SubjectEnrollment {
-  id        Int     @id @default(autoincrement())
+  id        String  @id @default(cuid())
   student   Student @relation(fields: [studentId], references: [id])
-  studentId Int
+  studentId String
   subject   Subject @relation(fields: [subjectId], references: [id])
-  subjectId Int
+  subjectId String
 }
 
 model Subject {
@@ -153,7 +164,7 @@ model StudentGroup {
 }
 
 model Student {
-  id               Int                    @id @default(autoincrement())
+  id               String                 @id @default(cuid())
   person           Person                 @relation(fields: [personId], references: [id])
   personId         Int
   group            StudentGroup?          @relation(fields: [groupId], references: [id])
@@ -162,4 +173,28 @@ model Student {
   grades           Grade[]
   submissions      AssignmentSubmission[]
   CourseAttendance CourseAttendance[]
+}
+
+// Authjs
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  username      String?   @unique
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id])
 }
