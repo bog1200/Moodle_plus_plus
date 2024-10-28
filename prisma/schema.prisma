@@ -15,47 +15,6 @@ enum AssignmentType {
   QUIZ
 }
 
-enum Role {
-  ADMIN
-  TEACHER
-  STUDENT
-}
-
-// Models
-model Person {
-  id         Int          @id @default(autoincrement())
-  account    Account?
-  accountId  Int?         @unique
-  firstName  String
-  lastName   String
-  email      String
-  phone      String
-  address    String
-  gender     String
-  dob        DateTime
-  IdDocument IdDocument[]
-  File       File[]
-  Teacher    Teacher[]
-  Student    Student[]
-}
-
-model IdDocumentType {
-  id         Int          @id @default(autoincrement())
-  name       String
-  IdDocument IdDocument[]
-}
-
-model IdDocument {
-  id               Int            @id @default(autoincrement())
-  documentNumber   String
-  issueDate        DateTime
-  expiryDate       DateTime
-  person           Person         @relation(fields: [personId], references: [id])
-  personId         Int
-  idDocumentType   IdDocumentType @relation(fields: [idDocumentTypeId], references: [id])
-  idDocumentTypeId Int
-}
-
 model Grade {
   id           Int        @id @default(autoincrement())
   gradeValue   String
@@ -66,12 +25,12 @@ model Grade {
 }
 
 model File {
-  id          Int    @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   fileName    String
   fileType    String
   fileContent Bytes
-  person      Person @relation(fields: [personId], references: [id])
-  personId    Int
+  owner       Account @relation(fields: [ownerId], references: [id])
+  ownerId     Int
 }
 
 model CourseAttendance {
@@ -113,21 +72,26 @@ model Assignment {
 }
 
 model Account {
-  id       Int     @id @default(autoincrement())
-  ssoId    String  @unique
-  username String  @unique
-  password String
-  person   Person? @relation(fields: [personId], references: [id])
-  personId Int?    @unique
-  roles    Role
+  id        Int       @id @default(autoincrement())
+  ssoId     String    @unique
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  address   String
+  gender    String
+  dob       DateTime
+  File      File[]
+  Teacher   Teacher[]
+  Student   Student[]
 }
 
 model Teacher {
-  id       Int       @id @default(autoincrement())
-  person   Person    @relation(fields: [personId], references: [id])
-  personId Int
-  courses  Course[]
-  Subject  Subject[]
+  id        Int       @id @default(autoincrement())
+  account   Account   @relation(fields: [accountId], references: [id])
+  accountId Int
+  courses   Course[]
+  Subject   Subject[]
 }
 
 model SubjectEnrollment {
@@ -154,8 +118,8 @@ model StudentGroup {
 
 model Student {
   id               Int                    @id @default(autoincrement())
-  person           Person                 @relation(fields: [personId], references: [id])
-  personId         Int
+  account          Account                @relation(fields: [accountId], references: [id])
+  accountId        Int
   group            StudentGroup?          @relation(fields: [groupId], references: [id])
   groupId          Int?
   enrollments      SubjectEnrollment[]
