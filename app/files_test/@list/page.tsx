@@ -8,9 +8,11 @@ export default async function FileListTest() {
     const data = await s3Client.send(new ListObjectsV2Command({Bucket: process.env.S3_BUCKET!}));
     const filesWithUrls = await Promise.all(
         data.Contents?.map(async (file) => {
-            const command = new GetObjectCommand({Bucket: process.env.S3_BUCKET!, Key: file.Key!});
-            const url = await getSignedUrl(s3Client, command, {expiresIn: 3600});
-            return {key: file.Key!, url, s3: file.Key};
+            const viewCommand = new GetObjectCommand({Bucket: process.env.S3_BUCKET!, Key: file.Key!});
+            const downloadCommand = new GetObjectCommand({Bucket: process.env.S3_BUCKET!, Key: file.Key!, ResponseContentDisposition: 'attachment; filename=' + file.Key});
+            const viewUrl = await getSignedUrl(s3Client, viewCommand, {expiresIn: 3600});
+            const downloadUrl = await getSignedUrl(s3Client, downloadCommand, {expiresIn: 3600});
+            return {key: file.Key!, viewUrl, downloadUrl, s3: file.Key};
         }) || []
     );
 
@@ -42,11 +44,11 @@ export default async function FileListTest() {
                     <tr key={file.key}>
                         <td>{file.key}</td>
                         <td><a href={
-                            file.url
-                        }>View</a></td>
+                            file.viewUrl
+                        } target="_blank">View</a></td>
                         <td><a href={
-                            file.url
-                        } download>Download</a></td>
+                            file.downloadUrl
+                        } target="_blank">Download</a></td>
                         <td>
                             { file.key === '3.mp3' ? <p>Cannot delete 3.mp3</p> :
                             <form action={deleteFile}>
