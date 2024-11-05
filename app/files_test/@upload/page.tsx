@@ -18,6 +18,7 @@ async function upload(data: FormData) {
         Bucket: process.env.S3_BUCKET!,
         Key: file.name,
         Body: buffer,
+        ContentType: file.type
     };
        const upload =  await s3Client.send(new PutObjectCommand(uploadParams));
        if (upload.$metadata.httpStatusCode === 200) {
