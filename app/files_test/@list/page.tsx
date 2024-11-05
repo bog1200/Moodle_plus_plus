@@ -31,15 +31,19 @@ export default async function FileListTest() {
             <table className={"w-full text-center"}>
                 <thead>
                 <tr>
-                    <th className={"w-1/3"}>File Name</th>
-                    <th className={"w-1/3"}>Download button</th>
-                    <th className={"w-1/3"}>Delete button</th>
+                    <th className={"w-1/4"}>File Name</th>
+                    <th className={"w-1/4"}>View</th>
+                    <th className={"w-1/4"}>Download</th>
+                    <th className={"w-1/4"}>Delete</th>
                 </tr>
                 </thead>
                 <tbody>
                 {filesWithUrls.map((file) => (
                     <tr key={file.key}>
                         <td>{file.key}</td>
+                        <td><a href={
+                            file.url
+                        }>View</a></td>
                         <td><a href={
                             file.url
                         } download>Download</a></td>
