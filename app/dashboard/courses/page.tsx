@@ -1,7 +1,9 @@
+"use client"
+
 import React from 'react';
-import searchIcon from 'bootstrap-icons/icons/search.svg';
-import { Course } from '../components/Course';
-import { CourseAsList } from '../components/CourseAsList';
+import { Course } from '../../components/Course';
+import { CourseAsList } from '../../components/CourseAsList';
+import SearchIcon from '@/icons/SearchIcon';
 
 type CourseType = {
   name: string;
@@ -18,6 +20,7 @@ const CoursesPage: React.FC = () => {
   const [selectedOption, setSelectedOption] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [displayedCourses, setDisplayedCourses] = React.useState<CourseType[]>(courses);
   const coursesPerPage = 9;
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -32,33 +35,46 @@ const CoursesPage: React.FC = () => {
     setCurrentPage(currentPage - 1);
   };
 
+  // React.useEffect(() => {
+  //   const filteredCourses = courses.filter(course =>
+  //       course.name.toLowerCase().includes(searchTerm.toLowerCase())
+  //   );
+  //   setDisplayedCourses(filteredCourses);
+  // }, [courses, searchTerm]);
+
   const handleSearch = () => {
-    const filteredCourses = courses.filter(course => course.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    if (searchTerm.trim() === '') {
+      setDisplayedCourses(courses);
+    } else {
+      const filteredCourses: CourseType[] = courses.filter(course => course.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      setDisplayedCourses(filteredCourses);
+    }
     setCurrentPage(1);
-    // Update displayed courses based on search term
   };
 
   const startIndex = (currentPage - 1) * coursesPerPage;
-  const selectedCourses = courses.slice(startIndex, startIndex + coursesPerPage);
+  const selectedCourses = displayedCourses.slice(startIndex, startIndex + coursesPerPage);
 
   return (
       <div className="flex flex-col items-center">
-        <h2>Courses</h2>
-        <div className="flex items-center mb-3">
+        <h2 className="text-4xl">Courses</h2>
+        <div className="flex items-center mb-3 p-4 bg-gray-100 rounded-lg shadow-md">
           <p className="m-3 w-25 rounded-3">Display as: </p>
-          <select className="form-select me-2" value={selectedOption} onChange={handleSelectChange}>
+          <select
+              className="form-select me-2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={selectedOption} onChange={handleSelectChange}>
             <option value="0">Card</option>
             <option value="1">List</option>
           </select>
           <input
               type="search"
-              className="form-control me-2"
+              className="form-control me-2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Search..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
           />
-          <button onClick={handleSearch}>
-            <img src={searchIcon} alt="Search" width="30" height="30" />
+          <button onClick={handleSearch} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700">
+            <SearchIcon/>
           </button>
         </div>
 
@@ -78,15 +94,20 @@ const CoursesPage: React.FC = () => {
           )}
         </div>
         <div className="flex justify-between mt-5">
-          <button onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</button>
-          <button onClick={handleNextPage} disabled={startIndex + coursesPerPage >= courses.length}>Next</button>
+          <button onClick={handlePreviousPage} disabled={currentPage === 1}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 disabled:bg-gray-400">
+            Previous
+          </button>
+          <button onClick={handleNextPage} disabled={startIndex + coursesPerPage >= courses.length}
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 ml-2">
+            Next
+          </button>
         </div>
       </div>
   );
 };
 
 export default CoursesPage;
-
 
 
 // import React, { useEffect, useState } from 'react';

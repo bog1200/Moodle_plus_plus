@@ -26,15 +26,15 @@ export default async function Aside() {
                 <AcademicCap heading={"Dashboard"} color={"rgb(134, 8, 140)"}/>
             </Link>
             {/*TODO: Add the rest of the links and make them linear*/}
-            <Link href="/courses" className="mr-10">
+            <Link href="/dashboard/courses" className="mr-10">
                 {/*<Image src={calendarCheck} alt="calendar check" width={30} height={30}/>*/}
                 <BookOpen heading={"Courses"} color={"rgb(22, 87, 171)"}/>
             </Link>
-            <Link href="/schedule" className="mr-10">
+            <Link href="/dashboard/schedule" className="mr-10">
                 {/*<Image src={calendarEventFill} alt="calendar event" width={30} height={30}/>*/}
                 <Calendar heading={"Schedule"} color={"#e8ca20"}/>
             </Link>
-            <Link href="/profile" className="mr-10">
+            <Link href="/dashboard/profile" className="mr-10">
                 {/*<Image src={personFill} alt="profile" width={30} height={30}/>*/}
                 <User heading={"Profile"} color={"#3dc461"}/>
             </Link>
