@@ -8,24 +8,29 @@ import {redirect} from "next/navigation";
 export default function FileUploadTest() {
 
     const [uploadKey, setUploadKey] = useState<string | null>(null);
+    const fileSizeLimit = parseInt(process.env.NEXT_PUBLIC_FILE_UPLOAD_MAX_SIZE!);
+
 
    async function preUpload(event: ChangeEvent ) {
         event.preventDefault();
         const file: File | null | undefined = (event.target as HTMLInputElement).files?.item(0);
-        if (!file) {
-            throw new Error('No file uploaded');
-        }
-        else {
-            const fileSummary: FileSummary = {
-                name: file.name,
-                type: file.type,
-                size: file.size
+        if (file) {
+            if (file.size > fileSizeLimit) {
+                alert(`File is too large. Maximum size is ${fileSizeLimit} bytes.`);
+                // clear the input
+                (event.target as HTMLInputElement).value = '';
+            } else {
+                const fileSummary: FileSummary = {
+                    name: file.name,
+                    type: file.type,
+                    size: file.size
+                }
+                console.log("Creating upload key");
+                const data = await getUploadKey(fileSummary);
+                console.log(data);
+                setUploadKey(data);
             }
-            const data = await getUploadKey(fileSummary);
-            console.log(data);
-            setUploadKey(data);
         }
-
     }
 
     async function upload(formData: FormData) {

@@ -8,6 +8,12 @@ export interface FileSummary{
     size: number;
 }
 export async function getUploadKey(file: FileSummary): Promise<string> {
+    const fileSizeLimit = parseInt(process.env.NEXT_PUBLIC_FILE_UPLOAD_MAX_SIZE!);
+
+    if (file.size > fileSizeLimit) {
+        // Client side validation should prevent this from happening, but client side validation can be bypassed
+        throw new Error('File is too large. Maximum size is ' + fileSizeLimit + ' bytes.');
+    }
     const params = {
         Bucket: process.env.S3_BUCKET!,
         Key: file.name,
