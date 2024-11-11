@@ -1,6 +1,7 @@
 import {auth} from "@/auth";
 import {PrismaClient} from "@prisma/client";
-import {redirect} from "next/navigation"; //TODO
+import {redirect} from "next/navigation";
+import {getCurrentStudent} from "@/app/actions/getCurrentStudent"; //TODO
 
 export default async function ProfilePage() {
 
@@ -15,30 +16,16 @@ export default async function ProfilePage() {
         return <div>User not found</div>;
     }
 
-    const prisma = new PrismaClient();
-
-    const account = await prisma.account.findFirst({
-        where: {
-            providerAccountId: user.id
-        }
-    })
-
-    if(!account){
-        return <div>Account not found</div>;
-    }
-
-    const student = await prisma.student.findMany({
-        where: {
-            accountId: account.id!
-        }
-    })
-
     //TODO: check-uri separate daca e doar un cont sau mai multe
+
+    const student = getCurrentStudent()
 
     if (student == null)
     {
         return;
     }
+
+
 
 
 
