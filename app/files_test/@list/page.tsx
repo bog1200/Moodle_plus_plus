@@ -1,28 +1,23 @@
 import {s3Client} from "@/app/lib/cloud/r2";
-import {ListObjectsV2Command, GetObjectCommand, DeleteObjectCommand} from "@aws-sdk/client-s3";
+import {GetObjectCommand} from "@aws-sdk/client-s3";
 import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
-import {redirect} from "next/navigation";
+import {prisma} from "@/prisma";
+import {deleteFile} from "@/app/actions/deleteFile";
 
 export default async function FileListTest() {
 
-    const data = await s3Client.send(new ListObjectsV2Command({Bucket: process.env.S3_BUCKET!}));
+    const data = await prisma.file.findMany();
     const filesWithUrls = await Promise.all(
-        data.Contents?.map(async (file) => {
-            const command = new GetObjectCommand({Bucket: process.env.S3_BUCKET!, Key: file.Key!});
-            const url = await getSignedUrl(s3Client, command, {expiresIn: 3600});
-            return {key: file.Key!, url, s3: file.Key};
+        data.map(async (file) => {
+            const viewCommand = new GetObjectCommand({Bucket: process.env.S3_BUCKET!, Key: file.fileLink!});
+            const downloadCommand = new GetObjectCommand({Bucket: process.env.S3_BUCKET!, Key: file.fileLink!, ResponseContentDisposition: 'attachment; filename=' + file.fileName});
+            const viewUrl = await getSignedUrl(s3Client, viewCommand, {expiresIn: 3600});
+            const downloadUrl = await getSignedUrl(s3Client, downloadCommand, {expiresIn: 3600});
+            return {id: file.id, name: file.fileName!, viewUrl, downloadUrl, s3: file.fileLink};
         }) || []
     );
 
-    async function deleteFile(data: FormData) {
-        "use server"
-       const q =  await s3Client.send(new DeleteObjectCommand({Bucket: process.env.S3_BUCKET!, Key: data.get('key') as string}));
-        if (q) {
-            return redirect('/files_test');
-        }
-        return redirect('/files_test?error=delete');
 
-    }
 
 
     return (
@@ -39,18 +34,19 @@ export default async function FileListTest() {
                 </thead>
                 <tbody>
                 {filesWithUrls.map((file) => (
-                    <tr key={file.key}>
-                        <td>{file.key}</td>
+                    <tr key={file.id}>
+                        <td>{file.name}</td>
                         <td><a href={
-                            file.url
-                        }>View</a></td>
+                            file.viewUrl
+                        } target="_blank">View</a></td>
                         <td><a href={
-                            file.url
-                        } download>Download</a></td>
+                            file.downloadUrl
+                        } target="_blank">Download</a></td>
                         <td>
-                            { file.key === '3.mp3' ? <p>Cannot delete 3.mp3</p> :
+                            { file.name === '3.mp3' ? <p>Cannot delete 3.mp3</p> :
                             <form action={deleteFile}>
-                                <input type="hidden" name="key" value={file.key}/>
+                                <input type="hidden" name="db" value={file.id}/>
+                                <input type="hidden" name="s3" value={file.s3}/>
                                 <button type="submit">Delete</button>
                             </form>
                             }
