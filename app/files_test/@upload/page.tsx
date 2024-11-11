@@ -4,10 +4,12 @@
 import {FileSummary, getUploadKey} from "@/app/actions/getUploadKey";
 import {ChangeEvent, useState} from "react";
 import {redirect} from "next/navigation";
+import {storeUpload} from "@/app/actions/storeUpload";
 
 export default function FileUploadTest() {
 
     const [uploadKey, setUploadKey] = useState<string | null>(null);
+    const [fileName, setFileName] = useState<string | null>(null);
     const fileSizeLimit = parseInt(process.env.NEXT_PUBLIC_FILE_UPLOAD_MAX_SIZE!);
 
 
@@ -28,7 +30,8 @@ export default function FileUploadTest() {
                 console.log("Creating upload key");
                 const data = await getUploadKey(fileSummary);
                 console.log(data);
-                setUploadKey(data);
+                setUploadKey(data[0]);
+                setFileName(data[1]);
             }
         }
     }
@@ -41,6 +44,12 @@ export default function FileUploadTest() {
         if (!uploadKey) {
             throw new Error('No upload key');
         }
+        const fileSummary: FileSummary = {
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            link: fileName!
+        }
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
         const upload = await fetch(uploadKey!, {
@@ -51,6 +60,7 @@ export default function FileUploadTest() {
             }
         });
         if (upload.ok) {
+            await storeUpload(fileSummary);
             return redirect('/files_test');
         }
         else {
