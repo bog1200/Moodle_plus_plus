@@ -1,7 +1,7 @@
 import {auth} from "@/auth";
 import {PrismaClient} from "@prisma/client";
 
-export async function getCurrentStudent(){
+export async function getSubjectEnrollment(){
 
     const session = await auth();
 
@@ -17,7 +17,6 @@ export async function getCurrentStudent(){
 
     const prisma = new PrismaClient();
 
-
     const account = await prisma.account.findFirst({
         where: {
             providerAccountId: user.id
@@ -28,7 +27,7 @@ export async function getCurrentStudent(){
         return null;
     }
 
-    const student = await prisma.student.findFirst({
+    const student = await prisma.student.findMany({
         where: {
             accountId: account.id!
         }
@@ -41,7 +40,18 @@ export async function getCurrentStudent(){
         return null;
     }
 
-    return student;
+    const subjectEnrollment = await prisma.subjectEnrollment.findMany({
+        where: {
+            studentId: student.id!
+        }
+    })
+
+    if (subjectEnrollment == null)
+    {
+        return null;
+    }
+
+    return subjectEnrollment;
 
 
 }

@@ -26,9 +26,6 @@ export default async function ProfilePage() {
     }
 
 
-
-
-
   return (
       <div className="flex flex-col items-center">
         <h2 className="text-2xl font-bold mb-4 text-gray-300">Profile</h2>
