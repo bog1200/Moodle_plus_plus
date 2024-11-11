@@ -28,7 +28,7 @@ model File {
   id          String  @id @default(cuid())
   fileName    String
   fileType    String
-  fileContent Bytes
+  fileLink    String
   owner       Account @relation(fields: [ownerId], references: [id])
   ownerId     String
 }
@@ -69,6 +69,8 @@ model Assignment {
   assignmentType AssignmentType
   submissions    AssignmentSubmission[]
   Grade          Grade[]
+  subject        Subject                @relation(fields: [subjectId], references: [id])
+  subjectId      String
 }
 
 model Account {
@@ -116,6 +118,7 @@ model Subject {
   teacher     Teacher             @relation(fields: [teacherId], references: [id])
   teacherId   String
   enrollments SubjectEnrollment[]
+  assignments Assignment[]
 }
 
 model StudentGroup {
