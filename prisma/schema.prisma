@@ -119,7 +119,7 @@ model Subject {
 }
 
 model StudentGroup {
-  id       Int       @id @default(autoincrement())
+  id       String    @id @default(cuid())
   name     String
   students Student[]
 }
@@ -129,7 +129,7 @@ model Student {
   account          Account                @relation(fields: [accountId], references: [id])
   accountId        String
   group            StudentGroup?          @relation(fields: [groupId], references: [id])
-  groupId          Int?
+  groupId          String?
   enrollments      SubjectEnrollment[]
   grades           Grade[]
   submissions      AssignmentSubmission[]
