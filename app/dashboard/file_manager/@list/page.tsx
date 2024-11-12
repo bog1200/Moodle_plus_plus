@@ -16,8 +16,9 @@ export default async function FileListTest() {
                 <thead>
                 <tr>
                     <th className={"w-1/4"}>File Name</th>
-                    <th className={"w-1/4"}>View</th>
-                    <th className={"w-1/4"}>Download</th>
+
+                    <th className={"w-1/4"}>Owner</th>
+                    <th className={"w-1/4"}>View/Download</th>
                     <th className={"w-1/4"}>Delete</th>
                 </tr>
                 </thead>
@@ -25,10 +26,12 @@ export default async function FileListTest() {
                 {filesWithUrls.map((file) => (
                     <tr key={file.id}>
                         <td>{file.name}</td>
-                        <td><a href={file.viewUrl} target="_blank">View</a></td>
-                        <td><a href={file.downloadUrl} target="_blank">Download</a></td>
+                        <td>{file.owner}</td>
                         <td>
-                            { file.name === '3.mp3' ? <p>Cannot delete 3.mp3</p> :
+                            <a className="mr-2" href={file.viewUrl} target="_blank">View</a>
+                            <a href={file.downloadUrl} target="_blank">Download</a></td>
+                        <td>
+                        { file.name === '3.mp3' ? <p>Cannot delete 3.mp3</p> :
                             <form action={deleteFile}>
                                 <input type="hidden" name="db" value={file.id}/>
                                 <input type="hidden" name="s3" value={file.s3}/>
