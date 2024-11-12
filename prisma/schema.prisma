@@ -25,12 +25,12 @@ model Grade {
 }
 
 model File {
-  id          String  @id @default(cuid())
-  fileName    String
-  fileType    String
-  fileLink    String
-  owner       Account @relation(fields: [ownerId], references: [id])
-  ownerId     String
+  id       String  @id @default(cuid())
+  fileName String
+  fileType String
+  fileLink String
+  owner    Account @relation(fields: [ownerId], references: [id])
+  ownerId  String
 }
 
 model CourseAttendance {
@@ -82,7 +82,7 @@ model Account {
   userId                   String    @unique
   type                     String
   provider                 String
-  providerAccountId        String
+  providerAccountId        String //ID PENTRU LOGARE
   refresh_token            String?   @db.Text
   access_token             String?   @db.Text
   expires_at               Int?
