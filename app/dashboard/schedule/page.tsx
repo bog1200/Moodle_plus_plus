@@ -1,51 +1,38 @@
-import { getCurrentStudent } from "@/app/actions/getCurrentStudent";
-import { getSubjectEnrollment } from "@/app/actions/getSubjectEnrollment";
-// import Calendar from "@/icons/Calendar";
-import {prisma} from "@/prisma";
-
+import { prisma } from "@/prisma";
+import {getCurrentStudent} from "@/app/actions/getCurrentStudent";
 export default async function SchedulePage() {
     const student = await getCurrentStudent();
-    const subjectEnrollment = student ? await getSubjectEnrollment() : null;
-
-    if(subjectEnrollment == null){
-        return <p className="text-center text-gray-500">No data available</p>;
+    if (student == null) {
+        return;
     }
-
-    const subjectList = subjectEnrollment.map(sub => sub.subjectId);
-    const subject = await prisma.subject.findMany({
+    const assignments = await prisma.assignment.findMany({
         where: {
-            id: {
-                in: subjectList
+            subject: {
+                enrollments: {
+                    some: {
+                        studentId: student.id
+                    }
+                }
             }
+        },
+        include: {
+            subject: true
+        },
+        orderBy: {
+            dueDate: 'asc'
         }
     });
-//TODO ALSO DO A ASSIGNMENT FINDMANY
-
-    if (!student || !subject) {
-        return <p className="text-center text-gray-500">No data available</p>;
-    }
-
-    console.log(subject);
-
     return (
         <div className="flex flex-col items-center">
             <h2 className="text-2xl font-bold mb-4">Schedule</h2>
-            <p>Student ID: {student.id}</p>
-            <p>Subject IDs: {subject.map(sub => sub.id).join(', ')}</p>
-            {/*<ul>*/}
-            {/*    {subject.map(sub => (*/}
-            {/*        <li key={sub.id}>*/}
-            {/*            <p>Subject: {sub.name}</p>*/}
-            {/*            <ul>*/}
-            {/*                {sub.assignments.map(assignment => (*/}
-            {/*                    <li key={assignment.id}>*/}
-            {/*                        {assignment.title}: {new Date(assignment.dueDate).toLocaleDateString()}*/}
-            {/*                    </li>*/}
-            {/*                ))}*/}
-            {/*            </ul>*/}
-            {/*        </li>*/}
-            {/*    ))}*/}
-            {/*</ul>*/}
+            {assignments.map(assignment => (
+                <div key={assignment.id} className="flex flex-col gap-2">
+                    <p>{assignment.subject.name}</p>
+                    <p>{assignment.title}</p>
+                    <p>{assignment.dueDate.toDateString()}</p>
+                </div>
+            ))}
+
         </div>
     );
 }
