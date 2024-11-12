@@ -1,15 +1,10 @@
-import {redirect} from "next/navigation";
 import {auth, signOut} from "@/auth";
 
 export default async function Dashboard() {
 
     const session = await auth();
 
-    if (!session) {
-        return redirect("/")
-    }
-
-    const user = session.user!;
+    const user = session!.user!;
 
     return (
         <div>

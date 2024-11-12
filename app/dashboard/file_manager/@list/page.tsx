@@ -1,22 +1,11 @@
-import {s3Client} from "@/app/lib/cloud/r2";
-import {GetObjectCommand} from "@aws-sdk/client-s3";
-import {getSignedUrl} from "@aws-sdk/s3-request-presigner";
-import {prisma} from "@/prisma";
 import {deleteFile} from "@/app/actions/deleteFile";
+import {getAllFiles} from "@/app/actions/getAllFiles";
+
+
 
 export default async function FileListTest() {
 
-    const data = await prisma.file.findMany();
-    const filesWithUrls = await Promise.all(
-        data.map(async (file) => {
-            const viewCommand = new GetObjectCommand({Bucket: process.env.S3_BUCKET!, Key: file.fileLink!});
-            const downloadCommand = new GetObjectCommand({Bucket: process.env.S3_BUCKET!, Key: file.fileLink!, ResponseContentDisposition: 'attachment; filename=' + file.fileName});
-            const viewUrl = await getSignedUrl(s3Client, viewCommand, {expiresIn: 3600});
-            const downloadUrl = await getSignedUrl(s3Client, downloadCommand, {expiresIn: 3600});
-            return {id: file.id, name: file.fileName!, viewUrl, downloadUrl, s3: file.fileLink};
-        }) || []
-    );
-
+    const filesWithUrls = await getAllFiles();
 
 
 
@@ -36,12 +25,8 @@ export default async function FileListTest() {
                 {filesWithUrls.map((file) => (
                     <tr key={file.id}>
                         <td>{file.name}</td>
-                        <td><a href={
-                            file.viewUrl
-                        } target="_blank">View</a></td>
-                        <td><a href={
-                            file.downloadUrl
-                        } target="_blank">Download</a></td>
+                        <td><a href={file.viewUrl} target="_blank">View</a></td>
+                        <td><a href={file.downloadUrl} target="_blank">Download</a></td>
                         <td>
                             { file.name === '3.mp3' ? <p>Cannot delete 3.mp3</p> :
                             <form action={deleteFile}>
