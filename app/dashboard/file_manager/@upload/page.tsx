@@ -61,10 +61,10 @@ export default function FileUploadTest() {
         });
         if (upload.ok) {
             await storeUpload(fileSummary);
-            return redirect('/files_test');
+            return redirect('/dashboard/file_manager/');
         }
         else {
-            return redirect('/files_test?error=upload');
+            return redirect('/dashboard/file_manager/?error=upload');
         }
     }
 

@@ -17,8 +17,8 @@ export async function deleteFile(data: FormData) {
                 id: data.get('db') as string
             }
         });
-        return redirect('/files_test');
+        return redirect('/dashboard/file_manager/');
     }
-    return redirect('/files_test?error=delete');
+    return redirect('/dashboard/file_manager/?error=delete');
 
 }
