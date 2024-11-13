@@ -20,7 +20,7 @@ export async function getAllFiles() {
             });
             const viewUrl = await getSignedUrl(s3Client, viewCommand, {expiresIn: 3600});
             const downloadUrl = await getSignedUrl(s3Client, downloadCommand, {expiresIn: 3600});
-            return {id: file.id, name: file.fileName!, viewUrl, downloadUrl, s3: file.fileLink};
+            return {id: file.id, name: file.fileName!, viewUrl, downloadUrl, s3: file.fileLink, owner: file.ownerId};
         }) || []
     );
 }

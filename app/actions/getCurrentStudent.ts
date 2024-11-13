@@ -17,31 +17,13 @@ export async function getCurrentStudent(){
 
     const prisma = new PrismaClient();
 
-
-    const account = await prisma.account.findFirst({
+    return prisma.student.findFirst({
         where: {
-            providerAccountId: user.id
+            account: {
+                providerAccountId: user.id
+            }
         }
-    })
-
-    if(!account){
-        return null;
-    }
-
-    const student = await prisma.student.findFirst({
-        where: {
-            accountId: account.id!
-        }
-    })
-
-    //TODO: check-uri separate daca e doar un cont sau mai multe
-
-    if (student == null)
-    {
-        return null;
-    }
-
-    return student;
+    });
 
 
 }

@@ -32,6 +32,8 @@ export default async function SchedulePage() {
                     <p>{assignment.dueDate.toDateString()}</p>
                 </div>
             ))}
+            <div className={"h-screen"}></div>
+            <div>1</div>
 
         </div>
     );
