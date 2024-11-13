@@ -19,8 +19,12 @@ export async function getCurrentStudent(){
 
     return prisma.student.findFirst({
         where: {
-            account: {
-                providerAccountId: user.id
+            user: {
+                accounts: {
+                    some: {
+                        providerAccountId: user.id
+                    }
+                }
             }
         }
     });
