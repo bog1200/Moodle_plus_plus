@@ -15,8 +15,8 @@ export default async function Aside() {
 
 
     return (
-        <aside className="flex flex-row lg:flex-col h-full lg:h-screen overflow-clip justify-around items-center border bg-gray-100 shadow-md">
-            <div className="flex">
+        <aside className="flex flex-row lg:flex-col h-full lg:h-screen  justify-around items-center border bg-gray-100 shadow-md ">
+            <div className="hidden md:flex">
                 <Image src="/favicon.ico" alt="Logo" width={75} height={75} className="rounded-full"/>
 
             </div>
@@ -48,7 +48,7 @@ export default async function Aside() {
                     <li>
                         <Link href="/dashboard/file_manager" className="lg:mr-10">
                             {/*<Image src={calendarCheck} alt="calendar check" width={30} height={30}/>*/}
-                            <SvgIcon heading={"File Manager (Admin)"} svg={<BookOpen color={"#faa"}/>}/>
+                            <SvgIcon heading={"File Manager"} svg={<BookOpen color={"#faa"}/>}/>
                         </Link>
                     </li>
                 </ul>
