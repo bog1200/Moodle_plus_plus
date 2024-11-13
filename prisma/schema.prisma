@@ -25,14 +25,12 @@ model Grade {
 }
 
 model File {
-  id        String   @id @default(cuid())
-  fileName  String
-  fileType  String
-  fileLink  String
-  owner     User     @relation(fields: [ownerId], references: [id])
-  ownerId   String
-  Account   Account? @relation(fields: [accountId], references: [id])
-  accountId String?
+  id       String @id @default(cuid())
+  fileName String
+  fileType String
+  fileLink String
+  owner    User   @relation(fields: [ownerId], references: [id])
+  ownerId  String
 }
 
 model CourseAttendance {
@@ -91,7 +89,6 @@ model Account {
   session_state            String?
   refresh_token_expires_in Int?
   user                     User?   @relation(fields: [userId], references: [id])
-  File                     File[]
 
   @@unique([provider, providerAccountId])
 }
