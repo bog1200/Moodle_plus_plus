@@ -142,14 +142,17 @@ model Student {
 // Authjs
 
 model User {
-  id      String    @id @default(cuid())
-  phone   String?
-  address String?
-  gender  String?
-  dob     DateTime?
-  Teacher Teacher[]
-  Student Student[]
-  File    File[]
+  id        String    @id @default(cuid())
+  phone     String?
+  address   String?
+  gender    String?
+  dob       DateTime?
+  Teacher   Teacher[]
+  Student   Student[]
+  File      File[]
+  isTeacher Boolean   @default(false)
+  isStudent Boolean   @default(false)
+  isAdmin   Boolean   @default(false)
 
   //authjs
   name          String?
