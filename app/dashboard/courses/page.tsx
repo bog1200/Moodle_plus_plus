@@ -58,17 +58,17 @@ const CoursesPage: React.FC = () => {
   return (
       <div className="flex flex-col items-center">
         <h2 className="text-4xl">Courses</h2>
-        <div className="flex items-center mb-3 p-4 bg-gray-100 rounded-lg shadow-md bg-background text-foreground">
+        <div className="flex items-center mb-3 p-4 rounded-lg shadow-md bg-background text-foreground border border-foreground">
           <p className="m-3 w-25 rounded-3">Display as: </p>
           <select
-              className="form-select me-2 px-4 py-2 border  rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="form-select me-2 px-4 py-2 border bg-background text-foreground rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               value={selectedOption} onChange={handleSelectChange}>
             <option value="0">Card</option>
             <option value="1">List</option>
           </select>
           <input
               type="search"
-              className="form-control me-2 px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="form-control me-2 px-4 py-2 bg-background text-foreground  border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Search..."
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
