@@ -15,8 +15,8 @@ export default async function Aside() {
 
 
     return (
-        <aside className="flex flex-row lg:flex-col h-full lg:h-screen  justify-around items-center border bg-gray-100 shadow-md ">
-            <div className="hidden md:flex">
+        <aside className="flex flex-row lg:flex-col h-full lg:h-screen  justify-around items-center border bg-gray-100 shadow-md bg-background ">
+            <div className="hidden md:flex p-2 bg-white">
                 <Image src="/favicon.ico" alt="Logo" width={75} height={75} className="rounded-full"/>
 
             </div>

@@ -27,7 +27,7 @@ export default async function ProfilePage() {
 
   return (
       <div className="flex flex-col items-center">
-        <h2 className="text-2xl font-bold mb-4 text-gray-300">Profile</h2>
+        <h2 className="text-2xl font-bold mb-4 text-foreground">Profile</h2>
           <div className="bg-purple-950 p-4 rounded-lg shadow-md w-full max-w-md text-gray-300">
               <h3 className="text-xl font-semibold mb-2">User details</h3>
               <p className="mb-2"><strong>Email: </strong>{user.email}</p>
