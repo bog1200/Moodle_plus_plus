@@ -24,7 +24,7 @@ export async function storeUpload(file: FileSummary) {
             fileLink: file.link!,
             owner: {
                 connect: {
-                    id: account!.id
+                    id: account!.userId
                 }
             }
         }
