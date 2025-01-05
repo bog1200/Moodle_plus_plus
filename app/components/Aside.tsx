@@ -11,12 +11,12 @@ import SvgIcon from "@/app/components/SvgIcon";
 // import logo from '../public/static/photos/logo.jpg';
 
 
-export default async function Aside() {
+export default async function AsideDesktop() {
 
 
     return (
-        <aside className="flex flex-row lg:flex-col h-full lg:h-screen  justify-around items-center border bg-gray-100 shadow-md ">
-            <div className="hidden md:flex">
+        <aside className="flex flex-row lg:flex-col h-full lg:h-screen justify-around items-center border shadow-md bg-background ">
+            <div className="hidden md:flex p-2 bg-white">
                 <Image src="/favicon.ico" alt="Logo" width={75} height={75} className="rounded-full"/>
 
             </div>

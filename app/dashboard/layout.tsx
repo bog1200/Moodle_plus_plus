@@ -4,7 +4,7 @@ import React from "react";
 export default  async function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
         <div className={"h-full w-full flex max-h-full max-w-full"}>
-            <div className={"hidden lg:block h-screen sticky top-0 left-0 w-64"}>
+            <div className={"hidden lg:block h-screen sticky top-0 left-0 w-64 "}>
                 <AsideDesktop />
             </div>
             <div className={"w-full h-full p-2 mb-24 lg:mb-0"}>
