@@ -16,7 +16,7 @@ export async function getAllCourses() {
             },
         },
     });
-
+//todo filter courses by student enrollment
 
     // Map the results to the desired format
     const formattedCourses = courses.map(course => ({
