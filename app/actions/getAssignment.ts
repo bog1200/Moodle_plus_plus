@@ -13,7 +13,7 @@ export async function getAssignmentById(assignment_id: string) {
         },
         include: {
             submissions: true,
-            Grade: true
+            grade: true
         },
     });
 

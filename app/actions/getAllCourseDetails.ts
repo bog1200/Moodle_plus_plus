@@ -20,7 +20,7 @@ export async function getAllCourseDetails(course_id: string) {
             assignments: {
                 include: {
                     submissions: true,
-                    Grade: true,
+                    grade: true,
                 },
             },
             // course: {
