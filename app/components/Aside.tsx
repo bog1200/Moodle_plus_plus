@@ -7,12 +7,17 @@ import Logout from "@/icons/Logout";
 import User from "@/icons/User";
 import {signOut} from "@/auth";
 import SvgIcon from "@/app/components/SvgIcon";
+import {getUserRoles} from "@/app/actions/user";
 
 // import logo from '../public/static/photos/logo.jpg';
 
 
 export default async function AsideDesktop() {
-
+    const userRoles = await getUserRoles();
+    console.log(userRoles);
+    if(!userRoles){
+        return null;
+    }
 
     return (
         <aside className="flex flex-row lg:flex-col h-full lg:h-screen justify-around items-center border shadow-md bg-background ">
@@ -45,12 +50,12 @@ export default async function AsideDesktop() {
                       <SvgIcon heading={"Profile"} svg={ <User  color={"#3dc461"}/> }/>
                     </Link>
                     </li>
-                    <li>
+                    {userRoles.isAdmin && <li>
                         <Link href="/dashboard/file_manager" className="lg:mr-10">
                             {/*<Image src={calendarCheck} alt="calendar check" width={30} height={30}/>*/}
                             <SvgIcon heading={"File Manager"} svg={<BookOpen color={"#faa"}/>}/>
                         </Link>
-                    </li>
+                    </li> }
                 </ul>
 
                 {/*TODO: Add the rest of the links and make them linear*/}
