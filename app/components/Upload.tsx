@@ -14,7 +14,6 @@ export function SubmissionFileUpload(props: {assignmentID: string, courseID: str
 
     const [uploadKey, setUploadKey] = useState<string | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
-    const [text, setText] = useState<string>('');
     const fileSizeLimit = parseInt(process.env.NEXT_PUBLIC_FILE_UPLOAD_MAX_SIZE!);
 
 
@@ -43,47 +42,61 @@ export function SubmissionFileUpload(props: {assignmentID: string, courseID: str
 
     async function upload(formData: FormData) {
         const file: File | null = formData.get('file') as unknown as File
-        if (!file) {
-            throw new Error('No file uploaded');
+        const text: string = formData.get('text') as string;
+        let uploadedFile: string | undefined = undefined;
+        if (!file && !text ) {
+           return;
         }
-        if (!uploadKey) {
-            throw new Error('No upload key');
-        }
-        const fileSummary: FileSummary = {
-            name: file.name,
-            type: file.type,
-            size: file.size,
-            link: fileName!
-        }
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-        const upload = await fetch(uploadKey!, {
-            method: 'PUT',
-            body: buffer,
-            headers: {
-                'Content-Type': file.type
+        if (file && uploadKey) {
+            const fileSummary: FileSummary = {
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                link: fileName!
             }
-        });
-        if (upload.ok) {
-            const uploadData = await storeUpload(fileSummary);
-            const studentId = await getCurrentStudent();
-            if(studentId === null) {throw new Error('userId not found');}
-            const userId = await getUserId();
-            if(userId === null) {throw new Error('userId not found');}
-            await createAssignmentSubmission(studentId.id, props.assignmentID, uploadData.id, userId.id, text);
-            return redirect(`/dashboard/courses/${props.courseID}/${props.assignmentID}`);
+            const bytes = await file.arrayBuffer();
+            const buffer = Buffer.from(bytes);
+            const upload = await fetch(uploadKey!, {
+                method: 'PUT',
+                body: buffer,
+                headers: {
+                    'Content-Type': file.type
+                }
+            });
+            if (upload.ok) {
+                const uploadData = await storeUpload(fileSummary);
+                uploadedFile = uploadData.id;
+            }
+        }
+        const studentId = await getCurrentStudent();
+        if(studentId === null) {throw new Error('userId not found');}
+        const userId = await getUserId();
+        if(userId === null) {throw new Error('userId not found');}
+        if (uploadedFile) {
+            await createAssignmentSubmission(studentId.id, props.assignmentID, userId.id, text, uploadedFile);
         }
         else {
-            return redirect('/dashboard/file_manager/?error=upload'); //TODO
+            await createAssignmentSubmission(studentId.id, props.assignmentID, userId.id, text);
         }
+        return redirect(`/dashboard/courses/${props.courseID}/${props.assignmentID}`);
+
+
+
+
     }
 
 
     return (
         <div className={"w-full"}>
-            <form action={upload}>
-                <input type="text" name="text" placeholder="text" required onChange={(e) => setText(e.target.value)}/>
-                <input type="file" name="file" onChange={preUpload} required/>
+            <h2 className={"font-extrabold text-2xl py-4"}>New Submission:</h2>
+            <form className={"bg-background"} action={upload}>
+                <div className={"w-full"}>
+                    <textarea className={"bg-background text-foreground border-foreground border-2"} cols={30}
+                              rows={10} name="text" placeholder="text"
+                    />
+                </div>
+
+                <input type="file" name="file" onChange={preUpload}/>
                 <button type="submit">Upload</button>
             </form>
         </div>

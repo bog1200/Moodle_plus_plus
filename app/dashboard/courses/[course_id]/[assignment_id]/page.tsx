@@ -52,10 +52,10 @@ export default async function AssignmentPage({
                                         <p>Type: {file.fileType}</p>
                                         <p>Link: <a href={await getFile(file.fileLink, file.fileName)} target="_blank"
                                                     rel="noopener noreferrer">View File</a></p>
-                                        <DeleteSubmissionButton file={file}/>
                                     </li>
                                 ))}
                             </ul>
+                            <DeleteSubmissionButton submissionId={submission.id}/>
                         </li>
                     ))}
                 </ul>

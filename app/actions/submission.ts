@@ -2,37 +2,25 @@
 
 // Import necessary modules
 import { PrismaClient } from '@prisma/client';
-import {redirect} from "next/navigation";
 
 const prisma = new PrismaClient();
 
-export async function deleteSubmission(file_id: string, courseID?: string, assignmentID?: string) {
+
+export async function deleteSubmission(submissionId: string) {
     // Fetch the file details from the database
-    const file = await prisma.file.findUnique({
+    const deleteFiles =  prisma.file.deleteMany({
         where: {
-            id: file_id,
+            assignmentSubmissionId: submissionId,
         },
     });
-    console.log(courseID)
-    console.log(assignmentID)
-    if (file) {
-        // Check if the file has an associated assignment submission
-        if (file.assignmentSubmissionId) {
-            // Delete the associated assignment submission
-            await prisma.assignmentSubmission.delete({
-                where: {
-                    id: file.assignmentSubmissionId,
-                },
-            });
-        }
 
-        // Delete the file
-        await prisma.file.delete({
-            where: {
-                id: file_id,
-            },
-        });
-    }
+    const deleteSubmission =  prisma.assignmentSubmission.delete({
+        where: {
+            id: submissionId,
+        },
+    });
 
-    return redirect(`/dashboard/courses`);
+    return  prisma.$transaction([deleteFiles, deleteSubmission]);
+
+
 }
