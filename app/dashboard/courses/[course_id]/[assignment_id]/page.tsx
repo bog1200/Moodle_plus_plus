@@ -1,6 +1,3 @@
-
-import { getAllCourseDetails } from '@/app/actions/getAllCourseDetails';
-import {Assignment, Subject} from "@prisma/client";
 import Link from "next/link";
 import {getAssignmentById} from "@/app/actions/getAssignment";
 import {deleteSubmission} from "@/app/actions/submission";

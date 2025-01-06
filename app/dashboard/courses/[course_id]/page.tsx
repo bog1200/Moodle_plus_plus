@@ -1,6 +1,6 @@
 
 import { getAllCourseDetails } from '@/app/actions/getAllCourseDetails';
-import {Assignment, Subject} from "@prisma/client";
+import {Assignment} from "@prisma/client";
 import Link from "next/link";
 
 export default async function SubjectPage({
