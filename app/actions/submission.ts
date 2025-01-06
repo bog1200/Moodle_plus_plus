@@ -5,14 +5,30 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function deleteSubmission(submission_id: string) {
-    // Fetch course details from the database
-
-    return prisma.assignmentSubmission.delete({
+export async function deleteSubmission(file_id: string) {
+    // Fetch the file details from the database
+    const file = await prisma.file.findUnique({
         where: {
-            id: submission_id,
+            id: file_id,
         },
     });
 
+    if (file) {
+        // Check if the file has an associated assignment submission
+        if (file.assignmentSubmissionId) {
+            // Delete the associated assignment submission
+            await prisma.assignmentSubmission.delete({
+                where: {
+                    id: file.assignmentSubmissionId,
+                },
+            });
+        }
 
+        // Delete the file
+        await prisma.file.delete({
+            where: {
+                id: file_id,
+            },
+        });
+    }
 }

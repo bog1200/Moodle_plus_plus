@@ -17,6 +17,7 @@ export default async function SubjectPage({
 
     return (
         <div className="p-6 bg-background shadow-md rounded-lg">
+
             <h1 className="text-2xl text-foreground font-bold mb-4">{courseDetails.name}</h1>
             <p className="text-lg text-foreground mb-6">Teacher: {courseDetails.teacher.user.name}</p>
             <h2 className="text-xl text-foreground font-semibold mb-4">Assignments</h2>

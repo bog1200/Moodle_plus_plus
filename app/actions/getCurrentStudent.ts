@@ -1,33 +1,29 @@
+"use server"
 import {auth} from "@/auth";
 import {PrismaClient} from "@prisma/client";
 
 export async function getCurrentStudent(){
 
     const session = await auth();
-
-    if(!session){
-        return null;
-    }
-
-    const user = session?.user;
-
-    if (!user) {
-        return null;
-    }
-
     const prisma = new PrismaClient();
 
-    return prisma.student.findFirst({
+    if(!session){
+        throw new Error('Not authenticated');
+    }
+
+    const user = session.user.id!;
+
+    const student = prisma.student.findFirst({
         where: {
             user: {
                 accounts: {
                     some: {
-                        providerAccountId: user.id
+                        providerAccountId: user
                     }
                 }
             }
         }
     });
-
-
+    //console.log("STUDENT IS: " + student);
+    return student;
 }
