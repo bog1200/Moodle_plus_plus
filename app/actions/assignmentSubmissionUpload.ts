@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-export async function createAssignmentSubmission(studentId: string, assignmentId: string, fileUploadId: string) {
+export async function createAssignmentSubmission(studentId: string, assignmentId: string, fileUploadId: string, userId:string, text:string) {
     // Create a new AssignmentSubmission
 
     const assignmentSubmission = await prisma.assignmentSubmission.create({
@@ -19,6 +19,7 @@ export async function createAssignmentSubmission(studentId: string, assignmentId
                     id: assignmentId,
                 },
             },
+            text: text,
         },
     });
 
@@ -31,7 +32,7 @@ export async function createAssignmentSubmission(studentId: string, assignmentId
         data: {
             owner: {
                 connect: {
-                    id: studentId,
+                    id: userId,
                 },
             },
             assignmentSubmission: {

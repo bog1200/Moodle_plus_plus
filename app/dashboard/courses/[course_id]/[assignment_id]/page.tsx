@@ -3,8 +3,9 @@
 // import {Assignment, Subject} from "@prisma/client";
 import Link from "next/link";
 import {getAssignmentById} from "@/app/actions/getAssignment";
-import {deleteSubmission} from "@/app/actions/submission";
-import Upload from '@/app/components/Upload';
+import {SubmissionFileUpload} from '@/app/components/Upload';
+import {DeleteSubmissionButton} from '@/app/components/DeleteSubmissionButton';
+import {getFile} from "@/app/actions/getFile";
 
 export default async function AssignmentPage({
                                               params,
@@ -32,11 +33,10 @@ export default async function AssignmentPage({
             {assignmentDetails.submissions.length === 0 ? (
                 <div>
                     <h3>No submissions yet.</h3>
-                    <Upload assignmentID={assignmentId}/>
+                    <SubmissionFileUpload assignmentID={assignmentId} courseID={courseId}/>
                 {/*    send the assignment id */}
                 </div>
             ) : (
-
                 <ul className="space-y-4">
                     {assignmentDetails.submissions.map((submission) => (
                         <li key={submission.id}
@@ -44,12 +44,18 @@ export default async function AssignmentPage({
                             <h3 className="text-lg font-semibold mt-2">Submission
                                 Date: {new Date(submission.submissionDate).toLocaleDateString()}</h3>
                             <p className="text-lg text-foreground mb-6">Text: {submission.text}</p>
-                            <div className="space-x-2">
-                                <button onClick={async () => {
-                                    await deleteSubmission(submission.id);
-                                }} className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Delete
-                                </button>
-                            </div>
+                            <ul className="space-y-2">
+                                {submission.files.map(async (file) => (
+                                    <li key={file.id}
+                                        className="p-2 bg-background rounded-lg shadow-sm border-foreground border-2">
+                                        <h4 className="text-md font-semibold">File: {file.fileName}</h4>
+                                        <p>Type: {file.fileType}</p>
+                                        <p>Link: <a href={await getFile(file.fileLink, file.fileName)} target="_blank"
+                                                    rel="noopener noreferrer">View File</a></p>
+                                        <DeleteSubmissionButton file={file}/>
+                                    </li>
+                                ))}
+                            </ul>
                         </li>
                     ))}
                 </ul>

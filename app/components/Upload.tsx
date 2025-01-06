@@ -10,10 +10,11 @@ import {getCurrentStudent} from "@/app/actions/getCurrentStudent";
 import {getUserId} from "@/app/actions/getUserId";
 //import {storeUpload} from "@/app/actions/storeUpload";
 
-export default function FileUploadTest(props: {assignmentID: string}) {
+export function SubmissionFileUpload(props: {assignmentID: string, courseID: string}) {
 
     const [uploadKey, setUploadKey] = useState<string | null>(null);
     const [fileName, setFileName] = useState<string | null>(null);
+    const [text, setText] = useState<string>('');
     const fileSizeLimit = parseInt(process.env.NEXT_PUBLIC_FILE_UPLOAD_MAX_SIZE!);
 
 
@@ -65,10 +66,12 @@ export default function FileUploadTest(props: {assignmentID: string}) {
         });
         if (upload.ok) {
             const uploadData = await storeUpload(fileSummary);
-            const userId = await getCurrentStudent();
+            const studentId = await getCurrentStudent();
+            if(studentId === null) {throw new Error('userId not found');}
+            const userId = await getUserId();
             if(userId === null) {throw new Error('userId not found');}
-            await createAssignmentSubmission(userId.id, props.assignmentID, uploadData.id);
-            //return redirect('/dashboard/file_manager/');
+            await createAssignmentSubmission(studentId.id, props.assignmentID, uploadData.id, userId.id, text);
+            return redirect(`/dashboard/courses/${props.courseID}/${props.assignmentID}`);
         }
         else {
             return redirect('/dashboard/file_manager/?error=upload'); //TODO
@@ -76,38 +79,10 @@ export default function FileUploadTest(props: {assignmentID: string}) {
     }
 
 
-//query the database to tie the file to the assignment (we need the AssignmentId
-
-//     async function upload(data: FormData) {
-//     'use server'
-//
-//     const file: File | null = data.get('file') as unknown as File
-//     if (!file) {
-//         throw new Error('No file uploaded');
-//     }
-//
-//     const bytes = await file.arrayBuffer();
-//     const buffer = Buffer.from(bytes);
-//
-//     const uploadParams = {
-//         Bucket: process.env.S3_BUCKET!,
-//         Key: file.name,
-//         Body: buffer,
-//         ContentType: file.type
-//     };
-//        const upload =  await s3Client.send(new PutObjectCommand(uploadParams));
-//        if (upload.$metadata.httpStatusCode === 200) {
-//         return redirect('/files_test');
-//     }
-//        else {
-//     return redirect('/files_test?error=upload');
-//        }
-// }
-
-
     return (
         <div className={"w-full"}>
             <form action={upload}>
+                <input type="text" name="text" placeholder="text" required onChange={(e) => setText(e.target.value)}/>
                 <input type="file" name="file" onChange={preUpload} required/>
                 <button type="submit">Upload</button>
             </form>
@@ -115,3 +90,4 @@ export default function FileUploadTest(props: {assignmentID: string}) {
     );
 
 }
+

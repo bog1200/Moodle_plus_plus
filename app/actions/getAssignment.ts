@@ -12,9 +12,11 @@ export async function getAssignmentById(assignment_id: string) {
             id: assignment_id,
         },
         include: {
-            submissions: true,
-            grade: true,
-            files:true
+            submissions: {
+                include:
+                    {files: true}
+            },
+            grade: true
         },
     });
 
