@@ -1,7 +1,7 @@
 import {auth} from "@/auth";
-import {redirect} from "next/navigation";
-import {getCurrentStudent} from "@/app/actions/getCurrentStudent";
-import type {Metadata} from "next"; //TODO
+import {redirect} from "next/navigation"
+import {getAllUserData} from "@/app/actions/getAllUserData";
+import {Metadata} from "next";
 
 export const metadata: Metadata = {
     title: "Profile | Moodle++",
@@ -21,13 +21,13 @@ export default async function ProfilePage() {
     }
 
     //TODO: check-uri separate daca e doar un cont sau mai multe
+    const userData = await getAllUserData();
 
-    const student = getCurrentStudent()
-
-    if (student == null)
-    {
-        return;
+    if (!userData) {
+        return <div>User not found</div>;
     }
+
+    console.log(userData);
 
 
   return (
@@ -38,7 +38,13 @@ export default async function ProfilePage() {
               <p className="mb-2"><strong>Email: </strong>{user.email}</p>
               <p className="mb-2"><strong>Name: </strong>{user.name}</p>
               {/*<p className="mb-2"><strong>Group: </strong>{student[0].groupId}</p>*/}
-              <p className="mb-2"><strong>Rest of data here....</strong></p>
+              {/*If the user is student or teacher or admin*/}
+              <p className="mb-2"><strong>Role: </strong>{userData.isAdmin && <span>Admin</span>}{userData.isTeacher && <span>Teacher</span>}{userData.isStudent && <span>Student</span>}</p>
+              <p className="mb-2"><strong>Phone number: </strong>{userData.phone}</p>
+              <p className="mb-2"><strong>Address: </strong>{userData.address}</p>
+              <p className="mb-2"><strong>Gender: </strong>{userData.gender}</p>
+              <p className="mb-2"><strong>Birthdate: </strong>{userData.dob ? new Date(userData.dob).toLocaleDateString() : 'null'}</p>
+
           </div>
       </div>
   );
