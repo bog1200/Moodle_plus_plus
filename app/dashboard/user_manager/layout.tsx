@@ -1,7 +1,6 @@
-import React from "react";
 import {getUserRoles} from "@/app/actions/user";
 
-export default async function FileTestLayout({children, list, upload}: {children: React.ReactNode, list: React.ReactNode, upload: React.ReactNode}) {
+export default async function UserManagerLayout({children}: {children: React.ReactNode}) {
     const roles = await getUserRoles();
     if (!roles!.isAdmin) {
         return (
@@ -10,10 +9,7 @@ export default async function FileTestLayout({children, list, upload}: {children
     }
     return (
         <div>
-            <h1>Files</h1>
-            {list}
             {children}
-            {upload}
         </div>
     );
 }

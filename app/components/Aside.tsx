@@ -3,6 +3,7 @@ import Link from 'next/link';
 import AcademicCap from "@/icons/AcademicCap";
 import BookOpen from "@/icons/BookOpen";
 import Calendar from "@/icons/Calendar";
+import Person from "@/icons/Person";
 import Logout from "@/icons/Logout";
 import User from "@/icons/User";
 import {signOut} from "@/auth";
@@ -56,6 +57,16 @@ export default async function AsideDesktop() {
                             <SvgIcon heading={"File Manager"} svg={<BookOpen color={"#faa"}/>}/>
                         </Link>
                     </li> }
+
+                    {userRoles.isAdmin && <li>
+                        <Link href="/dashboard/user_manager" className="lg:mr-10">
+                            {/*<Image src={calendarCheck} alt="calendar check" width={30} height={30}/>*/}
+                            <SvgIcon heading={"User Manager"} svg={<Person color={"#ffa"}/>}/>
+                        </Link>
+                    </li> }
+
+
+
                 </ul>
 
                 {/*TODO: Add the rest of the links and make them linear*/}
