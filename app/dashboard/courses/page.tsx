@@ -1,9 +1,10 @@
 "use client"
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { Course } from '../../components/Course';
 import { CourseAsList } from '../../components/CourseAsList';
 import SearchIcon from '@/icons/SearchIcon';
+import {getAllCourses} from '@/app/actions/getAllCourses';
 
 type CourseType = {
   name: string;
@@ -12,16 +13,23 @@ type CourseType = {
 };
 
 const CoursesPage: React.FC = () => {
-  const courses: CourseType[] = [
-    // Example data, replace with actual data fetching logic
-    { name: 'Course 1', professor: 'Prof. A', subject: 'Subject 1' },
-    { name: 'Course 2', professor: 'Prof. B', subject: 'Subject 2' },
-  ];
+
+
   const [selectedOption, setSelectedOption] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTerm, setSearchTerm] = React.useState('');
+  const [courses, setCourses] = useState<CourseType[]>([]);
   const [displayedCourses, setDisplayedCourses] = React.useState<CourseType[]>(courses);
   const coursesPerPage = 9;
+
+    useEffect(() => {
+        getAllCourses().then((data) => {
+        setCourses(data);
+        setDisplayedCourses(data);
+        });
+    }, []);
+
+    console.log("courses: " + courses);
 
   const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(parseInt(event.target.value));
@@ -81,7 +89,7 @@ const CoursesPage: React.FC = () => {
         <div className="flex flex-wrap justify-center mt-5 w-128">
           {selectedOption === 0 ? (
               selectedCourses.map((course, index) => (
-                  <Course key={index} name={course.name} professor={course.professor} subject={course.subject} />
+                  <Course key={index} name={course.name} professor={course.professor} subject={course.subject}/>
               ))
           ) : (
               <ul>

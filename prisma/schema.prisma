@@ -25,12 +25,16 @@ model Grade {
 }
 
 model File {
-  id       String @id @default(cuid())
-  fileName String
-  fileType String
-  fileLink String
-  owner    User   @relation(fields: [ownerId], references: [id])
-  ownerId  String
+  id                     String                @id @default(cuid())
+  fileName               String
+  fileType               String
+  fileLink               String
+  owner                  User                  @relation(fields: [ownerId], references: [id])
+  ownerId                String
+  assignmentSubmission   AssignmentSubmission? @relation(fields: [assignmentSubmissionId], references: [id])
+  assignmentSubmissionId String?
+  assignment             Assignment?           @relation(fields: [assignmentId], references: [id])
+  assignmentId           String?
 }
 
 model CourseAttendance {
@@ -59,6 +63,8 @@ model AssignmentSubmission {
   studentId      String
   assignment     Assignment @relation(fields: [assignmentId], references: [id])
   assignmentId   String
+  files          File[]
+  text           String?
 }
 
 model Assignment {
@@ -68,9 +74,11 @@ model Assignment {
   dueDate        DateTime
   assignmentType AssignmentType
   submissions    AssignmentSubmission[]
-  Grade          Grade[]
+  grade          Grade[]
   subject        Subject                @relation(fields: [subjectId], references: [id])
   subjectId      String
+  files          File[]
+  text           String?
 }
 
 model Account {
