@@ -1,7 +1,12 @@
 import {auth} from "@/auth";
 import {redirect} from "next/navigation";
-import {getCurrentStudent} from "@/app/actions/getCurrentStudent"; //TODO
+import {getCurrentStudent} from "@/app/actions/getCurrentStudent";
+import type {Metadata} from "next"; //TODO
 
+export const metadata: Metadata = {
+    title: "Profile | Moodle++",
+    description: "Profile for Moodle++",
+};
 export default async function ProfilePage() {
 
     const session = await auth();

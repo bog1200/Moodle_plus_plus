@@ -1,4 +1,10 @@
 import {auth, signOut} from "@/auth";
+import type {Metadata} from "next";
+
+export const metadata: Metadata = {
+    title: "Dashboard | Moodle++",
+    description: "Dashboard for Moodle++",
+};
 
 export default async function Dashboard() {
 

@@ -1,11 +1,6 @@
 import {getAllUsers} from "@/app/actions/user";
 import Link from "next/link";
-import type {Metadata} from "next";
 
-export const metadata: Metadata = {
-    title: "User Manager | Moodle++",
-    description: "User Manager for Moodle++",
-};
 
 export default async function UserManager() {
     const users = await getAllUsers();

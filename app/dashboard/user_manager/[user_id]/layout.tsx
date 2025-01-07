@@ -1,13 +1,12 @@
-import React from "react";
 import {getUserRoles} from "@/app/actions/user";
 import type {Metadata} from "next";
 
 export const metadata: Metadata = {
-    title: "File Manager | Moodle++",
-    description: "File Manager for Moodle++",
+    title: "User Manager | Moodle++",
+    description: "User Manager for Moodle++",
 };
 
-export default async function FileTestLayout({children, list, upload}: {children: React.ReactNode, list: React.ReactNode, upload: React.ReactNode}) {
+export default async function UserManagerEditLayout({children}: {children: React.ReactNode}) {
     const roles = await getUserRoles();
     if (!roles!.isAdmin) {
         return (
@@ -16,10 +15,7 @@ export default async function FileTestLayout({children, list, upload}: {children
     }
     return (
         <div>
-            <h1>Files</h1>
-            {list}
             {children}
-            {upload}
         </div>
     );
 }

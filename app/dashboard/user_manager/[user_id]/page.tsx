@@ -4,6 +4,7 @@ import {useState, useEffect} from "react";
 import {useRouter} from "next/navigation";
 import {User} from "@prisma/client";
 
+
 export default function UserEditor({ params }: { params: Promise<{ user_id: string }> }) {
     const router = useRouter();
     const [profile, setProfile] = useState<User|null>(null);
