@@ -13,6 +13,7 @@ export default function UserEditor({ params }: { params: Promise<{ user_id: stri
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
     const [isTeacher, setIsTeacher] = useState<boolean>(false);
     const [isStudent, setIsStudent] = useState<boolean>(false);
+    const [phone, setPhone] = useState("");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -24,6 +25,7 @@ export default function UserEditor({ params }: { params: Promise<{ user_id: stri
             setIsAdmin(profile?.isAdmin || false);
             setIsTeacher(profile?.isTeacher || false);
             setIsStudent(profile?.isStudent || false);
+            setPhone(profile?.phone || "");
         };
         fetchData();
     }, [params]);
@@ -58,10 +60,16 @@ export default function UserEditor({ params }: { params: Promise<{ user_id: stri
             <p>ID: {profile.id}</p>
             <div className={"flex flex-col  items-center border-2 border-foreground rounded-xl p-4 m-4 h-fit"}>
                 <p className={"m-2"}>Name</p>
-               <input className={"text-foreground bg-background border-2 border-foreground  w-full p-4 m-4 rounded-full"}
-                             type={"text"} value={name} onChange={(e) => setName(e.target.value)}/>
+                <input
+                    className={"text-foreground bg-background border-2 border-foreground  w-full p-4 m-4 rounded-full"}
+                    type={"text"} value={name} onChange={(e) => setName(e.target.value)}/>
                 <p className={"m-2"}>Email</p>
-               <span className={"text-gray-500 bg-background border-2 border-foreground  w-full p-4 m-4 rounded-full"}> {email} </span>
+                <span
+                    className={"text-gray-500 bg-background border-2 border-foreground  w-full p-4 m-4 rounded-full"}> {email} </span>
+                <p className={"m-2"}>Phone</p>
+                <input
+                    className={"text-foreground bg-background border-2 border-foreground  w-full p-4 m-4 rounded-full"}
+                    type={"text"} value={phone} onChange={(e) => setPhone(e.target.value)}/>
                 <p className={"m-2"}>Roles</p>
                 <div className={"w-full flex flex-row content-around rounded-full"}>
                     <label
