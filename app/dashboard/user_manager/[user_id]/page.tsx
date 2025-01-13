@@ -44,7 +44,8 @@ export default function UserEditor({ params }: { params: Promise<{ user_id: stri
             name: name,
             isAdmin: isAdmin,
             isTeacher: isTeacher,
-            isStudent: isStudent
+            isStudent: isStudent,
+            phone: phone
         };
 
         // Save the updated profile
