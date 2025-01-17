@@ -7,7 +7,7 @@ import {redirect} from "next/navigation";
 import {createAssignmentSubmission} from "@/app/actions/assignmentSubmissionUpload";
 import {storeUpload} from "@/app/actions/storeUpload";
 import {getCurrentStudent} from "@/app/actions/getCurrentStudent";
-import {getUserId} from "@/app/actions/getUserId";
+import {getUserId} from "@/app/actions/user";
 //import {storeUpload} from "@/app/actions/storeUpload";
 
 export function SubmissionFileUpload(props: {assignmentID: string, courseID: string}) {

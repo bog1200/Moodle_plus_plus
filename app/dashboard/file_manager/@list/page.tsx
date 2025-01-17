@@ -26,7 +26,7 @@ export default async function FileListTest() {
                 {filesWithUrls.map((file) => (
                     <tr key={file.id}>
                         <td>{file.name}</td>
-                        <td>{file.owner}</td>
+                        <td className={"hover:underline"}><a href={`/dashboard/user_manager/${file.owner}`}>{file.owner}</a> </td>
                         <td>
                             <a className="mr-2" href={file.viewUrl} target="_blank">View</a>
                             <a href={file.downloadUrl} target="_blank">Download</a></td>

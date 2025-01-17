@@ -40,6 +40,34 @@ export async function getUserRoles() {
     })
 }
 
+export async function getUserId(){
+    const session = await auth();
+
+    if(!session){
+        return null;
+    }
+
+    const user = session?.user;
+
+    if (!user) {
+        return null
+    }
+
+    return prisma.user.findFirst({
+        where: {
+            accounts:
+            {
+                some: {
+                    providerAccountId: user.id
+                }
+            }
+        },
+        select: {
+            id: true
+        }
+    })
+}
+
 export async function getAllUsers() {
     return prisma.user.findMany({
         select: {
