@@ -1,5 +1,6 @@
 import {getUserRoles} from "@/app/actions/user";
 import type {Metadata} from "next";
+import {Suspense} from "react";
 
 export const metadata: Metadata = {
     title: "User Manager | Moodle++",
@@ -15,7 +16,9 @@ export default async function UserManagerEditLayout({children}: {children: React
     }
     return (
         <div>
+            <Suspense fallback={<h1>Loading...</h1>}>
             {children}
+            </Suspense>
         </div>
     );
 }

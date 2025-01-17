@@ -7,7 +7,7 @@ import {User} from "@prisma/client";
 
 export default function UserEditor({ params }: { params: Promise<{ user_id: string }> }) {
     const router = useRouter();
-    const [profile, setProfile] = useState<User|null>(null);
+    const [profile, setProfile] = useState<User|null|undefined>(undefined);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -19,7 +19,7 @@ export default function UserEditor({ params }: { params: Promise<{ user_id: stri
         const fetchData = async () => {
             const { user_id } = await params;
             const profile = await getUserById(user_id);
-            setProfile(profile);
+            setProfile(profile||null);
             setName(profile?.name || "");
             setEmail(profile?.email || "");
             setIsAdmin(profile?.isAdmin || false);
@@ -30,8 +30,11 @@ export default function UserEditor({ params }: { params: Promise<{ user_id: stri
         fetchData();
     }, [params]);
 
-    if (!profile) {
+    if (profile === null) {
         return <h1>User not found</h1>;
+    }
+    if (profile === undefined) {
+        return <h1>Loading...</h1>;
     }
 
 
