@@ -12,7 +12,7 @@ export default function Home() {
                  </div>
 
              </Link>
-             <Link href={"/api/auth/signin"}>
+             <Link href={"/login"}>
                  <button className="min-h-[100px] text-3xl">Log In</button>
              </Link>
 
