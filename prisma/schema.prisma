@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider          = "mysql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 // Enums
@@ -84,7 +85,7 @@ model Assignment {
 model Account {
   id                       String  @id @default(cuid())
   // Authjs
-  userId                   String  @unique
+  userId                   String
   type                     String
   provider                 String
   providerAccountId        String //ID PENTRU LOGARE

@@ -1,9 +1,23 @@
-import {signIn} from "@/auth";
-
+import Link from "next/link";
+import Image from "next/image";
 
 
 export default function Home() {
  return (
+     <>
+         <nav className={"w-svh border-b-2 boder-background p-2 flex justify-between"}>
+             <Link href="/">
+                 <div className={"scale-75 lg:scale-100"}>
+                     <Image src={"logo.svg"} alt={"logo"} width={100} height={100} priority={true}></Image>
+                 </div>
+
+             </Link>
+             <Link href={"/api/auth/signin"}>
+                 <button className="min-h-[100px] text-3xl">Log In</button>
+             </Link>
+
+         </nav>
+     </>
 //     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
 //       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
 //         <Image
@@ -14,11 +28,7 @@ export default function Home() {
 //           height={38}
 //           priority
 //         />
-        <form  action={async () => {
-          "use server"
-          await signIn("romailsso", { redirectTo: '/dashboard'});}} className="flex flex-col gap-4" >
-        <button type={"submit"} className={"size-20 bg-green-500"}> Sign In</button>
-        </form>
+
         )
         }
 

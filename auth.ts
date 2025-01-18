@@ -1,6 +1,7 @@
 import NextAuth, { type DefaultSession} from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/prisma"
+import GitHub from "next-auth/providers/github"
 
 declare module "next-auth" {
     /**
@@ -80,6 +81,12 @@ export const {
                 };
             }
         },
+
+        GitHub({
+            clientId: process.env.GITHUB_ID!,
+            clientSecret: process.env.GITHUB_SECRET!,
+            allowDangerousEmailAccountLinking: true,
+        }),
     ],
 });
 

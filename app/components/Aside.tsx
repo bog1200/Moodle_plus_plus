@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import AcademicCap from "@/icons/AcademicCap";
 import BookOpen from "@/icons/BookOpen";
@@ -9,34 +8,38 @@ import User from "@/icons/User";
 import {signOut} from "@/auth";
 import SvgIcon from "@/app/components/SvgIcon";
 import {getUserRoles} from "@/app/actions/user";
+import Image from "next/image";
 
 // import logo from '../public/static/photos/logo.jpg';
 
 
 export default async function AsideDesktop() {
     const userRoles = await getUserRoles();
-    console.log(userRoles);
     if(!userRoles){
         return null;
     }
 
     return (
         <aside className="flex flex-row lg:flex-col h-full lg:h-screen justify-around items-center border shadow-md bg-background ">
-            <div className="hidden md:flex p-2 bg-white">
-                <Image src="/favicon.ico" alt="Logo" width={75} height={75} className="rounded-full"/>
+            <div>
+                <Link href="/dashboard">
+                    <div className={"scale-75 lg:scale-100"}>
+                        <Image src={"logo.svg"} alt={"logo"} width={100} height={100}></Image>
+                    </div>
 
+                </Link>
             </div>
             <div className="flex flex-row lg:flex-col items-center z-10">
                 <ul className={"flex lg:block"}>
                     <li className="">
-                        <Link href="/dashboard"  className="lg:mr-10">
-                        <SvgIcon heading={"Dashboard"} svg={ <AcademicCap color={"rgb(134, 8, 140)"}/>}/>
-                    </Link>
+                        <Link href="/dashboard" className="lg:mr-10">
+                            <SvgIcon heading={"Dashboard"} svg={<AcademicCap color={"rgb(134, 8, 140)"}/>}/>
+                        </Link>
                     </li>
                     <li>
                         <Link href="/dashboard/courses" className="lg:mr-10">
                             {/*<Image src={calendarCheck} alt="calendar check" width={30} height={30}/>*/}
-                           <SvgIcon heading={"Courses"} svg={<BookOpen color={"rgb(22, 87, 171)"} /> }/>
+                            <SvgIcon heading={"Courses"} svg={<BookOpen color={"rgb(22, 87, 171)"}/>}/>
                         </Link>
                     </li>
                     <li>
