@@ -1,6 +1,6 @@
 <h1 style="text-align:center"><a href="https://moodle-plus-plus.vercel.app/">Moodle++</a></h1>
 
-<p style="text-align: center">
+<p align="center">
   <img src="public/logo.svg" alt="dba-logo" height="200"/>
   <br>
   <br>
@@ -10,7 +10,7 @@ Leveraging faster technologies to simplify course management and enhance the lea
  <br>
 </i>
 </p>
-<p style="text-align: center">
+<p align="center">
   <img src="https://img.shields.io/badge/Next.js-000?logo=next.js&style=for-the-badge" alt="next.js"/>
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white&textColor=white" alt="typescript"/>
     <img src="https://img.shields.io/badge/Tailwind CSS-06b6d4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="tailwind.css"/>
@@ -18,11 +18,11 @@ Leveraging faster technologies to simplify course management and enhance the lea
   <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="prisma"/>
 
 [//]: # ()
-[//]: # (<p style="text-align: center"><i>A web application, written using <a href="https://github.com/angular/angular">Angular</a> in <a href="https://en.wikipedia.org/wiki/HTML5">HTML5</a>, <a href="https://en.wikipedia.org/wiki/CSS">CSS3</a>, and <a href="https://typescriptlang.org">TypeScript</a> that allows users to book flights, check their flight status, and manage their account</i></p>)
+[//]: # (<p align="center"><i>A web application, written using <a href="https://github.com/angular/angular">Angular</a> in <a href="https://en.wikipedia.org/wiki/HTML5">HTML5</a>, <a href="https://en.wikipedia.org/wiki/CSS">CSS3</a>, and <a href="https://typescriptlang.org">TypeScript</a> that allows users to book flights, check their flight status, and manage their account</i></p>)
 
-[//]: # (<p style="text-align: center"><i>A REST API, written using <a href="https://github.com/expressjs/express">Express</a> in <a href="https://typescriptlang.org">TypeScript</a> that allows the web application to communicate with the database. </i></p>)
+[//]: # (<p align="center"><i>A REST API, written using <a href="https://github.com/expressjs/express">Express</a> in <a href="https://typescriptlang.org">TypeScript</a> that allows the web application to communicate with the database. </i></p>)
 
-[//]: # (<p style="text-align: center"><i>An <a href="">SQL</a> database schema, that stores all the data needed for the airline. </i></p>)
+[//]: # (<p align="center"><i>An <a href="">SQL</a> database schema, that stores all the data needed for the airline. </i></p>)
 
 [//]: # ()
 
