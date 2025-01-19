@@ -7,7 +7,7 @@ export function DeleteSubmissionButton({submissionId}: {submissionId: string}) {
     console.log("SUBMISSION ID: " + submissionId);
     return (
 
-        <button className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600" onClick={async () =>
+        <button className="bg-red-500 text-white px-4 py-2 my-2 rounded hover:bg-red-600" onClick={async () =>
         {
             await deleteSubmission(submissionId);
             router.refresh();

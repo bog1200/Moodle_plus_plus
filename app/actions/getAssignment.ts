@@ -14,7 +14,17 @@ export async function getAssignmentById(assignment_id: string) {
         include: {
             submissions: {
                 include:
-                    {files: true}
+                    {files: true,
+                    student: {
+                        include: {
+                            user: {
+                                select: {
+                                    name: true,
+                                }
+                            }
+                        }
+                    }
+                    }
             },
             grade: true
         },

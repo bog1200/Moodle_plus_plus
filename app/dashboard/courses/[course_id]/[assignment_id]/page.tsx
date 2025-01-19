@@ -6,6 +6,7 @@ import {getAssignmentById} from "@/app/actions/getAssignment";
 import {SubmissionFileUpload} from '@/app/components/Upload';
 import {DeleteSubmissionButton} from '@/app/components/DeleteSubmissionButton';
 import {getFile} from "@/app/actions/getFile";
+import {getUserRoles} from "@/app/actions/user";
 
 export default async function AssignmentPage({
                                               params,
@@ -15,6 +16,10 @@ export default async function AssignmentPage({
     const assignmentId = (await params).assignment_id;
     const courseId = (await params).course_id;
     const assignmentDetails = await getAssignmentById(assignmentId);
+    const roles =  await getUserRoles();
+    if (!roles) {
+        throw new Error('Not authenticated');
+    }
     if(assignmentDetails === null) {
         return <div>Assignment not found</div>;
     }
@@ -43,6 +48,14 @@ export default async function AssignmentPage({
                             className="p-4 bg-background rounded-lg shadow-sm border-foreground border-4">
                             <h3 className="text-lg font-semibold mt-2">Submission
                                 Date: {new Date(submission.submissionDate).toLocaleDateString()}</h3>
+                            {(roles.isAdmin || roles.isTeacher) && <>
+                                <p className="text-lg text-foreground mt-6">Student
+                                    Name: {submission.student.user.name}</p>
+                                <p className="text-lg text-foreground mb-6">Student ID: {submission.student.id}</p>
+                            </>
+
+
+                            }
                             <p className="text-lg text-foreground mb-6">Text: {submission.text}</p>
                             <ul className="space-y-2">
                                 {submission.files.map(async (file) => (
@@ -55,7 +68,8 @@ export default async function AssignmentPage({
                                     </li>
                                 ))}
                             </ul>
-                            <DeleteSubmissionButton submissionId={submission.id}/>
+                            {roles.isStudent && <DeleteSubmissionButton submissionId={submission.id}/>}
+
                         </li>
                     ))}
                 </ul>
