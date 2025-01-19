@@ -24,7 +24,7 @@ export default async function AsideDesktop() {
             <div>
                 <Link href="/dashboard">
                     <div className={"scale-75 lg:scale-100"}>
-                        <Image src={"logo.svg"} alt={"logo"} width={100} height={100}></Image>
+                        <Image src={"/logo.svg"} alt={"logo"} width={100} height={100} priority={true}></Image>
                     </div>
 
                 </Link>
