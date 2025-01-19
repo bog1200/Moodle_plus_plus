@@ -1,30 +1,40 @@
 "use server";
 
-// Import necessary modules
 import { PrismaClient } from '@prisma/client';
+import {getCurrentStudent} from "@/app/actions/getCurrentStudent";
 
 const prisma = new PrismaClient();
+export async function getEnrolledCourses() {
 
-export async function getAllCourses() {
+    const student = await getCurrentStudent();
+
+    if (!student) {
+       return null;
+    }
     // Fetch courses from the database
-    const courses = await prisma.subject.findMany({
+    const subjects =  await prisma.subjectEnrollment.findMany({
+        where: {
+            studentId: student.id
+        },
         include: {
-            teacher: {
+            subject: {
                 include: {
-                    user: true,
+                    teacher: {
+                        include: {
+                            user: {
+                                select: {
+                                    name: true,
+                                }
+                            }
+                        }
+
+                    },
                 },
             },
         },
     });
-//todo filter courses by student enrollment
-
-    // Map the results to the desired format
-    const formattedCourses = courses.map(course => ({
-        name: course.name!,
-        professor: course.teacher.user.name!,
-        subject: course.id!,
-    }));
-    console.log("formatted courses: " + formattedCourses);
-
-    return formattedCourses;
+    if (process.env.NODE_ENV === 'development') {
+        console.log("SUBJECTS: " + JSON.stringify(subjects));
+    }
+    return subjects;
 }
