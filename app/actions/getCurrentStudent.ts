@@ -12,8 +12,10 @@ export async function getCurrentStudent(){
     }
 
     const user = session.user.id!;
+    console.log(`getCurrentStudent: Session: ${JSON.stringify(session)}`);
+    console.log(`getCurrentStudent: User: ${user}`);
 
-    const student = prisma.student.findFirst({
+    const student = await prisma.student.findFirst({
         where: {
             user: {
                 accounts: {
@@ -24,6 +26,8 @@ export async function getCurrentStudent(){
             }
         }
     });
-    //console.log("STUDENT IS: " + student);
+    if (student){
+        console.log(`getCurrentStudent: Student: ${JSON.stringify(student)}`);
+    }
     return student;
 }

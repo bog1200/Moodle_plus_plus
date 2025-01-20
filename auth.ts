@@ -11,6 +11,7 @@ declare module "next-auth" {
         user: {
            familyName: string;
            givenName: string;
+           provider: string;
             /**
              * By default, TypeScript merges new interface properties and overwrites existing ones.
              * In this case, the default session user properties will be overwritten,
@@ -35,7 +36,15 @@ export const {
             jwt: async ({ token, account, profile }) => {
 
                 if (account && profile) {
-                    token.sub = profile.sub!;
+                    if (account.provider === "romailsso") {
+                        token.sub = profile.sub!;
+                        token.provider = account.provider;
+                    }
+                    if (account.provider === "github") {
+                        token.sub = profile.id!.toString();
+                        token.provider = account.provider;
+                    }
+
                 }
                 if (profile) {
                     token.family_name = profile.family_name;
@@ -51,6 +60,7 @@ export const {
                     id: token.sub,
                     familyName: token.family_name,
                     givenName: token.given_name,
+                    provider: token.provider,
                 },
             }
         },

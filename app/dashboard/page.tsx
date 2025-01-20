@@ -16,6 +16,7 @@ export default async function Dashboard() {
         <div>
             <h1>Dashboard</h1>
             <h2>Welcome, {user.name}!</h2>
+            <h3>SSO ID: {user.provider}-{user.id}</h3>
 
             <form  action={async () => {
                 "use server"
