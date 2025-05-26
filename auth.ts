@@ -36,14 +36,15 @@ export const {
             jwt: async ({ token, account, profile }) => {
 
                 if (account && profile) {
-                    if (account.provider === "romailsso" || account.provider === "bananaidp") {
-                        token.sub = profile.sub!;
-                        token.provider = account.provider;
-                    }
                     if (account.provider === "github") {
                         token.sub = profile.id!.toString();
                         token.provider = account.provider;
                     }
+                    else {
+                        token.sub = profile.sub!;
+                        token.provider = account.provider;
+                    }
+
 
                 }
                 if (profile) {
