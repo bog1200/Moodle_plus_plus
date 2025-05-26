@@ -36,16 +36,8 @@ export const {
             jwt: async ({ token, account, profile }) => {
 
                 if (account && profile) {
-                    if (account.provider === "github") {
-                        token.sub = profile.id!.toString();
-                        token.provider = account.provider;
-                    }
-                    else {
-                        token.sub = profile.sub!;
-                        token.provider = account.provider;
-                    }
-
-
+                    token.sub = account.provider === "github" ? profile.id!.toString() : profile.sub!;
+                    token.provider = account.provider;
                 }
                 if (profile) {
                     token.family_name = profile.family_name;
