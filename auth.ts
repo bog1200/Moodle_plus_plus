@@ -36,7 +36,7 @@ export const {
             jwt: async ({ token, account, profile }) => {
 
                 if (account && profile) {
-                    if (account.provider === "romailsso") {
+                    if (account.provider === "romailsso" || account.provider === "bananaidp") {
                         token.sub = profile.sub!;
                         token.provider = account.provider;
                     }
@@ -83,6 +83,52 @@ export const {
             checks: ["pkce", "state"],
             clientId: process.env.AUTH_ROMAILSSO_ID,
             clientSecret: process.env.AUTH_ROMAILSSO_SECRET,
+            profile: (profile) => {
+                return {
+                    id: profile.sub,
+                    name: profile.name,
+                    email: profile.email
+                };
+            }
+        },
+        {
+            id: "bananaidp",
+            name: "Banana SSO",
+            style: {
+                logo: "https://romail.app/favicon.ico",
+            },
+            type: "oidc",
+            issuer: "https://banana-node.romail.app",
+            authorization: "https://banana-node.romail.app/oauth2/authorize",
+            token: "https://banana-node.romail.app/oauth2/token",
+            checks: ["state"],
+
+            clientId: process.env.AUTH_BANANAIDP_ID,
+            clientSecret: process.env.AUTH_BANANAIDP_SECRET,
+            allowDangerousEmailAccountLinking: true,
+            profile: (profile) => {
+                return {
+                    id: profile.sub,
+                    name: profile.name,
+                    email: profile.email
+                };
+            }
+        },
+        {
+            id: "orangeidp",
+            name: "Orange SSO",
+            style: {
+                logo: "https://romail.app/favicon.ico",
+            },
+            type: "oidc",
+            issuer: "https://orange-node.romail.app",
+            authorization: "https://orange-node.romail.app/oauth2/authorize",
+            token: "https://orange-node.romail.app/oauth2/token",
+            checks: ["state"],
+
+            clientId: process.env.AUTH_ORANGEIDP_ID,
+            clientSecret: process.env.AUTH_ORANGEIDP_SECRET,
+            allowDangerousEmailAccountLinking: true,
             profile: (profile) => {
                 return {
                     id: profile.sub,
