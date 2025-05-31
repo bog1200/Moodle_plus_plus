@@ -90,7 +90,7 @@ export const {
             }
         },
         authorized: async ({ auth }) => {
-            // Logged in users are authenticated, otherwise redirect to login page
+            // Logged-in users are authenticated, otherwise redirect to login page
             return !!auth
         },
     },
@@ -124,7 +124,10 @@ export const {
             },
             type: "oidc",
             issuer: "https://banana-node.romail.app",
-            authorization: "https://banana-node.romail.app/oauth2/authorize",
+            authorization: {
+                url: "https://banana-node.romail.app/oauth2/authorize",
+                params: { scope: "openid profile email address" }
+            },
             token: "https://banana-node.romail.app/oauth2/token",
             checks: ["state"],
 
@@ -147,7 +150,10 @@ export const {
             },
             type: "oidc",
             issuer: "https://orange-node.romail.app",
-            authorization: "https://orange-node.romail.app/oauth2/authorize",
+            authorization: {
+                url: "https://orange-node.romail.app/oauth2/authorize",
+                params: { scope: "openid profile email address" }
+            },
             token: "https://orange-node.romail.app/oauth2/token",
             checks: ["state"],
 
