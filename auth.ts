@@ -36,6 +36,20 @@ export const {
     adapter: PrismaAdapter(prisma),
     callbacks:
         {
+            signIn: async ({ user, profile }) => {
+              if (user && profile) {
+                  await prisma.user.update({
+                      where: { email: user.email! },
+                      data: {
+                          name: profile.name,
+                          dob: profile.birthdate,
+                          address: profile.address?.formatted || profile.address as string,
+                          gender: profile.gender,
+                      },
+                  });
+              }
+                return true;
+            },
             jwt: async ({ token, account, profile }) => {
 
                 if (account && profile) {
