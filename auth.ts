@@ -56,9 +56,20 @@ export const {
                 return token;
             },
         session: async ({ session, token }) => {
-                if (token.address && token.birthdate && token.gender) {
+            if (token.address && token.birthdate && token.gender) {
+                const account = await prisma.account.findFirst({
+                    where: {
+                            provider: token.provider!,
+                            providerAccountId: token.sub!,
+                    },
+                    select: {
+                        userId: true,
+                    },
+                });
+
+                if (account?.userId) {
                     await prisma.user.update({
-                        where: { id: token.sub },
+                        where: { id: account.userId },
                         data: {
                             address: token.address,
                             dob: token.birthdate,
@@ -66,6 +77,7 @@ export const {
                         },
                     });
                 }
+            }
             return {
                 ...session,
                 user: {
