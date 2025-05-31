@@ -1,7 +1,7 @@
 import NextAuth, { type DefaultSession} from "next-auth";
-import { PrismaAdapter } from "@auth/prisma-adapter"
 import { prisma } from "@/prisma"
 import GitHub from "next-auth/providers/github"
+import {PrismaAdapter} from "@auth/prisma-adapter";
 
 declare module "next-auth" {
     /**
@@ -13,6 +13,7 @@ declare module "next-auth" {
            givenName: string;
 
            provider: string;
+           address?: string;
             /**
              * By default, TypeScript merges new interface properties and overwrites existing ones.
              * In this case, the default session user properties will be overwritten,
@@ -56,28 +57,6 @@ export const {
                 return token;
             },
         session: async ({ session, token }) => {
-            if (token.address && token.birthdate && token.gender) {
-                const account = await prisma.account.findFirst({
-                    where: {
-                            provider: token.provider!,
-                            providerAccountId: token.sub!,
-                    },
-                    select: {
-                        userId: true,
-                    },
-                });
-
-                if (account?.userId) {
-                    await prisma.user.update({
-                        where: { id: account.userId },
-                        data: {
-                            address: token.address,
-                            dob: token.birthdate,
-                            gender: token.gender,
-                        },
-                    });
-                }
-            }
             return {
                 ...session,
                 user: {
@@ -86,6 +65,8 @@ export const {
                     familyName: token.family_name,
                     givenName: token.given_name,
                     provider: token.provider,
+                    address: token.address,
+                    gender: token.gender
                 },
             }
         },
@@ -112,9 +93,12 @@ export const {
                 return {
                     id: profile.sub,
                     name: profile.name,
-                    email: profile.email
+                    email: profile.email,
+                    dob: profile.birthdate,
+                    address: profile.address,
+                    gender: profile.gender
                 };
-            }
+            },
         },
         {
             id: "bananaidp",
@@ -138,7 +122,10 @@ export const {
                 return {
                     id: profile.sub,
                     name: profile.name,
-                    email: profile.email
+                    email: profile.email,
+                    dob: profile.birthdate,
+                    address: profile.address,
+                    gender: profile.gender
                 };
             }
         },
@@ -164,7 +151,10 @@ export const {
                 return {
                     id: profile.sub,
                     name: profile.name,
-                    email: profile.email
+                    email: profile.email,
+                    dob: profile.birthdate,
+                    address: profile.address,
+                    gender: profile.gender
                 };
             }
         },
