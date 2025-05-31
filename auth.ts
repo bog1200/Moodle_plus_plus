@@ -11,6 +11,7 @@ declare module "next-auth" {
         user: {
            familyName: string;
            givenName: string;
+
            provider: string;
             /**
              * By default, TypeScript merges new interface properties and overwrites existing ones.
@@ -27,6 +28,7 @@ export const {
     signIn,
     signOut,
 } = NextAuth({
+    debug: true,
     session: {
         strategy: 'jwt',
     },
@@ -40,12 +42,30 @@ export const {
                     token.provider = account.provider;
                 }
                 if (profile) {
+                    console.log("P:"+profile.address, "T:"+token.address, "B:"+token.birthdate);
                     token.family_name = profile.family_name;
                     token.given_name = profile.given_name;
+                    if (profile.address && profile.birthdate && profile.gender){
+                        token.address = profile.address;
+                        token.birthdate = profile.birthdate;
+                        token.gender = profile.gender
+                    }
+
                 }
+
                 return token;
             },
         session: async ({ session, token }) => {
+                if (token.address && token.birthdate && token.gender) {
+                    await prisma.user.update({
+                        where: { id: token.sub },
+                        data: {
+                            address: token.address,
+                            dob: token.birthdate,
+                            gender: token.gender,
+                        },
+                    });
+                }
             return {
                 ...session,
                 user: {
